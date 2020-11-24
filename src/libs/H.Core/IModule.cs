@@ -15,7 +15,7 @@ namespace H.Core
         ISettingsStorage Settings { get; }
         ICollection<string> GetAvailableSettings();
         void SetSetting(string key, object value);
-        object GetSetting(string key);
+        object? GetSetting(string key);
         bool IsValid();
 
         event EventHandler<string> NewCommand;
@@ -25,6 +25,6 @@ namespace H.Core
         void SaveSettings();
 
         string[] GetSupportedVariables();
-        object GetModuleVariableValue(string name);
+        object? GetModuleVariableValue(string name);
     }
 }

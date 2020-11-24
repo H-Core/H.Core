@@ -45,12 +45,12 @@ namespace H.Core.Utilities
         /// <typeparam name="T">Return Type</typeparam>
         /// <param name="task">Task method to execute</param>
         /// <returns></returns>
-        public static T RunSync<T>(Func<Task<T>> task)
+        public static T? RunSync<T>(Func<Task<T>> task)
         {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
-            T ret = default(T);
+            var ret = default(T);
             synch.Post(async _ =>
             {
                 synch.InnerException = null;
@@ -77,17 +77,16 @@ namespace H.Core.Utilities
         private class ExclusiveSynchronizationContext : SynchronizationContext
         {
             private bool _done;
-            public Exception InnerException { private get; set; }
-            private readonly AutoResetEvent _workItemsWaiting = new AutoResetEvent(false);
-            private readonly Queue<Tuple<SendOrPostCallback, object>> _items =
-                new Queue<Tuple<SendOrPostCallback, object>>();
+            public Exception? InnerException { private get; set; }
+            private readonly AutoResetEvent _workItemsWaiting = new (false);
+            private readonly Queue<Tuple<SendOrPostCallback, object?>> _items =new ();
 
-            public override void Send(SendOrPostCallback d, object state)
+            public override void Send(SendOrPostCallback d, object? state)
             {
                 throw new NotSupportedException("We cannot send to our same thread");
             }
 
-            public override void Post(SendOrPostCallback d, object state)
+            public override void Post(SendOrPostCallback d, object? state)
             {
                 lock (_items)
                 {
@@ -105,7 +104,7 @@ namespace H.Core.Utilities
             {
                 while (!_done)
                 {
-                    Tuple<SendOrPostCallback, object> task = null;
+                    Tuple<SendOrPostCallback, object?>? task = null;
                     lock (_items)
                     {
                         if (_items.Count > 0)

@@ -8,13 +8,13 @@ namespace H.Core.Notifiers
     {
         #region Properties
 
-        private string Command { get; set; }
+        private string Command { get; set; } = string.Empty;
 
         #endregion
 
         #region Events
 
-        public event EventHandler EventOccurred;
+        public event EventHandler? EventOccurred;
 
         protected void OnEventOccurred()
         {
@@ -27,9 +27,9 @@ namespace H.Core.Notifiers
 
         protected Notifier()
         {
-            AddSetting(nameof(Command), o => Command = o, o => true, string.Empty);
+            AddSetting(nameof(Command), o => Command = o, _ => true, Command);
 
-            EventOccurred += (sender, args) =>
+            EventOccurred += (_, _) =>
             {
                 Log($"{Name} AfterEvent");
                 try

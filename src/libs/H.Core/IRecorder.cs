@@ -12,17 +12,17 @@ namespace H.Core
 
         bool IsInitialized { get; }
         bool IsStarted { get; }
-        IReadOnlyCollection<byte> RawData { get; }
-        IReadOnlyCollection<byte> WavData { get; }
-        IReadOnlyCollection<byte> WavHeader { get; }
+        IReadOnlyCollection<byte>? RawData { get; }
+        IReadOnlyCollection<byte>? WavData { get; }
+        IReadOnlyCollection<byte>? WavHeader { get; }
 
         #endregion
 
         #region Events
 
-        event EventHandler Started;
-        event EventHandler<RecorderEventArgs> Stopped;
-        event EventHandler<RecorderEventArgs> RawDataReceived;
+        event EventHandler? Started;
+        event EventHandler<RecorderEventArgs>? Stopped;
+        event EventHandler<RecorderEventArgs>? RawDataReceived;
 
         #endregion
 

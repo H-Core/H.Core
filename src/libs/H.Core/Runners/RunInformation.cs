@@ -6,12 +6,12 @@ namespace H.Core.Runners
     {
         #region Properties
 
-        public Exception Exception { get; set; }
+        public Exception? Exception { get; set; }
         public bool IsInternal { get; set; }
-        public string Description { get; set; }
-        public Action<string> Action { get; set; }
+        public string? Description { get; set; }
+        public Action<string?>? Action { get; set; }
 
-        public string RunText { get; set; }
+        public string? RunText { get; set; }
 
         #endregion
 

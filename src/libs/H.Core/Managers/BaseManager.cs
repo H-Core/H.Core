@@ -12,7 +12,7 @@ namespace H.Core.Managers
     {
         #region Properties
 
-        public new IRecorder Recorder {
+        public new IRecorder? Recorder {
             get => base.Recorder;
             set {
                 if (value == null && base.Recorder != null)
@@ -31,16 +31,16 @@ namespace H.Core.Managers
             }
         }
 
-        public IConverter Converter { get; set; }
+        public IConverter? Converter { get; set; }
         public List<IConverter> AlternativeConverters { get; set; } = new List<IConverter>();
 
-        public string Text { get; private set; }
+        public string? Text { get; private set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<string> NewText;
+        public event EventHandler<string?>? NewText;
         private void OnNewText() => NewText?.Invoke(this, Text);
 
         #endregion
@@ -174,8 +174,8 @@ namespace H.Core.Managers
             }
 
             using var recognition = await Converter.StartStreamingRecognitionAsync();
-            recognition.AfterPartialResults += (o, e) => ProcessText($"deskband preview {e.Text}");
-            recognition.AfterFinalResults += (o, e) =>
+            recognition.AfterPartialResults += (_, e) => ProcessText($"deskband preview {e.Text}");
+            recognition.AfterFinalResults += (_, e) =>
             {
                 ProcessText("deskband clear-preview");
                 ProcessText(e.Text);
@@ -189,6 +189,11 @@ namespace H.Core.Managers
             // ReSharper disable once AccessToDisposedClosure
             async void RecorderOnRawDataReceived(object o, RecorderEventArgs e)
             {
+                if (e.RawData == null)
+                {
+                    return;
+                }
+
                 await recognition.WriteAsync(e.RawData.ToArray());
             }
 
@@ -227,6 +232,11 @@ namespace H.Core.Managers
                 WavData = WavData,
             });
 
+            if (WavData == null)
+            {
+                return;
+            }
+
             await ProcessSpeechAsync(WavData.ToArray());
         }
 
@@ -237,10 +247,7 @@ namespace H.Core.Managers
         public override void Dispose()
         {
             Recorder?.Dispose();
-            Recorder = null;
-
             Converter?.Dispose();
-            Converter = null;
 
             base.Dispose();
         }

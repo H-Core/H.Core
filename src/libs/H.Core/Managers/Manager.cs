@@ -13,17 +13,17 @@ namespace H.Core.Managers
 
         #region Events
 
-        public event EventHandler<string> NotHandledText;
-        public event EventHandler<string> HandledText;
+        public event EventHandler<string?>? NotHandledText;
+        public event EventHandler<string>? HandledText;
 
         public delegate void ValueDelegate(string key, T value);
-        public event ValueDelegate NewValue;
+        public event ValueDelegate? NewValue;
 
         #endregion
 
         #region Constructors
 
-        public Manager(IStorage<T> storage = null)
+        public Manager(IStorage<T>? storage = null)
         {
             Storage = storage ?? new InvariantDictionaryStorage<T>();
             Storage.Load();
@@ -35,9 +35,10 @@ namespace H.Core.Managers
 
         #region Event handlers
 
-        private void OnNewText(object sender, string text)
+        private void OnNewText(object? sender, string? text)
         {
-            if (string.IsNullOrWhiteSpace(text) ||
+            if (text == null ||
+                string.IsNullOrWhiteSpace(text) ||
                 !Storage.ContainsKey(text))
             {
                 NotHandledText?.Invoke(this, text);

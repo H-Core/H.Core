@@ -12,22 +12,22 @@ namespace H.Core.Recorders
 
         public bool IsInitialized { get; protected set; }
         public bool IsStarted { get; protected set; }
-        public IReadOnlyCollection<byte> RawData { get; protected set; }
-        public IReadOnlyCollection<byte> WavData { get; protected set; }
-        public IReadOnlyCollection<byte> WavHeader { get; protected set; }
+        public IReadOnlyCollection<byte>? RawData { get; protected set; }
+        public IReadOnlyCollection<byte>? WavData { get; protected set; }
+        public IReadOnlyCollection<byte>? WavHeader { get; protected set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler Started;
+        public event EventHandler? Started;
 
-        public event EventHandler<RecorderEventArgs> Stopped;
+        public event EventHandler<RecorderEventArgs>? Stopped;
 
         /// <summary>
         /// When new partial raw data
         /// </summary>
-        public event EventHandler<RecorderEventArgs> RawDataReceived;
+        public event EventHandler<RecorderEventArgs>? RawDataReceived;
 
         protected void OnStarted()
         {

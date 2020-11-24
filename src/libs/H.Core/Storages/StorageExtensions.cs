@@ -4,7 +4,7 @@ namespace H.Core.Storages
 {
     public static class StorageExtensions
     {
-        public static T GetOrAdd<T>(this IStorage<T> storage, string key, T value = default(T))
+        public static T? GetOrAdd<T>(this IStorage<T?> storage, string key, T value = default)
         {
             if (storage == null)
             {

@@ -10,16 +10,16 @@ namespace H.Core.Runners
     {
         #region Properties
 
-        private InvariantStringDictionary<RunInformation> HandlerDictionary { get; } = new InvariantStringDictionary<RunInformation>();
+        private InvariantStringDictionary<RunInformation> HandlerDictionary { get; } = new ();
 
         #endregion
 
         #region Events
 
-        public event EventHandler<RunnerEventArgs> BeforeRun;
+        public event EventHandler<RunnerEventArgs>? BeforeRun;
         private void OnBeforeRun(string text) => BeforeRun?.Invoke(this, CreateArgs(text));
 
-        public event EventHandler<RunnerEventArgs> AfterRun;
+        public event EventHandler<RunnerEventArgs>? AfterRun;
         private void OnAfterRun(string text) => AfterRun?.Invoke(this, CreateArgs(text));
 
         private RunnerEventArgs CreateArgs(string text) => new RunnerEventArgs { Runner = this, Text = text };
@@ -52,7 +52,7 @@ namespace H.Core.Runners
         public virtual bool IsSupport(string key, string data) => GetInformation(key, data) != null;
         public bool IsInternal(string key, string data) => GetInformation(key, data)?.IsInternal ?? false;
 
-        public RunInformation GetInformation(string key, string data)
+        public RunInformation? GetInformation(string key, string data)
         {
             if (string.IsNullOrWhiteSpace(data))
             {
@@ -60,16 +60,22 @@ namespace H.Core.Runners
             }
 
             var values = data.SplitOnlyFirst(' ');
-            return HandlerDictionary.TryGetValue(values[0], out var information) ? information : null;
+            var first = values[0];
+            if (first == null)
+            {
+                return null;
+            }
+
+            return HandlerDictionary.TryGetValue(first, out var information) ? information : null;
         }
 
         #endregion
 
         #region Protected methods
 
-        private string FindVariablesAndReplace(string command)
+        private string? FindVariablesAndReplace(string? command)
         {
-            if (string.IsNullOrWhiteSpace(command))
+            if (command == null || string.IsNullOrWhiteSpace(command))
             {
                 return command;
             }
@@ -94,7 +100,13 @@ namespace H.Core.Runners
         protected virtual RunInformation RunInternal(string key, string data)
         {
             var values = data.SplitOnlyFirstIgnoreQuote(' ');
-            var information = GetHandler(values[0]);
+            var first = values[0];
+            if (first == null)
+            {
+                return new RunInformation(new InvalidOperationException("RunInternal values[0] == null."));
+            }
+
+            var information = GetHandler(first);
             var command = values[1];
 
             try
@@ -127,9 +139,9 @@ namespace H.Core.Runners
         }
 
         public static bool IsWaitCommand { get; set; }
-        public static string WaitCommand { get; set; }
+        public static string? WaitCommand { get; set; }
 
-        protected async Task<string> WaitNextCommand(int timeout)
+        protected async Task<string?> WaitNextCommand(int timeout)
         {
             var recordTimeout = (int)(0.6 * timeout);
             Run($"start-record {recordTimeout}");
@@ -175,7 +187,7 @@ namespace H.Core.Runners
             IsWaitCommand = false;
         }
 
-        protected void AddAction(string key, Action<string> action, string description = null, bool isInternal = false) =>
+        protected void AddAction(string key, Action<string?> action, string? description = null, bool isInternal = false) =>
             AddAction(key, new RunInformation
             {
                 Description = description,
@@ -183,13 +195,13 @@ namespace H.Core.Runners
                 IsInternal = isInternal
             });
 
-        protected void AddInternalAction(string key, Action<string> action, string description = null) =>
+        protected void AddInternalAction(string key, Action<string?> action, string? description = null) =>
             AddAction(key, action, description, true);
 
-        protected void AddAsyncAction(string key, Func<string, Task> func, string description = null, bool isInternal = false) =>
-            AddAction(key, async text => await (func?.Invoke(text) ?? Task.Delay(0)), description, isInternal);
+        protected void AddAsyncAction(string key, Func<string?, Task> func, string? description = null, bool isInternal = false) =>
+            AddAction(key, async text => await (func.Invoke(text) ?? Task.Delay(0)), description, isInternal);
 
-        protected void AddInternalAsyncAction(string key, Func<string, Task> func, string description = null) =>
+        protected void AddInternalAsyncAction(string key, Func<string?, Task> func, string? description = null) =>
             AddAsyncAction(key, func, description, true);
 
         private void AddAction(string key, RunInformation information) =>

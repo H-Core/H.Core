@@ -7,7 +7,7 @@ namespace H.Core.Recorders
     {
         #region Properties
 
-        public IRecorder Recorder { get; protected set; }
+        public IRecorder? Recorder { get; protected set; }
 
         #endregion
 

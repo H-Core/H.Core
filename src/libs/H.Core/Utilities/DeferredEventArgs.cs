@@ -24,11 +24,11 @@ namespace H.Core.Utilities
 {
     public class DeferredEventArgs : EventArgs, IDisposable
     {
-        public new static readonly DeferredEventArgs Empty = new DeferredEventArgs();
+        public new static readonly DeferredEventArgs Empty = new ();
 
-        private readonly object _eventDeferralLock = new object();
+        private readonly object _eventDeferralLock = new ();
 
-        private EventDeferral _eventDeferral;
+        private EventDeferral? _eventDeferral;
 
         public EventDeferral GetDeferral()
         {
@@ -44,7 +44,7 @@ namespace H.Core.Utilities
             _eventDeferral = null;
         }
 
-        internal EventDeferral GetCurrentDeferralAndReset()
+        internal EventDeferral? GetCurrentDeferralAndReset()
         {
             lock (_eventDeferralLock)
             {

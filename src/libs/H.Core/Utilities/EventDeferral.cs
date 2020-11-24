@@ -26,7 +26,7 @@ namespace H.Core.Utilities
 {
     public class EventDeferral : IDisposable
     {
-        private readonly TaskCompletionSource<object> _taskCompletionSource = new TaskCompletionSource<object>();
+        private readonly TaskCompletionSource<object?> _taskCompletionSource = new ();
 
         internal EventDeferral()
         {

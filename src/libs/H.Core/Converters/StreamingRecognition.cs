@@ -9,8 +9,8 @@ namespace H.Core.Converters
     {
         #region Events
 
-        public event EventHandler<VoiceActionsEventArgs> AfterPartialResults;
-        public event EventHandler<VoiceActionsEventArgs> AfterFinalResults;
+        public event EventHandler<VoiceActionsEventArgs>? AfterPartialResults;
+        public event EventHandler<VoiceActionsEventArgs>? AfterFinalResults;
 
         protected void OnAfterPartialResults(string value)
         {

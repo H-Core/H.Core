@@ -7,7 +7,7 @@ namespace H.Core.Utilities
 {
     public static class StringExtensions
     {
-        public static string[] SplitOnlyFirst(this string text, char separator)
+        public static string?[] SplitOnlyFirst(this string? text, char separator)
         {
             if (text == null)
             {
@@ -25,7 +25,7 @@ namespace H.Core.Utilities
             return new[] { prefix, postfix };
         }
 
-        public static string[] SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
+        public static string?[] SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
         {
             if (text == null)
             {
@@ -59,7 +59,7 @@ namespace H.Core.Utilities
 
         private static string GetVariableName(int i) => $"$VARIABLE{i}$";
 
-        public static bool IsAny(this string text, StringComparison comparison, params string [] otherStrings)
+        public static bool IsAny(this string? text, StringComparison comparison, params string [] otherStrings)
         {
             foreach (var str in otherStrings)
             {
@@ -75,7 +75,7 @@ namespace H.Core.Utilities
         public static bool IsAny(this string text, params string[] otherStrings) =>
             text.IsAny(StringComparison.CurrentCulture, otherStrings);
 
-        public static bool IsAnyOrdinalIgnoreCase(this string text, params string[] otherStrings) =>
+        public static bool IsAnyOrdinalIgnoreCase(this string? text, params string[] otherStrings) =>
             text.IsAny(StringComparison.OrdinalIgnoreCase, otherStrings);
     }
 }

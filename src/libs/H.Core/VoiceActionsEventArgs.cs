@@ -5,9 +5,9 @@ namespace H.Core
 {
     public class VoiceActionsEventArgs : EventArgs
     {
-        public IRecorder Recorder { get; set; }
-        public IConverter Converter { get; set; }
-        public IReadOnlyCollection<byte> Data { get; set; }
-        public string Text { get; set; }
+        public IRecorder? Recorder { get; set; }
+        public IConverter? Converter { get; set; }
+        public IReadOnlyCollection<byte>? Data { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }

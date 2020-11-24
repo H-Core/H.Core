@@ -8,7 +8,7 @@ namespace H.Core.Storages
     {
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public new Setting this[string key]
         {

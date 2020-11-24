@@ -17,7 +17,7 @@ namespace H.Core.Utilities
         {
             if (!ContainsKey(key))
             {
-                value = default(T);
+                value = default!;
                 return false;
             }
             
@@ -31,7 +31,7 @@ namespace H.Core.Utilities
 
         #region Private methods
 
-        private static string ToInvariantString(string text) => text?.ToLowerInvariant();
+        private static string ToInvariantString(string text) => text.ToLowerInvariant();
 
         #endregion
     }

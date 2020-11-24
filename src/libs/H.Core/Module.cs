@@ -21,20 +21,20 @@ namespace H.Core
         public ISettingsStorage Settings { get; } = new SettingsStorage();
         public bool IsValid() => Settings.All(entry => entry.Value.IsValid());
 
-        protected InvariantStringDictionary<Func<object>> Variables { get; } = new InvariantStringDictionary<Func<object>>();
+        protected InvariantStringDictionary<Func<object?>> Variables { get; } = new ();
         public string[] GetSupportedVariables() => Variables.Keys.ToArray();
 
         protected void AddVariable(string key, Func<object> action) => Variables[key] = action;
-        public object GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
+        public object? GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
         #endregion
 
         #region Events
 
-        public event EventHandler<string> NewCommand;
-        public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
-        public event EventHandler<IModule> SettingsSaved;
-        public event EventHandler<Exception> ExceptionOccurred;
+        public event EventHandler<string>? NewCommand;
+        public event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
+        public event EventHandler<IModule>? SettingsSaved;
+        public event EventHandler<Exception>? ExceptionOccurred;
 
         protected void OnExceptionOccurred(Exception value)
         {
@@ -51,7 +51,7 @@ namespace H.Core
             Name = GetType().FullName;
             UniqueName = GetType().Name;
 
-            Settings.PropertyChanged += (sender, args) =>
+            Settings.PropertyChanged += (_, args) =>
             {
                 var key = args.PropertyName;
                 if (!Settings.ContainsKey(key))
@@ -71,7 +71,13 @@ namespace H.Core
         public void Print(string text) => Run($"print {text}");
         public void ShowSettings() => Run($"show-module-settings {UniqueName}");
 
-        public async Task RunAsync(string text) => await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
+        public async Task RunAsync(string text)
+        {
+            if (NewCommandAsync != null)
+            {
+                await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
+            }
+        }
 
         public async Task SayAsync(string text) => await RunAsync($"say {text}");
 
@@ -96,7 +102,7 @@ namespace H.Core
             Settings.Set(key, value);
         }
 
-        public object GetSetting(string key)
+        public object? GetSetting(string key)
         {
             return Settings[key].Value;
         }
@@ -110,8 +116,8 @@ namespace H.Core
                 Value = defaultValue,
                 DefaultValue = defaultValue,
                 SettingType = type,
-                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) != false,
-                SetAction = o => setAction?.Invoke(ConvertTo<T>(o))
+                CheckFunc = o => CanConvert<T>(o) && checkFunc.Invoke(ConvertTo<T>(o)),
+                SetAction = o => setAction.Invoke(ConvertTo<T>(o))
             };
         }
 
@@ -124,12 +130,12 @@ namespace H.Core
                 Value = defaultValues.ElementAtOrDefault(0),
                 DefaultValue = defaultValues,
                 SettingType = SettingType.Enumerable,
-                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) == true,
-                SetAction = o => setAction?.Invoke(ConvertTo<T>(o))
+                CheckFunc = o => CanConvert<T>(o) && checkFunc.Invoke(ConvertTo<T>(o)),
+                SetAction = o => setAction.Invoke(ConvertTo<T>(o))
             };
         }
 
-        protected static bool IsNull(string key) => key == null;
+        protected static bool IsNull(string? key) => key == null;
         protected static bool NoEmpty(string key) => !string.IsNullOrEmpty(key);
         protected static bool Always<T>(T key) => true;
         protected static bool Any(object key) => true;
@@ -143,7 +149,7 @@ namespace H.Core
 
         #endregion
 
-        private bool CanConvert<T>(object value)
+        private bool CanConvert<T>(object? value)
         {
             try
             {
@@ -156,7 +162,7 @@ namespace H.Core
             }
         }
 
-        private T ConvertTo<T>(object value) => (T)Convert.ChangeType(value, typeof(T));
+        private T ConvertTo<T>(object? value) => (T)Convert.ChangeType(value, typeof(T));
 
         #endregion
 
@@ -170,17 +176,17 @@ namespace H.Core
 
         #region Static methods
 
-        public static Action<string> LogAction { get; set; }
+        public static Action<string>? LogAction { get; set; }
         public static void Log(string text) => LogAction?.Invoke(text);
 
-        public static Func<string, object> GetVariableValueGlobalFunc { get; set; }
-        public static object GetVariable(string key) => GetVariableValueGlobalFunc?.Invoke(key);
-        public static T GetVariable<T>(string key, T defaultValue = default(T))
+        public static Func<string, object>? GetVariableValueGlobalFunc { get; set; }
+        public static object? GetVariable(string key) => GetVariableValueGlobalFunc?.Invoke(key);
+        public static T? GetVariable<T>(string key, T defaultValue = default)
         {
             return GetVariable(key) is T value ? value : defaultValue;
         }
 
-        public static Func<string, Task<List<string>>> SearchFunc { get; set; }
+        public static Func<string, Task<List<string>>>? SearchFunc { get; set; }
         protected static async Task<List<string>> SearchInInternet(string key)
         {
             if (SearchFunc == null)
