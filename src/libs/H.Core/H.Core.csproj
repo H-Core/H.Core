@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net4.5</TargetFrameworks>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet">
+    <Version>0.9.0</Version>
+    <Description>HomeCenter Core library that contains IConverter/IRecorder/IRunner etc.</Description>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>
