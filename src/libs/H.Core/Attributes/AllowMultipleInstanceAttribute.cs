@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Core.Attributes
+namespace H.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class AllowMultipleInstanceAttribute : Attribute

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace H.NET.Core.CustomEventArgs
+namespace H.Core.CustomEventArgs
 {
     public class RecorderEventArgs : EventArgs
     {

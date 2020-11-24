@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.CustomEventArgs;
-using H.NET.Core.Recorders;
+using H.Core.CustomEventArgs;
+using H.Core.Recorders;
 
-namespace H.NET.Core.Managers
+namespace H.Core.Managers
 {
     public class BaseManager : ParentRecorder
     {

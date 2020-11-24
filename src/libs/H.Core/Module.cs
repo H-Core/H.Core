@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using H.NET.Core.Settings;
-using H.NET.Core.Storages;
-using H.NET.Core.Utilities;
+using H.Core.Settings;
+using H.Core.Storages;
+using H.Core.Utilities;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public class Module : IModule
     {

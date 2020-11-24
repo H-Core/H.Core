@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Core.Runners
+namespace H.Core.Runners
 {
     public class RunInformation
     {

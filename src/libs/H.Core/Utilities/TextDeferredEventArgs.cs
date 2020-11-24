@@ -1,4 +1,4 @@
-﻿namespace H.NET.Core.Utilities
+﻿namespace H.Core.Utilities
 {
     public class TextDeferredEventArgs : DeferredEventArgs
     {

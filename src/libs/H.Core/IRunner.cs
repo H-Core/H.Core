@@ -1,7 +1,7 @@
 ﻿using System;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface IRunner : IModule
     {

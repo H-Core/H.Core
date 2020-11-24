@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface INotifier : IModule
     {

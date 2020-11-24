@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Core.Utilities
+namespace H.Core.Utilities
 {
     public abstract class DisposableObject : IDisposable
     {

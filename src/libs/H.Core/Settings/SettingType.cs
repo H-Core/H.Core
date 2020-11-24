@@ -1,4 +1,4 @@
-﻿namespace H.NET.Core.Settings
+﻿namespace H.Core.Settings
 {
     public enum SettingType
     {

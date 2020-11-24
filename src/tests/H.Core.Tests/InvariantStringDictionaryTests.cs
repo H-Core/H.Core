@@ -1,4 +1,4 @@
-﻿using H.NET.Core.Utilities;
+﻿using H.Core.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace H.Core.Tests

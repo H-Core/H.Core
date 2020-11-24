@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public class VoiceActionsEventArgs : EventArgs
     {

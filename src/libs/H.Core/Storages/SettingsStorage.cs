@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using H.NET.Core.Settings;
+using H.Core.Settings;
 
-namespace H.NET.Core.Storages
+namespace H.Core.Storages
 {
     public class SettingsStorage : Dictionary<string, Setting>, ISettingsStorage
     {

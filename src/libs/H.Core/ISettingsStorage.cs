@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
-using H.NET.Core.Settings;
+using H.Core.Settings;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface ISettingsStorage : IStorage<Setting>, INotifyPropertyChanged
     {

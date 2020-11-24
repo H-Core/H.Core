@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Core.Storages
+namespace H.Core.Storages
 {
     public static class StorageExtensions
     {

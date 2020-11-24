@@ -20,7 +20,7 @@
 
 using System;
 
-namespace H.NET.Core.Utilities
+namespace H.Core.Utilities
 {
     public class DeferredEventArgs : EventArgs, IDisposable
     {

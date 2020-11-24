@@ -22,7 +22,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.NET.Core.Utilities
+namespace H.Core.Utilities
 {
     public class EventDeferral : IDisposable
     {

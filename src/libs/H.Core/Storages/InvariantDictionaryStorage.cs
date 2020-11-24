@@ -1,6 +1,6 @@
-﻿using H.NET.Core.Utilities;
+﻿using H.Core.Utilities;
 
-namespace H.NET.Core.Storages
+namespace H.Core.Storages
 {
     public class InvariantDictionaryStorage<T> : InvariantStringDictionary<T>, IStorage<T>
     {

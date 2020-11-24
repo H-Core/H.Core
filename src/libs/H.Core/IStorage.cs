@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface IStorage<T> : IDictionary<string, T> //IEnumerable<KeyValuePair<string, T>>
     {

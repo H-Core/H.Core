@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using H.NET.Core.Utilities;
+using H.Core.Utilities;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface IModule : IDisposable
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace H.NET.Core.Utilities
+namespace H.Core.Utilities
 {
     public static class StringExtensions
     {

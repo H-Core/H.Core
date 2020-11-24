@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.NET.Core.Recorders
+namespace H.Core.Recorders
 {
     public static class RecorderExtensions
     {

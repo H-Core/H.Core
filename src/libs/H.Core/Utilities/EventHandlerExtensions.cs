@@ -23,7 +23,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.NET.Core.Utilities
+namespace H.Core.Utilities
 {
     public static class EventHandlerExtensions
     {

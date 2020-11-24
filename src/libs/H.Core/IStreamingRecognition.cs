@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface IStreamingRecognition : IDisposable
     {

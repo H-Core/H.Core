@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.NET.Core.Converters
+namespace H.Core.Converters
 {
     public abstract class Converter : Module, IConverter
     {

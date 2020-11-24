@@ -1,8 +1,7 @@
 ﻿using System;
-using H.NET.Core;
-using H.NET.Core.Attributes;
+using H.Core.Attributes;
 
-namespace H.Notifiers
+namespace H.Core.Notifiers
 {
     [AllowMultipleInstance(false)]
     public class Notifier : Module, INotifier

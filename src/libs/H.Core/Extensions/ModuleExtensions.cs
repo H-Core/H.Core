@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using H.NET.Core.Attributes;
+using H.Core.Attributes;
 
-namespace H.NET.Core.Extensions
+namespace H.Core.Extensions
 {
     public static class ModuleExtensions
     {

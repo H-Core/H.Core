@@ -1,4 +1,4 @@
-﻿namespace H.NET.Core.Synthesizers
+﻿namespace H.Core.Synthesizers
 {
     public class Synthesizer : Module
     {

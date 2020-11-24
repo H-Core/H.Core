@@ -1,7 +1,7 @@
 ﻿using System;
-using H.NET.Core.Storages;
+using H.Core.Storages;
 
-namespace H.NET.Core.Managers
+namespace H.Core.Managers
 {
     public class Manager<T> : BaseManager
     {

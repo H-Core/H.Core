@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Utilities;
+using H.Core.Utilities;
 
-namespace H.NET.Core.Converters
+namespace H.Core.Converters
 {
     public abstract class StreamingRecognition : DisposableObject, IStreamingRecognition
     {

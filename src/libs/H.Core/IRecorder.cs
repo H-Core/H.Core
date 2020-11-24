@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.CustomEventArgs;
+using H.Core.CustomEventArgs;
 
-namespace H.NET.Core
+namespace H.Core
 {
     public interface IRecorder : IModule
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using H.NET.Core.Utilities;
+using H.Core.Utilities;
 
-namespace H.NET.Core.Runners
+namespace H.Core.Runners
 {
     public abstract class Runner : Module, IRunner
     {

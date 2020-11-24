@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace H.NET.Core.Utilities
+namespace H.Core.Utilities
 {
     public class InvariantStringDictionary<T> : Dictionary<string, T>
     {
