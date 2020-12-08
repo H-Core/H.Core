@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace H.Core
 {
+    [Serializable]
     public class VoiceActionsEventArgs : EventArgs
     {
         public IRecorder? Recorder { get; set; }
