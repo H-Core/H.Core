@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>0.9.2</Version>
+    <Version>0.9.3</Version>
     <Description>HomeCenter Core library that contains IConverter/IRecorder/IRunner etc.</Description>
     <PackageReleaseNotes>Added LogReceived event.</PackageReleaseNotes>
   </PropertyGroup>
