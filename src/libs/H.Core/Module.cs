@@ -35,10 +35,16 @@ namespace H.Core
         public event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
         public event EventHandler<IModule>? SettingsSaved;
         public event EventHandler<Exception>? ExceptionOccurred;
+        public event EventHandler<string>? LogReceived;
 
         protected void OnExceptionOccurred(Exception value)
         {
             ExceptionOccurred?.Invoke(this, value);
+        }
+        
+        protected void OnLogReceived(string value)
+        {
+            LogReceived?.Invoke(this, value);
         }
 
         #endregion
@@ -56,7 +62,7 @@ namespace H.Core
                 var key = args.PropertyName;
                 if (!Settings.ContainsKey(key))
                 {
-                    Log($"Settings is not exists: {key}");
+                    OnLogReceived($"Settings is not exists: {key}");
                 }
             };
         }
@@ -175,9 +181,6 @@ namespace H.Core
         #endregion
 
         #region Static methods
-
-        public static Action<string>? LogAction { get; set; }
-        public static void Log(string text) => LogAction?.Invoke(text);
 
         public static Func<string, object>? GetVariableValueGlobalFunc { get; set; }
         public static object? GetVariable(string key) => GetVariableValueGlobalFunc?.Invoke(key);

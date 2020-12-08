@@ -31,21 +31,21 @@ namespace H.Core.Notifiers
 
             EventOccurred += (_, _) =>
             {
-                Log($"{Name} AfterEvent");
+                OnLogReceived($"{Name} AfterEvent");
                 try
                 {
                     if (string.IsNullOrWhiteSpace(Command))
                     {
-                        Log("Command is empty");
+                        OnLogReceived("Command is empty");
                         return;
                     }
 
                     Run(Command);
-                    Log($"Run command: {Command}");
+                    OnLogReceived($"Run command: {Command}");
                 }
                 catch (Exception exception)
                 {
-                    Log($"Exception: {exception}");
+                    OnLogReceived($"Exception: {exception}");
                 }
             };
         }

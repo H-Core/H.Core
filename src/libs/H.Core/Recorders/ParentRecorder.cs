@@ -36,7 +36,7 @@ namespace H.Core.Recorders
 
             if (Recorder == null)
             {
-                Log("Recorder is not found");
+                OnLogReceived("Recorder is not found");
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace H.Core.Recorders
 
             if (Recorder == null)
             {
-                Log("Recorder is not found");
+                OnLogReceived("Recorder is not found");
                 return;
             }
 

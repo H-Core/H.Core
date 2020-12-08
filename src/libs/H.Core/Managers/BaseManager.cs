@@ -62,7 +62,7 @@ namespace H.Core.Managers
         {
             if (Converter == null)
             {
-                Log("Converter is not found");
+                OnLogReceived("Converter is not found");
                 return;
             }
 
@@ -112,7 +112,7 @@ namespace H.Core.Managers
             }
             catch (Exception exception)
             {
-                Log($"{exception}");
+                OnLogReceived($"{exception}");
             }
         }
 
@@ -136,7 +136,7 @@ namespace H.Core.Managers
 
             if (Recorder == null)
             {
-                Log("Recorder is not found");
+                OnLogReceived("Recorder is not found");
                 return;
             }
 
@@ -163,7 +163,7 @@ namespace H.Core.Managers
         {
             if (Recorder == null)
             {
-                Log("Recorder is not found");
+                OnLogReceived("Recorder is not found");
                 return;
             }
 
@@ -220,7 +220,7 @@ namespace H.Core.Managers
 
             if (Recorder == null)
             {
-                Log("Recorder is not found");
+                OnLogReceived("Recorder is not found");
                 return;
             }
 
