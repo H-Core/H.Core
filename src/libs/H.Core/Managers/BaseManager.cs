@@ -56,8 +56,7 @@ namespace H.Core.Managers
             Text = text;
             OnNewText();
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
+        
         public async Task ProcessSpeechAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
             if (Converter == null)

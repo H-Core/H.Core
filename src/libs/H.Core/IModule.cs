@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using H.Core.Storages;
 using H.Core.Utilities;
 
 namespace H.Core

@@ -16,13 +16,18 @@ namespace H.Core.Runners
 
         #region Events
 
-        public event EventHandler<RunnerEventArgs>? BeforeRun;
-        private void OnBeforeRun(string text) => BeforeRun?.Invoke(this, CreateArgs(text));
+        public event EventHandler<string>? BeforeRun;
+        public event EventHandler<string>? AfterRun;
+        
+        private void OnBeforeRun(string value)
+        {
+            BeforeRun?.Invoke(this, value);
+        }
 
-        public event EventHandler<RunnerEventArgs>? AfterRun;
-        private void OnAfterRun(string text) => AfterRun?.Invoke(this, CreateArgs(text));
-
-        private RunnerEventArgs CreateArgs(string text) => new RunnerEventArgs { Runner = this, Text = text };
+        private void OnAfterRun(string value)
+        {
+            AfterRun?.Invoke(this, value);
+        }
 
         #endregion
 

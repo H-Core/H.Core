@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.Core
+namespace H.Core.Notifiers
 {
     public interface INotifier : IModule
     {

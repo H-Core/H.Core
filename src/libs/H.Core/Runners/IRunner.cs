@@ -1,7 +1,6 @@
 ﻿using System;
-using H.Core.Runners;
 
-namespace H.Core
+namespace H.Core.Runners
 {
     public interface IRunner : IModule
     {
@@ -10,8 +9,8 @@ namespace H.Core
         bool IsInternal(string key, string data);
         RunInformation? GetInformation(string key, string data);
 
-        event EventHandler<RunnerEventArgs>? BeforeRun;
-        event EventHandler<RunnerEventArgs>? AfterRun;
+        event EventHandler<string>? BeforeRun;
+        event EventHandler<string>? AfterRun;
 
         string[] GetSupportedCommands();
     }
