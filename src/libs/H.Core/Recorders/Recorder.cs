@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using H.Core.CustomEventArgs;
 
 namespace H.Core.Recorders
 {
@@ -12,9 +10,9 @@ namespace H.Core.Recorders
 
         public bool IsInitialized { get; protected set; }
         public bool IsStarted { get; protected set; }
-        public IReadOnlyCollection<byte>? RawData { get; protected set; }
-        public IReadOnlyCollection<byte>? WavData { get; protected set; }
-        public IReadOnlyCollection<byte>? WavHeader { get; protected set; }
+        public byte[]? RawData { get; protected set; }
+        public byte[]? WavData { get; protected set; }
+        public byte[]? WavHeader { get; protected set; }
 
         #endregion
 
@@ -40,12 +38,9 @@ namespace H.Core.Recorders
             Stopped?.Invoke(this, args);
         }
 
-        protected void OnRawDataReceived(IReadOnlyCollection<byte> value)
+        protected void OnRawDataReceived(byte[] value)
         {
-            RawDataReceived?.Invoke(this, new RecorderEventArgs
-            {
-                RawData = value,
-            });
+            RawDataReceived?.Invoke(this, new RecorderEventArgs(value));
         }
 
         #endregion
@@ -83,11 +78,7 @@ namespace H.Core.Recorders
             }
 
             IsStarted = false;
-            OnStopped(new RecorderEventArgs
-            {
-                RawData = RawData,
-                WavData = WavData,
-            });
+            OnStopped(new RecorderEventArgs(RawData, WavData));
 
             await Task.Delay(0, cancellationToken).ConfigureAwait(false);
         }

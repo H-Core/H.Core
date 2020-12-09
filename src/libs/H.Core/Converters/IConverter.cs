@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.Core
+namespace H.Core.Converters
 {
     public interface IConverter : IModule
     {

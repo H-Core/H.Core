@@ -9,23 +9,17 @@ namespace H.Core.Converters
     {
         #region Events
 
-        public event EventHandler<VoiceActionsEventArgs>? AfterPartialResults;
-        public event EventHandler<VoiceActionsEventArgs>? AfterFinalResults;
+        public event EventHandler<string>? AfterPartialResults;
+        public event EventHandler<string>? AfterFinalResults;
 
         protected void OnAfterPartialResults(string value)
         {
-            AfterPartialResults?.Invoke(this, new VoiceActionsEventArgs
-            {
-                Text = value,
-            });
+            AfterPartialResults?.Invoke(this, value);
         }
 
         protected void OnAfterFinalResults(string value)
         {
-            AfterFinalResults?.Invoke(this, new VoiceActionsEventArgs
-            {
-                Text = value,
-            });
+            AfterFinalResults?.Invoke(this, value);
         }
 
         #endregion

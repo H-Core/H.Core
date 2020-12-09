@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using H.Core.CustomEventArgs;
+using H.Core.Converters;
 using H.Core.Recorders;
 
 namespace H.Core.Managers
@@ -174,11 +174,11 @@ namespace H.Core.Managers
             }
 
             using var recognition = await Converter.StartStreamingRecognitionAsync();
-            recognition.AfterPartialResults += (_, e) => ProcessText($"deskband preview {e.Text}");
-            recognition.AfterFinalResults += (_, e) =>
+            recognition.AfterPartialResults += (_, value) => ProcessText($"deskband preview {value}");
+            recognition.AfterFinalResults += (_, value) =>
             {
                 ProcessText("deskband clear-preview");
-                ProcessText(e.Text);
+                ProcessText(value);
             };
 
             if (Recorder.RawData != null)
@@ -226,11 +226,7 @@ namespace H.Core.Managers
 
             RawData = Recorder.RawData;
             WavData = Recorder.WavData;
-            OnStopped(new RecorderEventArgs
-            {
-                RawData = RawData,
-                WavData = WavData,
-            });
+            OnStopped(new RecorderEventArgs(RawData, WavData));
 
             if (WavData == null)
             {

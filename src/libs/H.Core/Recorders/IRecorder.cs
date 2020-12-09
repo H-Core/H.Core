@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using H.Core.CustomEventArgs;
 
-namespace H.Core
+namespace H.Core.Recorders
 {
     public interface IRecorder : IModule
     {
@@ -12,9 +10,9 @@ namespace H.Core
 
         bool IsInitialized { get; }
         bool IsStarted { get; }
-        IReadOnlyCollection<byte>? RawData { get; }
-        IReadOnlyCollection<byte>? WavData { get; }
-        IReadOnlyCollection<byte>? WavHeader { get; }
+        byte[]? RawData { get; }
+        byte[]? WavData { get; }
+        byte[]? WavHeader { get; }
 
         #endregion
 
