@@ -4,7 +4,7 @@
     {
         #region Properties
 
-        public bool UseCache { get; set; } = false;
+        public bool UseCache { get; set; }
 
         #endregion
     }

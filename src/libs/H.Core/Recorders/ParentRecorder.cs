@@ -24,7 +24,7 @@ namespace H.Core.Recorders
                 return;
             }
 
-            await Recorder.InitializeAsync(cancellationToken);
+            await Recorder.InitializeAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken = default)
@@ -42,11 +42,11 @@ namespace H.Core.Recorders
 
             if (!Recorder.IsInitialized)
             {
-                await Recorder.InitializeAsync(cancellationToken);
+                await Recorder.InitializeAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            await Recorder.StartAsync(cancellationToken);
-            await base.StartAsync(cancellationToken);
+            await Recorder.StartAsync(cancellationToken).ConfigureAwait(false);
+            await base.StartAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken = default)
@@ -62,12 +62,12 @@ namespace H.Core.Recorders
                 return;
             }
 
-            await Recorder.StopAsync(cancellationToken);
+            await Recorder.StopAsync(cancellationToken).ConfigureAwait(false);
 
             RawData = Recorder.RawData;
             WavData = Recorder.WavData;
 
-            await base.StopAsync(cancellationToken);
+            await base.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
         #endregion

@@ -22,7 +22,7 @@ namespace H.Core.Utilities
 
                 try
                 {
-                    await task();
+                    await task().ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -57,7 +57,7 @@ namespace H.Core.Utilities
 
                 try
                 {
-                    ret = await task();
+                    ret = await task().ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

@@ -81,11 +81,11 @@ namespace H.Core
         {
             if (NewCommandAsync != null)
             {
-                await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
+                await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text)).ConfigureAwait(false);
             }
         }
 
-        public async Task SayAsync(string text) => await RunAsync($"say {text}");
+        public async Task SayAsync(string text) => await RunAsync($"say {text}").ConfigureAwait(false);
 
         public void Enable() => Run($"enable-module {UniqueName}");
         public void Disable() => Run($"disable-module {UniqueName}");
@@ -197,11 +197,11 @@ namespace H.Core
                 return new List<string>();
             }
 
-            return await SearchFunc.Invoke(key);
+            return await SearchFunc.Invoke(key).ConfigureAwait(false);
         }
 
         public static async Task<List<string>> SearchInInternet(string query, int count) =>
-            (await SearchInInternet(query)).Take(count).ToList();
+            (await SearchInInternet(query).ConfigureAwait(false)).Take(count).ToList();
 
         #endregion
     }

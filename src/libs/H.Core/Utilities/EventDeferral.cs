@@ -38,7 +38,7 @@ namespace H.Core.Utilities
         {
             using (cancellationToken.Register(() => _taskCompletionSource.TrySetCanceled()))
             {
-                await _taskCompletionSource.Task;
+                await _taskCompletionSource.Task.ConfigureAwait(false);
             }
         }
 

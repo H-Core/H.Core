@@ -72,7 +72,7 @@ namespace H.Core.Managers
                     return;
                 }
 
-                var text = await Converter.ConvertAsync(bytes, cancellationToken);
+                var text = await Converter.ConvertAsync(bytes, cancellationToken).ConfigureAwait(false);
                 if (!AlternativeConverters.Any())
                 {
                     //Log("No alternative converters");
@@ -80,7 +80,7 @@ namespace H.Core.Managers
                     return;
                 }
 
-                var alternativeTexts = AlternativeConverters.Select(async i => await i.ConvertAsync(bytes, cancellationToken)).ToList();
+                var alternativeTexts = AlternativeConverters.Select(async i => await i.ConvertAsync(bytes, cancellationToken).ConfigureAwait(false)).ToList();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     //Log("Text is not empty. No alternative converters is uses");
@@ -92,8 +92,8 @@ namespace H.Core.Managers
                 while (alternativeTexts.Any())
                 {
                     //Log("WhenAny");
-                    var alternativeTextTask = await Task.WhenAny(alternativeTexts);
-                    var alternativeText = await alternativeTextTask;
+                    var alternativeTextTask = await Task.WhenAny(alternativeTexts).ConfigureAwait(false);
+                    var alternativeText = await alternativeTextTask.ConfigureAwait(false);
                     if (string.IsNullOrWhiteSpace(alternativeText))
                     {
                         //Log("string.IsNullOrWhiteSpace");
@@ -123,7 +123,7 @@ namespace H.Core.Managers
             }
 
             Text = null;
-            await base.StartAsync(cancellationToken);
+            await base.StartAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken = default)
@@ -139,18 +139,18 @@ namespace H.Core.Managers
                 return;
             }
 
-            await Recorder.StopAsync(cancellationToken);
+            await Recorder.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task ChangeAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
             {
-                await StartAsync(cancellationToken);
+                await StartAsync(cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                await StopAsync(cancellationToken);
+                await StopAsync(cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -172,7 +172,7 @@ namespace H.Core.Managers
                 return;
             }
 
-            using var recognition = await Converter.StartStreamingRecognitionAsync();
+            using var recognition = await Converter.StartStreamingRecognitionAsync().ConfigureAwait(false);
             recognition.PartialResultsReceived += (_, value) => ProcessText($"deskband preview {value}");
             recognition.FinalResultsReceived += (_, value) =>
             {
@@ -182,13 +182,13 @@ namespace H.Core.Managers
 
             if (Recorder.RawData.Any())
             {
-                await recognition.WriteAsync(Recorder.RawData);
+                await recognition.WriteAsync(Recorder.RawData).ConfigureAwait(false);
             }
 
             // ReSharper disable once AccessToDisposedClosure
             async void RecorderOnRawDataReceived(object o, byte[] bytes)
             {
-                await recognition.WriteAsync(bytes);
+                await recognition.WriteAsync(bytes).ConfigureAwait(false);
             }
 
             try
@@ -197,10 +197,10 @@ namespace H.Core.Managers
 
                 while (Recorder.IsStarted)
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1));
+                    await Task.Delay(TimeSpan.FromMilliseconds(1)).ConfigureAwait(false);
                 }
 
-                await recognition.StopAsync();
+                await recognition.StopAsync().ConfigureAwait(false);
             }
             finally
             {
@@ -227,7 +227,7 @@ namespace H.Core.Managers
                 return;
             }
 
-            await ProcessSpeechAsync(WavData.ToArray());
+            await ProcessSpeechAsync(WavData).ConfigureAwait(false);
         }
 
         #endregion

@@ -156,7 +156,7 @@ namespace H.Core.Runners
             var time = 0;
             while (IsWaitCommand && time < timeout)
             {
-                await Task.Delay(10);
+                await Task.Delay(10).ConfigureAwait(false);
                 time += 10;
             }
 
@@ -171,7 +171,7 @@ namespace H.Core.Runners
 
         protected async Task<bool> WaitAccept(int timeout, params string[] additionalAccepts)
         {
-            var command = await WaitNextCommand(timeout);
+            var command = await WaitNextCommand(timeout).ConfigureAwait(false);
 
             var defaultAccepts = new List<string> {"yes", "да", "согласен"};
             defaultAccepts.AddRange(additionalAccepts);
@@ -181,9 +181,9 @@ namespace H.Core.Runners
 
         protected async Task<bool> WaitAccept(string message, int timeout, params string[] additionalAccepts)
         {
-            await SayAsync(message);
+            await SayAsync(message).ConfigureAwait(false);
 
-            return await WaitAccept(timeout, additionalAccepts);
+            return await WaitAccept(timeout, additionalAccepts).ConfigureAwait(false);
         }
 
         public static void StopWaitCommand(string command)
@@ -204,7 +204,7 @@ namespace H.Core.Runners
             AddAction(key, action, description, true);
 
         protected void AddAsyncAction(string key, Func<string?, Task> func, string? description = null, bool isInternal = false) =>
-            AddAction(key, async text => await (func.Invoke(text) ?? Task.Delay(0)), description, isInternal);
+            AddAction(key, async text => await (func.Invoke(text) ?? Task.Delay(0)).ConfigureAwait(false), description, isInternal);
 
         protected void AddInternalAsyncAction(string key, Func<string?, Task> func, string? description = null) =>
             AddAsyncAction(key, func, description, true);

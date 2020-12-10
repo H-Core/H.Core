@@ -23,12 +23,12 @@ namespace H.Core.Converters
 
         protected async Task<string> ConvertOverStreamingRecognition(byte[] bytes, CancellationToken cancellationToken = default)
         {
-            using var recognition = await StartStreamingRecognitionAsync(cancellationToken);
+            using var recognition = await StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
             var response = string.Empty;
             recognition.FinalResultsReceived += (_, value) => response = value;
 
-            await recognition.WriteAsync(bytes, cancellationToken);
-            await recognition.StopAsync(cancellationToken);
+            await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+            await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
 
             return response;
         }
