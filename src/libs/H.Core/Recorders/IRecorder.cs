@@ -67,7 +67,7 @@ namespace H.Core.Recorders
         Task InitializeAsync(CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// 
+        /// Calls InitializeAsync if recorder is not initialized.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>

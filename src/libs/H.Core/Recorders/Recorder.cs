@@ -99,7 +99,7 @@ namespace H.Core.Recorders
         }
 
         /// <summary>
-        /// 
+        /// Calls InitializeAsync if recorder is not initialized.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
@@ -107,7 +107,11 @@ namespace H.Core.Recorders
         {
             if (IsStarted)
             {
-                throw new InvalidOperationException("Already started");
+                return;
+            }
+            if (!IsInitialized)
+            {
+                await InitializeAsync(cancellationToken).ConfigureAwait(false);
             }
 
             IsStarted = true;
@@ -115,8 +119,6 @@ namespace H.Core.Recorders
             WavData = EmptyArray<byte>.Value;
 
             OnStarted();
-
-            await Task.Delay(TimeSpan.Zero, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>

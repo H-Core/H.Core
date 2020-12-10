@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>0.9.5.2</Version>
+    <Version>0.9.5.3</Version>
     <Description>HomeCenter Core library that contains IConverter/IRecorder/IRunner etc.</Description>
     <PackageReleaseNotes>Added StreamRecognitionExtensions.</PackageReleaseNotes>
   </PropertyGroup>
