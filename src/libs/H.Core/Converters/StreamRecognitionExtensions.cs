@@ -45,8 +45,14 @@ namespace H.Core.Converters
                 await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
             }
 
+            void OnStopped(object? o, EventArgs eventArgs)
+            {
+                recorder.RawDataReceived -= OnRawDataReceived;
+                recorder.Stopped -= OnStopped;
+            }
+
             recorder.RawDataReceived += OnRawDataReceived;
-            recorder.Stopped += (_, _) => recorder.RawDataReceived -= OnRawDataReceived;
+            recorder.Stopped += OnStopped;
         }
     }
 }
