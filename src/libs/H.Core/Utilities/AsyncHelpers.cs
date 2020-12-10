@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace H.Core.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class AsyncHelpers
     {
         /// <summary>

@@ -3,6 +3,9 @@ using H.Core.Attributes;
 
 namespace H.Core.Notifiers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AllowMultipleInstance(false)]
     public class Notifier : Module, INotifier
     {
@@ -14,8 +17,14 @@ namespace H.Core.Notifiers
 
         #region Events
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler? EventOccurred;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void OnEventOccurred()
         {
             EventOccurred?.Invoke(this, EventArgs.Empty);
@@ -25,6 +34,9 @@ namespace H.Core.Notifiers
 
         #region Constructors
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected Notifier()
         {
             AddSetting(nameof(Command), o => Command = o, _ => true, Command);

@@ -6,6 +6,9 @@ using H.Core.Utilities;
 
 namespace H.Core.Runners
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class Runner : Module, IRunner
     {
         #region Properties
@@ -15,8 +18,16 @@ namespace H.Core.Runners
         #endregion
 
         #region Events
+        
+        /// <summary>
+        /// 
+        /// </summary>
 
         public event EventHandler<string>? Started;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<string>? Completed;
         
         private void OnStarted(string value)
@@ -33,6 +44,12 @@ namespace H.Core.Runners
 
         #region Public methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public RunInformation Run(string key, string data)
         {
             try
@@ -51,12 +68,35 @@ namespace H.Core.Runners
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string[] GetSupportedCommands() =>
             HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public virtual bool IsSupport(string key, string data) => GetInformation(key, data) != null;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public bool IsInternal(string key, string data) => GetInformation(key, data)?.IsInternal ?? false;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public RunInformation? GetInformation(string key, string data)
         {
             if (string.IsNullOrWhiteSpace(data))
@@ -102,6 +142,12 @@ namespace H.Core.Runners
             return command;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         protected virtual RunInformation RunInternal(string key, string data)
         {
             var values = data.SplitOnlyFirstIgnoreQuote(' ');
@@ -143,9 +189,21 @@ namespace H.Core.Runners
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool IsWaitCommand { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public static string? WaitCommand { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
         protected async Task<string?> WaitNextCommand(int timeout)
         {
             var recordTimeout = (int)(0.6 * timeout);
@@ -169,6 +227,12 @@ namespace H.Core.Runners
             return WaitCommand;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <param name="additionalAccepts"></param>
+        /// <returns></returns>
         protected async Task<bool> WaitAccept(int timeout, params string[] additionalAccepts)
         {
             var command = await WaitNextCommand(timeout).ConfigureAwait(false);
@@ -179,6 +243,13 @@ namespace H.Core.Runners
             return command.IsAnyOrdinalIgnoreCase(defaultAccepts.ToArray());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="timeout"></param>
+        /// <param name="additionalAccepts"></param>
+        /// <returns></returns>
         protected async Task<bool> WaitAccept(string message, int timeout, params string[] additionalAccepts)
         {
             await SayAsync(message).ConfigureAwait(false);
@@ -186,12 +257,23 @@ namespace H.Core.Runners
             return await WaitAccept(timeout, additionalAccepts).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
         public static void StopWaitCommand(string command)
         {
             WaitCommand = command;
             IsWaitCommand = false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
         protected void AddAction(string key, Action<string?> action, string? description = null, bool isInternal = false) =>
             AddAction(key, new RunInformation
             {
@@ -200,12 +282,31 @@ namespace H.Core.Runners
                 IsInternal = isInternal
             });
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
         protected void AddInternalAction(string key, Action<string?> action, string? description = null) =>
             AddAction(key, action, description, true);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="func"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
         protected void AddAsyncAction(string key, Func<string?, Task> func, string? description = null, bool isInternal = false) =>
             AddAction(key, async text => await (func.Invoke(text) ?? Task.Delay(0)).ConfigureAwait(false), description, isInternal);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="func"></param>
+        /// <param name="description"></param>
         protected void AddInternalAsyncAction(string key, Func<string?, Task> func, string? description = null) =>
             AddAsyncAction(key, func, description, true);
 

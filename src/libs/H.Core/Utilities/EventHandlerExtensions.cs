@@ -25,16 +25,36 @@ using System.Threading.Tasks;
 
 namespace H.Core.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class EventHandlerExtensions
     {
         private static readonly Task CompletedTask = Task.FromResult(0);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="eventHandler"></param>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        /// <returns></returns>
         public static Task InvokeAsync<T>(this EventHandler<T> eventHandler, object sender, T eventArgs)
             where T : DeferredEventArgs
         {
             return InvokeAsync(eventHandler, sender, eventArgs, CancellationToken.None);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="eventHandler"></param>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static Task InvokeAsync<T>(this EventHandler<T> eventHandler, object sender, T eventArgs, CancellationToken cancellationToken)
             where T : DeferredEventArgs
         {

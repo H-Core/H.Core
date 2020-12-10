@@ -24,6 +24,9 @@ using System.Threading.Tasks;
 
 namespace H.Core.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EventDeferral : IDisposable
     {
         private readonly TaskCompletionSource<object?> _taskCompletionSource = new ();
@@ -32,6 +35,9 @@ namespace H.Core.Utilities
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Complete() => _taskCompletionSource.TrySetResult(null);
 
         internal async Task WaitForCompletion(CancellationToken cancellationToken)
@@ -42,6 +48,9 @@ namespace H.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             Complete();

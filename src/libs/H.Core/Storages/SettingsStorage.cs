@@ -4,12 +4,23 @@ using H.Core.Settings;
 
 namespace H.Core.Storages
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SettingsStorage : Dictionary<string, Setting>, ISettingsStorage
     {
         #region INotifyPropertyChanged
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new Setting this[string key]
         {
             get => base[key];
@@ -22,6 +33,11 @@ namespace H.Core.Storages
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Set(string key, object value)
         {
             if (!TryGetValue(key, out var thisSetting))
@@ -34,6 +50,11 @@ namespace H.Core.Storages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new bool Remove(string key)
         {
             var result = base.Remove(key);
@@ -44,7 +65,14 @@ namespace H.Core.Storages
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Load() { }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public void Save() { }
     }
 }

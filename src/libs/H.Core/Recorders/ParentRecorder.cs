@@ -3,10 +3,16 @@ using System.Threading.Tasks;
 
 namespace H.Core.Recorders
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ParentRecorder : Recorder
     {
         #region Properties
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IRecorder? Recorder { get; protected set; }
 
         #endregion
@@ -17,6 +23,11 @@ namespace H.Core.Recorders
 
         #region Public methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (Recorder == null || Recorder.IsInitialized)
@@ -27,6 +38,11 @@ namespace H.Core.Recorders
             await Recorder.InitializeAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (IsStarted)
@@ -49,6 +65,11 @@ namespace H.Core.Recorders
             await base.StartAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
@@ -74,6 +95,9 @@ namespace H.Core.Recorders
 
         #region IDisposable
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override void Dispose()
         {
             base.Dispose();

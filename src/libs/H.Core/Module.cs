@@ -9,40 +9,116 @@ using H.Core.Utilities;
 
 namespace H.Core
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Module : IModule
     {
         #region Properties
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Name { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string ShortName => GetType().Name;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string UniqueName { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsRegistered { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string Description { get; } = string.Empty;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ISettingsStorage Settings { get; } = new SettingsStorage();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool IsValid() => Settings.All(entry => entry.Value.IsValid());
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected InvariantStringDictionary<Func<object?>> Variables { get; } = new ();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string[] GetSupportedVariables() => Variables.Keys.ToArray();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="action"></param>
         protected void AddVariable(string key, Func<object> action) => Variables[key] = action;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public object? GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
         #endregion
 
         #region Events
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<string>? NewCommand;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<IModule>? SettingsSaved;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<Exception>? ExceptionOccurred;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<string>? LogReceived;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         protected void OnExceptionOccurred(Exception value)
         {
             ExceptionOccurred?.Invoke(this, value);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         protected void OnLogReceived(string value)
         {
             LogReceived?.Invoke(this, value);
@@ -53,6 +129,9 @@ namespace H.Core
 
         #region Constructors
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected Module()
         {
             Name = GetType().FullName;
@@ -72,12 +151,34 @@ namespace H.Core
 
         #region Main Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
         public void Run(string text) => NewCommand?.Invoke(this, text);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
         public void Say(string text) => Run($"say {text}");
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
         public void Print(string text) => Run($"print {text}");
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public void ShowSettings() => Run($"show-module-settings {UniqueName}");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public async Task RunAsync(string text)
         {
             if (NewCommandAsync != null)
@@ -88,11 +189,26 @@ namespace H.Core
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public async Task SayAsync(string text) => await RunAsync($"say {text}").ConfigureAwait(false);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Enable() => Run($"enable-module {UniqueName}");
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public void Disable() => Run($"disable-module {UniqueName}");
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void SaveSettings() => SettingsSaved?.Invoke(this, this);
 
         #endregion
@@ -101,21 +217,44 @@ namespace H.Core
 
         #region Settings
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ICollection<string> GetAvailableSettings()
         {
             return Settings.Keys;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void SetSetting(string key, object value)
         {
             Settings.Set(key, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public object? GetSetting(string key)
         {
             return Settings[key].Value;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="setAction"></param>
+        /// <param name="checkFunc"></param>
+        /// <param name="defaultValue"></param>
+        /// <param name="type"></param>
         protected void AddSetting<T>(string key, Action<T> setAction, Func<T, bool> checkFunc, T defaultValue, SettingType type = SettingType.Default)
         {
             key = key ?? throw new ArgumentNullException(nameof(key));
@@ -130,6 +269,14 @@ namespace H.Core
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="setAction"></param>
+        /// <param name="checkFunc"></param>
+        /// <param name="defaultValues"></param>
         protected void AddEnumerableSetting<T>(string key, Action<T> setAction, Func<T, bool> checkFunc, T[] defaultValues)
         {
             key = key ?? throw new ArgumentNullException(nameof(key));
@@ -144,15 +291,68 @@ namespace H.Core
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool IsNull(string? key) => key == null;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool NoEmpty(string key) => !string.IsNullOrEmpty(key);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_"></param>
+        /// <returns></returns>
         protected static bool Always<T>(T _) => true;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_"></param>
+        /// <returns></returns>
         protected static bool Any(object _) => true;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool IsNull(int key) => key == 0;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool Positive(int key) => key > 0;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool Negative(int key) => key < 0;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool NotNegative(int key) => key >= 0;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static bool NotPositive(int key) => key <= 0;
 
 
@@ -177,6 +377,9 @@ namespace H.Core
 
         #region IDisposable
 
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void Dispose()
         {
         }
@@ -185,14 +388,40 @@ namespace H.Core
 
         #region Static methods
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static Func<string, object>? GetVariableValueGlobalFunc { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static object? GetVariable(string key) => GetVariableValueGlobalFunc?.Invoke(key);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static T? GetVariable<T>(string key, T defaultValue = default)
         {
             return GetVariable(key) is T value ? value : defaultValue;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static Func<string, Task<List<string>>>? SearchFunc { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected static async Task<List<string>> SearchInInternet(string key)
         {
             if (SearchFunc == null)
@@ -203,6 +432,12 @@ namespace H.Core
             return await SearchFunc.Invoke(key).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static async Task<List<string>> SearchInInternet(string query, int count) =>
             (await SearchInInternet(query).ConfigureAwait(false)).Take(count).ToList();
 

@@ -4,8 +4,18 @@ using System.Threading.Tasks;
 
 namespace H.Core.Recorders
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class RecorderExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recorder"></param>
+        /// <param name="timeout"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static async Task StartWithTimeoutAsync(this IRecorder recorder, TimeSpan timeout, CancellationToken cancellationToken = default)
         {
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
@@ -22,6 +32,13 @@ namespace H.Core.Recorders
             await recorder.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recorder"></param>
+        /// <param name="timeout"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static async Task ChangeWithTimeoutAsync(this IRecorder recorder, TimeSpan timeout, CancellationToken cancellationToken = default)
         {
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));

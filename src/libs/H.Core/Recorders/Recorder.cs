@@ -5,22 +5,51 @@ using H.Core.Utilities;
 
 namespace H.Core.Recorders
 {
+    /// <summary>
+    /// /
+    /// </summary>
     public class Recorder : Module, IRecorder
     {
         #region Properties
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsInitialized { get; protected set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsStarted { get; protected set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public byte[] RawData { get; protected set; } = EmptyArray<byte>.Value;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public byte[] WavData { get; protected set; } = EmptyArray<byte>.Value;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public byte[] WavHeader { get; protected set; } = EmptyArray<byte>.Value;
 
         #endregion
 
         #region Events
+        
+        /// <summary>
+        /// 
+        /// </summary>
 
         public event EventHandler? Started;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler? Stopped;
 
         /// <summary>
@@ -28,17 +57,26 @@ namespace H.Core.Recorders
         /// </summary>
         public event EventHandler<byte[]>? RawDataReceived;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void OnStarted()
         {
             Started?.Invoke(this, EventArgs.Empty);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected void OnStopped()
         {
             Stopped?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         protected void OnRawDataReceived(byte[] value)
         {
             RawDataReceived?.Invoke(this, value);
@@ -48,6 +86,11 @@ namespace H.Core.Recorders
 
         #region Public methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public virtual Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             IsInitialized = true;
@@ -55,6 +98,11 @@ namespace H.Core.Recorders
             return Task.FromResult(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public virtual async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (IsStarted)
@@ -71,6 +119,11 @@ namespace H.Core.Recorders
             await Task.Delay(TimeSpan.Zero, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)

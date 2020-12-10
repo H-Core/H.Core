@@ -8,10 +8,16 @@ using H.Core.Recorders;
 
 namespace H.Core.Managers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BaseManager : ParentRecorder
     {
         #region Properties
 
+        /// <summary>
+        /// 
+        /// </summary>
         public new IRecorder? Recorder {
             get => base.Recorder;
             set {
@@ -31,14 +37,28 @@ namespace H.Core.Managers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IConverter? Converter { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public List<IConverter> AlternativeConverters { get; } = new ();
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string? Text { get; private set; }
 
         #endregion
 
         #region Events
+        
+        /// <summary>
+        /// 
+        /// </summary>
 
         public event EventHandler<string?>? NewText;
         private void OnNewText() => NewText?.Invoke(this, Text);
@@ -51,12 +71,22 @@ namespace H.Core.Managers
 
         #region Public methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
         public void ProcessText(string text)
         {
             Text = text;
             OnNewText();
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task ProcessSpeechAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
             if (Converter == null)
@@ -115,6 +145,11 @@ namespace H.Core.Managers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (IsStarted)
@@ -126,6 +161,11 @@ namespace H.Core.Managers
             await base.StartAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
@@ -142,6 +182,11 @@ namespace H.Core.Managers
             await Recorder.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task ChangeAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
@@ -234,6 +279,9 @@ namespace H.Core.Managers
 
         #region IDisposable
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override void Dispose()
         {
             Recorder?.Dispose();

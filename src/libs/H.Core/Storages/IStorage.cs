@@ -2,6 +2,10 @@
 
 namespace H.Core.Storages
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IStorage<T> : IDictionary<string, T> //IEnumerable<KeyValuePair<string, T>>
     {
         //T this[string key] { get; set; }
@@ -9,7 +13,14 @@ namespace H.Core.Storages
         //bool TryGetValue(string key, out T value);
         //bool Remove(string key);
 
+        /// <summary>
+        /// 
+        /// </summary>
         void Load();
+        
+        /// <summary>
+        /// 
+        /// </summary>
         void Save();
     }
 }

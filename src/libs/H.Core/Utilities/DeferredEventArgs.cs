@@ -22,14 +22,24 @@ using System;
 
 namespace H.Core.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DeferredEventArgs : EventArgs, IDisposable
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public new static readonly DeferredEventArgs Empty = new ();
 
         private readonly object _eventDeferralLock = new ();
 
         private EventDeferral? _eventDeferral;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public EventDeferral GetDeferral()
         {
             lock (_eventDeferralLock)
@@ -38,6 +48,9 @@ namespace H.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             _eventDeferral?.Dispose();

@@ -5,8 +5,17 @@ using System.Text.RegularExpressions;
 
 namespace H.Core.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
         public static string?[] SplitOnlyFirst(this string? text, char separator)
         {
             if (text == null)
@@ -25,6 +34,13 @@ namespace H.Core.Utilities
             return new[] { prefix, postfix };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="separator"></param>
+        /// <param name="quoteSeparator"></param>
+        /// <returns></returns>
         public static string?[] SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
         {
             if (text == null)
@@ -59,6 +75,13 @@ namespace H.Core.Utilities
 
         private static string GetVariableName(int i) => $"$VARIABLE{i}$";
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="comparison"></param>
+        /// <param name="otherStrings"></param>
+        /// <returns></returns>
         public static bool IsAny(this string? text, StringComparison comparison, params string [] otherStrings)
         {
             foreach (var str in otherStrings)
@@ -72,9 +95,21 @@ namespace H.Core.Utilities
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="otherStrings"></param>
+        /// <returns></returns>
         public static bool IsAny(this string text, params string[] otherStrings) =>
             text.IsAny(StringComparison.CurrentCulture, otherStrings);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="otherStrings"></param>
+        /// <returns></returns>
         public static bool IsAnyOrdinalIgnoreCase(this string? text, params string[] otherStrings) =>
             text.IsAny(StringComparison.OrdinalIgnoreCase, otherStrings);
     }
