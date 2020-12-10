@@ -6,7 +6,9 @@
 
         static EmptyArray()
         {
+#pragma warning disable CA1825 // Avoid zero-length array allocations
             Value = new T[0];
+#pragma warning restore CA1825 // Avoid zero-length array allocations
         }
     }
 }

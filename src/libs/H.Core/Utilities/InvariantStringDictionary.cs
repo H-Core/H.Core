@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace H.Core.Utilities
 {
@@ -6,12 +7,28 @@ namespace H.Core.Utilities
     {
         #region Public methods
 
-        public new T this[string key] {
-            get => base[ToInvariantString(key)];
-            set => base[ToInvariantString(key)] = value;
+        public new T this[string key]
+        {
+            get
+            {
+                key = key ?? throw new ArgumentNullException(nameof(key));
+
+                return base[ToInvariantString(key)];
+            }
+            set
+            {
+                key = key ?? throw new ArgumentNullException(nameof(key));
+
+                base[ToInvariantString(key)] = value;
+            }
         }
 
-        public new bool ContainsKey(string key) => base.ContainsKey(ToInvariantString(key));
+        public new bool ContainsKey(string key)
+        {
+            key = key ?? throw new ArgumentNullException(nameof(key));
+            
+            return base.ContainsKey(ToInvariantString(key));
+        }
 
         public new bool TryGetValue(string key, out T value)
         {
@@ -25,13 +42,18 @@ namespace H.Core.Utilities
             return true;
         }
 
-        public new bool Remove(string key) => base.Remove(ToInvariantString(key));
+        public new bool Remove(string key)
+        {
+            key = key ?? throw new ArgumentNullException(nameof(key));
+            
+            return base.Remove(ToInvariantString(key));
+        }
 
         #endregion
 
         #region Private methods
 
-        private static string ToInvariantString(string text) => text.ToLowerInvariant();
+        private static string ToInvariantString(string text) => text.ToUpperInvariant();
 
         #endregion
     }

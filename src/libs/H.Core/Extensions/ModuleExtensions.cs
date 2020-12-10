@@ -9,8 +9,12 @@ namespace H.Core.Extensions
         public static bool AllowMultipleInstance(this Type type) => 
             type.GetTypeInfo().GetCustomAttribute<AllowMultipleInstanceAttribute>() != null;
 
-        public static bool AllowMultipleInstance(this IModule module) => 
-            module.GetType().AllowMultipleInstance();
+        public static bool AllowMultipleInstance(this IModule module)
+        {
+            module = module ?? throw new ArgumentNullException(nameof(module));
+            
+            return module.GetType().AllowMultipleInstance();
+        }
 
         public static bool AutoCreateInstance(this Type type)
         {
@@ -19,8 +23,11 @@ namespace H.Core.Extensions
             return attribute?.AutoCreateInstance ?? true;
         }
 
-        public static bool AutoCreateInstance(this IModule module) =>
-            module.GetType().AutoCreateInstance();
-
+        public static bool AutoCreateInstance(this IModule module)
+        {
+            module = module ?? throw new ArgumentNullException(nameof(module));
+            
+            return module.GetType().AutoCreateInstance();
+        }
     }
 }

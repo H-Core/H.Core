@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using H.Core.Settings;
@@ -81,7 +82,9 @@ namespace H.Core
         {
             if (NewCommandAsync != null)
             {
-                await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text)).ConfigureAwait(false);
+                using var args = TextDeferredEventArgs.Create(text);
+                
+                await NewCommandAsync.InvokeAsync(this, args).ConfigureAwait(false);
             }
         }
 
@@ -155,11 +158,11 @@ namespace H.Core
 
         #endregion
 
-        private bool CanConvert<T>(object? value)
+        private static bool CanConvert<T>(object? value)
         {
             try
             {
-                var unused = Convert.ChangeType(value, typeof(T));
+                var unused = Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
                 return true;
             }
             catch (Exception)
@@ -168,7 +171,7 @@ namespace H.Core
             }
         }
 
-        private T ConvertTo<T>(object? value) => (T)Convert.ChangeType(value, typeof(T));
+        private static T ConvertTo<T>(object? value) => (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
 
         #endregion
 

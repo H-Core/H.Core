@@ -32,7 +32,7 @@ namespace H.Core.Managers
         }
 
         public IConverter? Converter { get; set; }
-        public List<IConverter> AlternativeConverters { get; set; } = new List<IConverter>();
+        public List<IConverter> AlternativeConverters { get; } = new ();
 
         public string? Text { get; private set; }
 
