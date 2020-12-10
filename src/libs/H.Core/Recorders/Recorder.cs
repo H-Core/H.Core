@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using H.Core.Utilities;
 
 namespace H.Core.Recorders
 {
@@ -10,9 +11,9 @@ namespace H.Core.Recorders
 
         public bool IsInitialized { get; protected set; }
         public bool IsStarted { get; protected set; }
-        public byte[]? RawData { get; protected set; }
-        public byte[]? WavData { get; protected set; }
-        public byte[]? WavHeader { get; protected set; }
+        public byte[] RawData { get; protected set; } = EmptyArray<byte>.Value;
+        public byte[] WavData { get; protected set; } = EmptyArray<byte>.Value;
+        public byte[] WavHeader { get; protected set; } = EmptyArray<byte>.Value;
 
         #endregion
 
@@ -20,12 +21,12 @@ namespace H.Core.Recorders
 
         public event EventHandler? Started;
 
-        public event EventHandler<RecorderEventArgs>? Stopped;
+        public event EventHandler? Stopped;
 
         /// <summary>
-        /// When new partial raw data
+        /// When new partial raw data received.
         /// </summary>
-        public event EventHandler<RecorderEventArgs>? RawDataReceived;
+        public event EventHandler<byte[]>? RawDataReceived;
 
         protected void OnStarted()
         {
@@ -33,25 +34,25 @@ namespace H.Core.Recorders
         }
 
 
-        protected void OnStopped(RecorderEventArgs args)
+        protected void OnStopped()
         {
-            Stopped?.Invoke(this, args);
+            Stopped?.Invoke(this, EventArgs.Empty);
         }
 
         protected void OnRawDataReceived(byte[] value)
         {
-            RawDataReceived?.Invoke(this, new RecorderEventArgs(value));
+            RawDataReceived?.Invoke(this, value);
         }
 
         #endregion
 
         #region Public methods
 
-        public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public virtual Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             IsInitialized = true;
 
-            await Task.Delay(0, cancellationToken);
+            return Task.FromResult(false);
         }
 
         public virtual async Task StartAsync(CancellationToken cancellationToken = default)
@@ -62,25 +63,25 @@ namespace H.Core.Recorders
             }
 
             IsStarted = true;
-            RawData = null;
-            WavData = null;
+            RawData = EmptyArray<byte>.Value;
+            WavData = EmptyArray<byte>.Value;
 
             OnStarted();
 
-            await Task.Delay(0, cancellationToken).ConfigureAwait(false);
+            await Task.Delay(TimeSpan.Zero, cancellationToken).ConfigureAwait(false);
         }
 
-        public virtual async Task StopAsync(CancellationToken cancellationToken = default)
+        public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
             {
-                return;
+                return Task.FromResult(false);
             }
 
             IsStarted = false;
-            OnStopped(new RecorderEventArgs(RawData, WavData));
-
-            await Task.Delay(0, cancellationToken).ConfigureAwait(false);
+            OnStopped();
+            
+            return Task.FromResult(false);
         }
 
         #endregion

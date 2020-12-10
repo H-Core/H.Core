@@ -180,20 +180,15 @@ namespace H.Core.Managers
                 ProcessText(value);
             };
 
-            if (Recorder.RawData != null)
+            if (Recorder.RawData.Any())
             {
-                await recognition.WriteAsync(Recorder.RawData.ToArray());
+                await recognition.WriteAsync(Recorder.RawData);
             }
 
             // ReSharper disable once AccessToDisposedClosure
-            async void RecorderOnRawDataReceived(object o, RecorderEventArgs e)
+            async void RecorderOnRawDataReceived(object o, byte[] bytes)
             {
-                if (e.RawData == null)
-                {
-                    return;
-                }
-
-                await recognition.WriteAsync(e.RawData.ToArray());
+                await recognition.WriteAsync(bytes);
             }
 
             try
@@ -213,7 +208,7 @@ namespace H.Core.Managers
             }
         }
 
-        private async void Recorder_OnStopped(object sender, RecorderEventArgs args)
+        private async void Recorder_OnStopped(object sender, EventArgs args)
         {
             IsStarted = false;
 
@@ -225,9 +220,9 @@ namespace H.Core.Managers
 
             RawData = Recorder.RawData;
             WavData = Recorder.WavData;
-            OnStopped(new RecorderEventArgs(RawData, WavData));
+            OnStopped();
 
-            if (WavData == null)
+            if (!WavData.Any())
             {
                 return;
             }

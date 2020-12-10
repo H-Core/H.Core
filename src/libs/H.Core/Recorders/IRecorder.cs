@@ -10,17 +10,17 @@ namespace H.Core.Recorders
 
         bool IsInitialized { get; }
         bool IsStarted { get; }
-        byte[]? RawData { get; }
-        byte[]? WavData { get; }
-        byte[]? WavHeader { get; }
+        byte[] RawData { get; }
+        byte[] WavData { get; }
+        byte[] WavHeader { get; }
 
         #endregion
 
         #region Events
 
         event EventHandler? Started;
-        event EventHandler<RecorderEventArgs>? Stopped;
-        event EventHandler<RecorderEventArgs>? RawDataReceived;
+        event EventHandler? Stopped;
+        event EventHandler<byte[]>? RawDataReceived;
 
         #endregion
 
