@@ -173,8 +173,8 @@ namespace H.Core.Managers
             }
 
             using var recognition = await Converter.StartStreamingRecognitionAsync();
-            recognition.AfterPartialResults += (_, value) => ProcessText($"deskband preview {value}");
-            recognition.AfterFinalResults += (_, value) =>
+            recognition.PartialResultsReceived += (_, value) => ProcessText($"deskband preview {value}");
+            recognition.FinalResultsReceived += (_, value) =>
             {
                 ProcessText("deskband clear-preview");
                 ProcessText(value);

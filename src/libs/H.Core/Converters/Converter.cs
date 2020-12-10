@@ -25,7 +25,7 @@ namespace H.Core.Converters
         {
             using var recognition = await StartStreamingRecognitionAsync(cancellationToken);
             var response = string.Empty;
-            recognition.AfterFinalResults += (_, value) => response = value;
+            recognition.FinalResultsReceived += (_, value) => response = value;
 
             await recognition.WriteAsync(bytes, cancellationToken);
             await recognition.StopAsync(cancellationToken);

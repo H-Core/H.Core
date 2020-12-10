@@ -16,17 +16,17 @@ namespace H.Core.Runners
 
         #region Events
 
-        public event EventHandler<string>? BeforeRun;
-        public event EventHandler<string>? AfterRun;
+        public event EventHandler<string>? Started;
+        public event EventHandler<string>? Completed;
         
-        private void OnBeforeRun(string value)
+        private void OnStarted(string value)
         {
-            BeforeRun?.Invoke(this, value);
+            Started?.Invoke(this, value);
         }
 
-        private void OnAfterRun(string value)
+        private void OnCompleted(string value)
         {
-            AfterRun?.Invoke(this, value);
+            Completed?.Invoke(this, value);
         }
 
         #endregion
@@ -37,11 +37,11 @@ namespace H.Core.Runners
         {
             try
             {
-                OnBeforeRun(key);
+                OnStarted(key);
 
                 var info = RunInternal(key, data);
 
-                OnAfterRun(key);
+                OnCompleted(key);
 
                 return info;
             }

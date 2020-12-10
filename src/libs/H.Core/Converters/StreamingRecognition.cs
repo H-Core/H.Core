@@ -9,17 +9,17 @@ namespace H.Core.Converters
     {
         #region Events
 
-        public event EventHandler<string>? AfterPartialResults;
-        public event EventHandler<string>? AfterFinalResults;
+        public event EventHandler<string>? PartialResultsReceived;
+        public event EventHandler<string>? FinalResultsReceived;
 
-        protected void OnAfterPartialResults(string value)
+        protected void OnPartialResultsReceived(string value)
         {
-            AfterPartialResults?.Invoke(this, value);
+            PartialResultsReceived?.Invoke(this, value);
         }
 
-        protected void OnAfterFinalResults(string value)
+        protected void OnFinalResultsReceived(string value)
         {
-            AfterFinalResults?.Invoke(this, value);
+            FinalResultsReceived?.Invoke(this, value);
         }
 
         #endregion
