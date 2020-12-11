@@ -17,11 +17,17 @@ namespace H.Core.Converters
         /// <param name="recognition"></param>
         /// <param name="recorder"></param>
         /// <param name="writeWavHeader"></param>
+        /// <param name="exceptionsStorage"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public static async Task BindRecorderAsync(this IStreamingRecognition recognition, IRecorder recorder, bool writeWavHeader = false, CancellationToken cancellationToken = default)
+        public static async Task BindRecorderAsync(
+            this IStreamingRecognition recognition, 
+            IRecorder recorder, 
+            bool writeWavHeader = false,
+            ExceptionsStorage? exceptionsStorage = null,
+            CancellationToken cancellationToken = default)
         {
             recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
@@ -43,13 +49,27 @@ namespace H.Core.Converters
 
             async void OnRawDataReceived(object? _, byte[] bytes)
             {
-                await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    exceptionsStorage?.OnOccurred(exception);
+                }
             }
 
             void OnStopped(object? o, EventArgs eventArgs)
             {
-                recorder.RawDataReceived -= OnRawDataReceived;
-                recorder.Stopped -= OnStopped;
+                try
+                {
+                    recorder.RawDataReceived -= OnRawDataReceived;
+                    recorder.Stopped -= OnStopped;
+                }
+                catch (Exception exception)
+                {
+                    exceptionsStorage?.OnOccurred(exception);
+                }
             }
 
             recorder.RawDataReceived += OnRawDataReceived;
@@ -62,13 +82,15 @@ namespace H.Core.Converters
         /// <param name="converter"></param>
         /// <param name="recorder"></param>
         /// <param name="writeWavHeader"></param>
+        /// <param name="exceptionsStorage"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public static async Task<IStreamingRecognition> StartStreamingRecognitionAsync(
             this IConverter converter, 
             IRecorder recorder,
-            bool writeWavHeader = false, 
+            bool writeWavHeader = false,
+            ExceptionsStorage? exceptionsStorage = null,
             CancellationToken cancellationToken = default)
         {
             converter = converter ?? throw new ArgumentNullException(nameof(converter));
@@ -79,10 +101,17 @@ namespace H.Core.Converters
             var recognition = await converter.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
             recognition.Stopping += async (_, _) =>
             {
-                await recorder.StopAsync(cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    await recorder.StopAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    exceptionsStorage?.OnOccurred(exception);
+                }
             };
 
-            await recognition.BindRecorderAsync(recorder, writeWavHeader, cancellationToken).ConfigureAwait(false);
+            await recognition.BindRecorderAsync(recorder, writeWavHeader, exceptionsStorage, cancellationToken).ConfigureAwait(false);
 
             return recognition;
         }

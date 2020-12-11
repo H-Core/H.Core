@@ -5,12 +5,13 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>0.11.0</Version>
+    <Version>0.11.1</Version>
     <Description>HomeCenter Core library that contains IConverter/IRecorder/IRunner etc.</Description>
     <PackageReleaseNotes>
       Added IStreamingRecognition.Stopping event.
       Added IStreamingRecognition.Stopped event.
       Added IConverter.StartStreamingRecognitionAsync(IRecorder) extension.
+      Added ExceptionsStorage for extensions.
     </PackageReleaseNotes>
   </PropertyGroup>
 
