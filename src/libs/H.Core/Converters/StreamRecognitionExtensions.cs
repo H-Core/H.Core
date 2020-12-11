@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Recorders;
+using H.Core.Utilities;
 
 namespace H.Core.Converters
 {
@@ -17,7 +18,7 @@ namespace H.Core.Converters
         /// <param name="recognition"></param>
         /// <param name="recorder"></param>
         /// <param name="writeWavHeader"></param>
-        /// <param name="exceptionsStorage"></param>
+        /// <param name="exceptionsBag"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
@@ -26,7 +27,7 @@ namespace H.Core.Converters
             this IStreamingRecognition recognition, 
             IRecorder recorder, 
             bool writeWavHeader = false,
-            ExceptionsStorage? exceptionsStorage = null,
+            ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
         {
             recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
@@ -55,7 +56,7 @@ namespace H.Core.Converters
                 }
                 catch (Exception exception)
                 {
-                    exceptionsStorage?.OnOccurred(exception);
+                    exceptionsBag?.OnOccurred(exception);
                 }
             }
 
@@ -68,7 +69,7 @@ namespace H.Core.Converters
                 }
                 catch (Exception exception)
                 {
-                    exceptionsStorage?.OnOccurred(exception);
+                    exceptionsBag?.OnOccurred(exception);
                 }
             }
 
@@ -82,7 +83,7 @@ namespace H.Core.Converters
         /// <param name="converter"></param>
         /// <param name="recorder"></param>
         /// <param name="writeWavHeader"></param>
-        /// <param name="exceptionsStorage"></param>
+        /// <param name="exceptionsBag"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
@@ -90,7 +91,7 @@ namespace H.Core.Converters
             this IConverter converter, 
             IRecorder recorder,
             bool writeWavHeader = false,
-            ExceptionsStorage? exceptionsStorage = null,
+            ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
         {
             converter = converter ?? throw new ArgumentNullException(nameof(converter));
@@ -107,11 +108,11 @@ namespace H.Core.Converters
                 }
                 catch (Exception exception)
                 {
-                    exceptionsStorage?.OnOccurred(exception);
+                    exceptionsBag?.OnOccurred(exception);
                 }
             };
 
-            await recognition.BindRecorderAsync(recorder, writeWavHeader, exceptionsStorage, cancellationToken).ConfigureAwait(false);
+            await recognition.BindRecorderAsync(recorder, writeWavHeader, exceptionsBag, cancellationToken).ConfigureAwait(false);
 
             return recognition;
         }
