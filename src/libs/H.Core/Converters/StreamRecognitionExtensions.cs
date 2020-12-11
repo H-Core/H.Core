@@ -77,7 +77,7 @@ namespace H.Core.Converters
             await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
 
             var recognition = await converter.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
-            recognition.Stopped += async (_, _) =>
+            recognition.Stopping += async (_, _) =>
             {
                 await recorder.StopAsync(cancellationToken).ConfigureAwait(false);
             };

@@ -13,6 +13,11 @@ namespace H.Core.Converters
         #region Events
 
         /// <summary>
+        /// Before <see cref="StopAsync"/> call.
+        /// </summary>
+        public event EventHandler? Stopping;
+        
+        /// <summary>
         /// After <see cref="StopAsync"/> call.
         /// </summary>
         public event EventHandler? Stopped;
@@ -28,6 +33,14 @@ namespace H.Core.Converters
         /// </summary>
         public event EventHandler<string>? FinalResultsReceived;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        protected void OnStopping()
+        {
+            Stopping?.Invoke(this, EventArgs.Empty);
+        }
+        
         /// <summary>
         /// 
         /// </summary>

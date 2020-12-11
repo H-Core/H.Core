@@ -12,6 +12,11 @@ namespace H.Core.Converters
         #region Events
 
         /// <summary>
+        /// Before <see cref="StopAsync"/> call.
+        /// </summary>
+        event EventHandler? Stopping;
+
+        /// <summary>
         /// After <see cref="StopAsync"/> call.
         /// </summary>
         event EventHandler? Stopped;
