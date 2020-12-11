@@ -9,15 +9,26 @@ namespace H.Core.Converters
     /// </summary>
     public interface IStreamingRecognition : IDisposable
     {
+        #region Events
+
+        /// <summary>
+        /// After <see cref="StopAsync"/> call.
+        /// </summary>
+        event EventHandler? Stopped;
+
         /// <summary>
         /// 
         /// </summary>
         event EventHandler<string>? PartialResultsReceived;
-        
+
         /// <summary>
         /// 
         /// </summary>
         event EventHandler<string>? FinalResultsReceived;
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// 
@@ -33,5 +44,7 @@ namespace H.Core.Converters
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task StopAsync(CancellationToken cancellationToken = default);
+        
+        #endregion
     }
 }

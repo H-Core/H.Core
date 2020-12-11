@@ -19,6 +19,7 @@ namespace H.Core.Converters
         /// <param name="writeWavHeader"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public static async Task BindRecorderAsync(this IStreamingRecognition recognition, IRecorder recorder, bool writeWavHeader = false, CancellationToken cancellationToken = default)
         {
@@ -53,6 +54,37 @@ namespace H.Core.Converters
 
             recorder.RawDataReceived += OnRawDataReceived;
             recorder.Stopped += OnStopped;
+        }
+
+        /// <summary>
+        /// Dispose is required!.
+        /// </summary>
+        /// <param name="converter"></param>
+        /// <param name="recorder"></param>
+        /// <param name="writeWavHeader"></param>
+        /// <param name="cancellationToken"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <returns></returns>
+        public static async Task<IStreamingRecognition> StartStreamingRecognitionAsync(
+            this IConverter converter, 
+            IRecorder recorder,
+            bool writeWavHeader = false, 
+            CancellationToken cancellationToken = default)
+        {
+            converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
+
+            await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
+
+            var recognition = await converter.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
+            recognition.Stopped += async (_, _) =>
+            {
+                await recorder.StopAsync(cancellationToken).ConfigureAwait(false);
+            };
+
+            await recognition.BindRecorderAsync(recorder, writeWavHeader, cancellationToken).ConfigureAwait(false);
+
+            return recognition;
         }
     }
 }

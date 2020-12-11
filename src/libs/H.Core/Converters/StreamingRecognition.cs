@@ -11,6 +11,11 @@ namespace H.Core.Converters
     public abstract class StreamingRecognition : DisposableObject, IStreamingRecognition
     {
         #region Events
+
+        /// <summary>
+        /// After <see cref="StopAsync"/> call.
+        /// </summary>
+        public event EventHandler? Stopped;
         
         /// <summary>
         /// 
@@ -23,6 +28,14 @@ namespace H.Core.Converters
         /// </summary>
         public event EventHandler<string>? FinalResultsReceived;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        protected void OnStopped()
+        {
+            Stopped?.Invoke(this, EventArgs.Empty);
+        }
+        
         /// <summary>
         /// 
         /// </summary>
