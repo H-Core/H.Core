@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace H.Core.Utilities
 {
@@ -42,6 +43,19 @@ namespace H.Core.Utilities
             Exceptions.Add(value);
 
             ExceptionOccurred?.Invoke(this, value);
+        }
+
+        /// <summary>
+        /// Throws <see cref="AggregateException"/> if any exceptions occur.
+        /// </summary>
+        /// <exception cref="AggregateException"></exception>
+        public void EnsureNoExceptions()
+        {
+            var exception = AggregateException;
+            if (exception.InnerExceptions.Any())
+            {
+                throw exception;
+            }
         }
 
         #endregion
