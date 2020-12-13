@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.Core.Converters
+namespace H.Core.Recognizers
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class Converter : Module, IConverter
+    public abstract class Recognizer : Module, IRecognizer
     {
         #region Properties
 

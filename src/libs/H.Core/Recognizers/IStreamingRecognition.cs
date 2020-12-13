@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.Core.Converters
+namespace H.Core.Recognizers
 {
     /// <summary>
     /// 

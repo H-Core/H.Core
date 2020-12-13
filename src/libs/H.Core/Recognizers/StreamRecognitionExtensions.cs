@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using H.Core.Recorders;
 using H.Core.Utilities;
 
-namespace H.Core.Converters
+namespace H.Core.Recognizers
 {
     /// <summary>
     /// 
@@ -80,7 +80,7 @@ namespace H.Core.Converters
         /// <summary>
         /// Dispose is required!.
         /// </summary>
-        /// <param name="converter"></param>
+        /// <param name="recognizer"></param>
         /// <param name="recorder"></param>
         /// <param name="writeWavHeader"></param>
         /// <param name="exceptionsBag"></param>
@@ -88,18 +88,18 @@ namespace H.Core.Converters
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public static async Task<IStreamingRecognition> StartStreamingRecognitionAsync(
-            this IConverter converter, 
+            this IRecognizer recognizer, 
             IRecorder recorder,
             bool writeWavHeader = false,
             ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
         {
-            converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
 
             await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
 
-            var recognition = await converter.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
+            var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
             recognition.Stopping += async (_, _) =>
             {
                 try

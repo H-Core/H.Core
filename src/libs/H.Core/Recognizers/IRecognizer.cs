@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.Core.Converters
+namespace H.Core.Recognizers
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IConverter : IModule
+    public interface IRecognizer : IModule
     {
         /// <summary>
         /// 

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Utilities;
 
-namespace H.Core.Converters
+namespace H.Core.Recognizers
 {
     /// <summary>
     /// 
