@@ -1,17 +1,18 @@
 ﻿using System;
-using H.Core.Attributes;
 
 namespace H.Core.Notifiers
 {
     /// <summary>
     /// 
     /// </summary>
-    [AllowMultipleInstance(false)]
     public class Notifier : Module, INotifier
     {
         #region Properties
 
-        private string Command { get; set; } = string.Empty;
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Command { get; set; } = string.Empty;
 
         #endregion
 
