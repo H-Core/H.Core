@@ -14,14 +14,13 @@ namespace H.Core.Runners
         /// <param name="data"></param>
         /// <returns></returns>
         RunInformation Run(string key, string data);
-        
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
+        /// <param name="command"></param>
         /// <returns></returns>
-        bool IsSupport(string key, string data);
+        bool IsSupported(string command);
         
         /// <summary>
         /// 
@@ -30,14 +29,13 @@ namespace H.Core.Runners
         /// <param name="data"></param>
         /// <returns></returns>
         bool IsInternal(string key, string data);
-        
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
+        /// <param name="command"></param>
         /// <returns></returns>
-        RunInformation? GetInformation(string key, string data);
+        RunInformation? GetInformation(string command);
 
         /// <summary>
         /// 

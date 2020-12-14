@@ -75,46 +75,49 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         /// <returns></returns>
-        public string[] GetSupportedCommands() =>
-            Actions.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public virtual bool IsSupport(string key, string data) => GetInformation(key, data) != null;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public bool IsInternal(string key, string data) => GetInformation(key, data)?.IsInternal ?? false;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public RunInformation? GetInformation(string key, string data)
+        public string[] GetSupportedCommands()
         {
-            if (string.IsNullOrWhiteSpace(data))
+            return Actions.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public virtual bool IsSupported(string command)
+        {
+            return GetInformation(command) != null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool IsInternal(string key, string data)
+        {
+            return GetInformation(data)?.IsInternal ?? false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public RunInformation? GetInformation(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
             {
                 return null;
             }
 
-            var values = data.SplitOnlyFirst(' ');
-            var first = values[0];
-            if (first == null)
-            {
-                return null;
-            }
-
-            return Actions.TryGetValue(first, out var information) ? information : null;
+            var values = command.SplitOnlyFirst(' ');
+            
+            return Actions.TryGetValue(values[0], out var information)
+                ? information
+                : null;
         }
 
         #endregion
