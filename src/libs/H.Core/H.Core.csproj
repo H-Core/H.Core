@@ -5,13 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>0.13.2</Version>
     <Description>HomeCenter Core library that contains IRecognizer/IRecorder/IRunner/INotifiers etc.</Description>
-    <PackageReleaseNotes>
-      Refactored runners.
-      Refactored StringExtensions as null free.
-      Fixed InvariantStringDictionary bug.
-    </PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

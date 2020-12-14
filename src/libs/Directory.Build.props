@@ -3,6 +3,12 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
+    <Version>0.13.3</Version>
+    <PackageReleaseNotes>
+      Refactored runners.
+      Refactored StringExtensions as null free.
+      Fixed InvariantStringDictionary bug.
+    </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>havendv</Authors>

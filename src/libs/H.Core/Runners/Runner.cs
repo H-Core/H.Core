@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using H.Core.Utilities;
 
@@ -9,39 +9,14 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public class Runner : Module, IRunner
+    public class Runner : Module, IRunner, IEnumerable<ICommand>
     {
         #region Properties
 
         /// <summary>
         /// 
         /// </summary>
-        public InvariantStringDictionary<RunInformation> Actions { get; } = new ();
-
-        #endregion
-
-        #region Events
-        
-        /// <summary>
-        /// 
-        /// </summary>
-
-        public event EventHandler<string>? Started;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventHandler<string>? Completed;
-        
-        private void OnStarted(string value)
-        {
-            Started?.Invoke(this, value);
-        }
-
-        private void OnCompleted(string value)
-        {
-            Completed?.Invoke(this, value);
-        }
+        protected InvariantStringDictionary<ICommand> Commands { get; } = new();
 
         #endregion
 
@@ -50,83 +25,32 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public RunInformation Run(string key, string data)
+        public ICall? TryPrepareCall(string text)
         {
-            try
-            {
-                OnStarted(key);
+            text = text ?? throw new ArgumentNullException(nameof(text));
 
-                var info = RunInternal(key, data);
+            var values = text.SplitOnlyFirstIgnoreQuote(' ');
+            var prefix = values[0];
 
-                OnCompleted(key);
-
-                return info;
-            }
-            catch (Exception exception)
-            {
-                return new RunInformation(exception);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetSupportedCommands()
-        {
-            return Actions.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public virtual bool IsSupported(string command)
-        {
-            return GetInformation(command) != null;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public bool IsInternal(string key, string data)
-        {
-            return GetInformation(data)?.IsInternal ?? false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public RunInformation? GetInformation(string command)
-        {
-            if (string.IsNullOrWhiteSpace(command))
+            if (!Commands.TryGetValue(prefix, out var command))
             {
                 return null;
             }
-
-            var values = command.SplitOnlyFirst(' ');
             
-            return Actions.TryGetValue(values[0], out var information)
-                ? information
-                : null;
+            var arguments = FindVariablesAndReplace(values[1]);
+
+            return command.PrepareCall(arguments);
         }
 
         #endregion
 
         #region Protected methods
 
-        private string? FindVariablesAndReplace(string? command)
+        private string FindVariablesAndReplace(string command)
         {
-            if (command == null || string.IsNullOrWhiteSpace(command))
+            if (string.IsNullOrWhiteSpace(command))
             {
                 return command;
             }
@@ -146,53 +70,6 @@ namespace H.Core.Runners
             }
 
             return command;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected virtual RunInformation RunInternal(string key, string data)
-        {
-            var values = data.SplitOnlyFirstIgnoreQuote(' ');
-            var first = values[0];
-            if (first == null)
-            {
-                return new RunInformation(new InvalidOperationException("RunInternal values[0] == null."));
-            }
-
-            var information = GetAction(first);
-            var command = values[1];
-
-            try
-            {
-                command = FindVariablesAndReplace(command);
-            }
-            catch (Exception exception)
-            {
-                information.Exception = exception;
-            }
-
-            var action = information.Action;
-            if (action == null)
-            {
-                //Log
-            }
-
-            try
-            {
-                action?.Invoke(command);
-
-                information.RunText = $"{values[0]} {command}";
-
-                return information;
-            }
-            catch (Exception exception)
-            {
-                return information.WithException(exception);
-            }
         }
 
         /// <summary>
@@ -276,66 +153,62 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="command"></param>
+        public void Add(ICommand command)
+        {
+            command = command ?? throw new ArgumentNullException(nameof(command));
+            
+            Commands.Add(command.Prefix, command);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefix"></param>
         /// <param name="action"></param>
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
-        protected void AddAction(string key, Action<string?> action, string? description = null, bool isInternal = false)
+        protected void AddCommand(string prefix, Action<string> action, string? description = null, bool isInternal = false)
         {
-            AddAction(key, new RunInformation
+            Commands.Add(prefix, new Command(prefix, action)
             {
-                Description = description,
-                Action = action,
-                IsInternal = isInternal
+                Description = description ?? string.Empty,
+                IsInternal = isInternal,
             });
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        protected void AddInternalAction(string key, Action<string?> action, string? description = null)
-        {
-            AddAction(key, action, description, true);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
+        /// <param name="prefix"></param>
         /// <param name="func"></param>
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
-        protected void AddAsyncAction(string key, Func<string?, Task> func, string? description = null, bool isInternal = false)
+        protected void AddAsyncAction(string prefix, Func<string, Task> func, string? description = null, bool isInternal = false)
         {
-            AddAction(
-                key, 
-                async text => await (func.Invoke(text) ?? Task.FromResult(false)).ConfigureAwait(false),
-                description, 
-                isInternal);
+            Commands.Add(prefix, new AsyncCommand(prefix, func)
+            {
+                Description = description ?? string.Empty,
+                IsInternal = isInternal,
+            });
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="func"></param>
-        /// <param name="description"></param>
-        protected void AddInternalAsyncAction(string key, Func<string?, Task> func, string? description = null)
+        /// <returns></returns>
+        public IEnumerator<ICommand> GetEnumerator()
         {
-            AddAsyncAction(key, func, description, true);
+            return Commands.Values.GetEnumerator();
         }
 
-        private void AddAction(string key, RunInformation information)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            Actions.Add(key, information);
-        }
-
-        private RunInformation GetAction(string key)
-        {
-            return Actions.TryGetValue(key, out var handler) ? handler : new RunInformation();
+            return Commands.Values.GetEnumerator();
         }
 
         #endregion

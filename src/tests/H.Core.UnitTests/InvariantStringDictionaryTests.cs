@@ -80,21 +80,15 @@ namespace H.Core.UnitTests
         }
 
         [TestMethod]
-        public void ActionsTest()
+        public void CommandsTest()
         {
-            var runInformation = new RunInformation
+            var command = new Command("print", Console.WriteLine);
+            var dictionary = new InvariantStringDictionary<Command>
             {
-                Action = Console.WriteLine,
-            };
-            var dictionary = new InvariantStringDictionary<RunInformation>
-            {
-                {
-                    "print",
-                    runInformation
-                },
+                { "print", command },
             };
             
-            BaseContainsTest(dictionary, "print", runInformation);
+            BaseContainsTest(dictionary, "print", command);
         }
     }
 }
