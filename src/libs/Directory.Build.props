@@ -3,9 +3,10 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.13.9</Version>
+    <Version>0.13.10</Version>
     <PackageReleaseNotes>
       Refactored runners.
+      Refactored searchers.
       Refactored StringExtensions as null free.
       Fixed InvariantStringDictionary bug.
     </PackageReleaseNotes>
