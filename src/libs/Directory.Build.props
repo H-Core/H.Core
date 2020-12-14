@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.13.10</Version>
+    <Version>0.13.11</Version>
     <PackageReleaseNotes>
       Refactored runners.
       Refactored searchers.

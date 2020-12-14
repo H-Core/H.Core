@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Core.Searchers
@@ -14,6 +15,6 @@ namespace H.Core.Searchers
         /// <param name="query"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<string[]> SearchAsync(string query, CancellationToken cancellationToken = default);
+        Task<IEnumerable<SearchResult>> SearchAsync(string query, CancellationToken cancellationToken = default);
     }
 }
