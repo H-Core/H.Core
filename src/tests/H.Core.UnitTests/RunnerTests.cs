@@ -18,7 +18,7 @@ namespace H.Core.UnitTests
             return call;
         }
 
-        public static async Task CommandTest(ICommand command)
+        public static async Task<ICall> CommandTest(ICommand command)
         {
             using var runner = new Runner
             {
@@ -35,23 +35,29 @@ namespace H.Core.UnitTests
             call.Running += (_, _) => Console.WriteLine($"{nameof(call.Running)}");
             call.Ran += (_, _) => Console.WriteLine($"{nameof(call.Ran)}");
             await call.RunAsync();
+
+            return call;
         }
         
         [TestMethod]
         public async Task PrintTest()
         {
-            await CommandTest(new Command("print", Console.WriteLine));
+            var call = await CommandTest(new Command("print", Console.WriteLine));
+            
+            Assert.AreEqual(false, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
         }
 
         [TestMethod]
         public async Task PrintAsyncTest()
         {
-            await CommandTest(new AsyncCommand("print", arguments =>
+            var call = await CommandTest(new AsyncCommand("print", arguments =>
             {
                 Console.WriteLine(arguments);
 
                 return Task.CompletedTask;
             }));
+
+            Assert.AreEqual(true, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
         }
     }
 }

@@ -29,6 +29,8 @@ namespace H.Core.Runners
         {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             Action = action ?? throw new ArgumentNullException(nameof(action));
+
+            IsCancellable = true;
         }
 
         #endregion

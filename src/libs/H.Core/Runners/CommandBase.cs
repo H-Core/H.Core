@@ -24,6 +24,11 @@ namespace H.Core.Runners
         /// </summary>
         public string Prefix { get; set; } = string.Empty;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsCancellable { get; set; }
+
         #endregion
 
         #region Events
