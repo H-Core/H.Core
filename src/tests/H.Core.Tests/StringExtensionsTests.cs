@@ -7,10 +7,17 @@ namespace H.Core.Tests
     [TestClass]
     public class StringExtensionsTests
     {
-        private static void BaseTwoStringTupleTest((string?, string?) expected, string?[] actual)
+        private static void BaseTwoStringTupleTest((string, string) expected, string[] actual)
         {
+            Assert.AreEqual(2, actual.Length);
             Assert.AreEqual(expected.Item1, actual[0]);
             Assert.AreEqual(expected.Item2, actual[1]);
+        }
+        
+        private static void BaseTest(string expected, string[] actual)
+        {
+            Assert.AreEqual(1, actual.Length);
+            Assert.AreEqual(expected, actual[0]);
         }
 
         [TestMethod]
@@ -19,10 +26,11 @@ namespace H.Core.Tests
             BaseTwoStringTupleTest(("test", "test test"), "test test test".SplitOnlyFirst(' '));
             BaseTwoStringTupleTest(("test", "test"), "test test".SplitOnlyFirst(' '));
             BaseTwoStringTupleTest(("test", ""), "test ".SplitOnlyFirst(' '));
-            BaseTwoStringTupleTest(("test", null), "test".SplitOnlyFirst(' '));
             BaseTwoStringTupleTest(("", ""), " ".SplitOnlyFirst(' '));
-            BaseTwoStringTupleTest(("", null), "".SplitOnlyFirst(' '));
 
+            BaseTest("test", "test".SplitOnlyFirst(' '));
+            BaseTest("", "".SplitOnlyFirst(' '));
+            
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
                 string? test = null;

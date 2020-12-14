@@ -15,22 +15,21 @@ namespace H.Core.Utilities
         /// </summary>
         /// <param name="text"></param>
         /// <param name="separator"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public static string?[] SplitOnlyFirst(this string? text, char separator)
+        public static string[] SplitOnlyFirst(this string? text, char separator)
         {
-            if (text == null)
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
+            text = text ?? throw new ArgumentNullException(nameof(text));
+
             if (!text.Contains(separator.ToString()))
             {
-                return new []{ text, null };
+                return new[] { text };
             }
 
             var array = text.Split(separator);
             var prefix = array.FirstOrDefault();
             var postfix = string.Join(separator.ToString(), array.Skip(1));
-            
+
             return new[] { prefix, postfix };
         }
 
@@ -40,13 +39,12 @@ namespace H.Core.Utilities
         /// <param name="text"></param>
         /// <param name="separator"></param>
         /// <param name="quoteSeparator"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public static string?[] SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
+        public static string[] SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
         {
-            if (text == null)
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
+            text = text ?? throw new ArgumentNullException(nameof(text));
+            
             if (!text.Contains(quoteSeparator.ToString()))
             {
                 return text.SplitOnlyFirst(separator);
@@ -63,14 +61,17 @@ namespace H.Core.Utilities
                 return name;
             });
 
-            var pair = replacedText.SplitOnlyFirst(separator);
+            var values = replacedText.SplitOnlyFirst(separator);
+
             for (var j = 0; j < i; j++)
             {
-                pair[0] = pair[0]?.Replace(GetVariableName(j), matches[j]);
-                pair[1] = pair[1]?.Replace(GetVariableName(j), matches[j]);
+                for (var k = 0; k < values.Length; k++)
+                {
+                    values[k] = values[k].Replace(GetVariableName(j), matches[j]);
+                }
             }
 
-            return pair;
+            return values;
         }
 
         private static string GetVariableName(int i) => $"$VARIABLE{i}$";
@@ -82,7 +83,7 @@ namespace H.Core.Utilities
         /// <param name="comparison"></param>
         /// <param name="otherStrings"></param>
         /// <returns></returns>
-        public static bool IsAny(this string? text, StringComparison comparison, params string [] otherStrings)
+        public static bool IsAny(this string? text, StringComparison comparison, params string[] otherStrings)
         {
             foreach (var str in otherStrings)
             {
