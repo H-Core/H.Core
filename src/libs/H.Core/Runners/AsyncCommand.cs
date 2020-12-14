@@ -24,7 +24,7 @@ namespace H.Core.Runners
             string name, 
             Func<string[], CancellationToken, Task> action,
             string? description = null,
-            bool isCancellable = false,
+            bool isCancellable = true,
             bool isInternal = false)
         {
             return new(name, action)
@@ -48,7 +48,7 @@ namespace H.Core.Runners
             string name, 
             Func<string, CancellationToken, Task> action,
             string? description = null,
-            bool isCancellable = false,
+            bool isCancellable = true,
             bool isInternal = false)
         {
             return new(name, action)
