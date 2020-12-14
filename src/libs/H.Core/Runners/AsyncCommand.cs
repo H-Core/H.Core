@@ -59,8 +59,32 @@ namespace H.Core.Runners
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncCommand WithoutArguments(
+            string name,
+            Func<CancellationToken, Task> action,
+            string? description = null,
+            bool isCancellable = true,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
         #endregion
-        
+
         #region Properties
 
         /// <summary>
@@ -89,10 +113,26 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<string, CancellationToken, Task> action) :
-            this(name, (Func<string[], CancellationToken, Task>)((arguments, cancellationToken) =>
-                    action.Invoke(string.Join(" ", arguments), cancellationToken)))
+        public AsyncCommand(string name, Func<string, CancellationToken, Task> action) : base(name)
         {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (arguments, cancellationToken) =>
+                action(string.Join(" ", arguments), cancellationToken);
+            IsCancellable = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncCommand(string name, Func<CancellationToken, Task> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (_, cancellationToken) => action(cancellationToken);
+            IsCancellable = true;
         }
 
         #endregion
