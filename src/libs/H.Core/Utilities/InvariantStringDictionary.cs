@@ -74,6 +74,19 @@ namespace H.Core.Utilities
             return base.Remove(ToInvariantString(key));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public new void Add(string key, T value)
+        {
+            key = key ?? throw new ArgumentNullException(nameof(key));
+
+            base.Add(ToInvariantString(key), value);
+        }
+
         #endregion
 
         #region Private methods

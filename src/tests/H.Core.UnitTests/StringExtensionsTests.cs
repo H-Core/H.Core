@@ -2,7 +2,7 @@
 using H.Core.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace H.Core.Tests
+namespace H.Core.UnitTests
 {
     [TestClass]
     public class StringExtensionsTests
