@@ -9,11 +9,14 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public abstract class Runner : Module, IRunner
+    public class Runner : Module, IRunner
     {
         #region Properties
 
-        private InvariantStringDictionary<RunInformation> HandlerDictionary { get; } = new ();
+        /// <summary>
+        /// 
+        /// </summary>
+        public InvariantStringDictionary<RunInformation> Actions { get; } = new ();
 
         #endregion
 
@@ -73,7 +76,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <returns></returns>
         public string[] GetSupportedCommands() =>
-            HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
+            Actions.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
 
         /// <summary>
         /// 
@@ -111,7 +114,7 @@ namespace H.Core.Runners
                 return null;
             }
 
-            return HandlerDictionary.TryGetValue(first, out var information) ? information : null;
+            return Actions.TryGetValue(first, out var information) ? information : null;
         }
 
         #endregion
@@ -157,7 +160,7 @@ namespace H.Core.Runners
                 return new RunInformation(new InvalidOperationException("RunInternal values[0] == null."));
             }
 
-            var information = GetHandler(first);
+            var information = GetAction(first);
             var command = values[1];
 
             try
@@ -274,13 +277,15 @@ namespace H.Core.Runners
         /// <param name="action"></param>
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
-        protected void AddAction(string key, Action<string?> action, string? description = null, bool isInternal = false) =>
+        protected void AddAction(string key, Action<string?> action, string? description = null, bool isInternal = false)
+        {
             AddAction(key, new RunInformation
             {
                 Description = description,
                 Action = action,
                 IsInternal = isInternal
             });
+        }
 
         /// <summary>
         /// 
@@ -288,8 +293,10 @@ namespace H.Core.Runners
         /// <param name="key"></param>
         /// <param name="action"></param>
         /// <param name="description"></param>
-        protected void AddInternalAction(string key, Action<string?> action, string? description = null) =>
+        protected void AddInternalAction(string key, Action<string?> action, string? description = null)
+        {
             AddAction(key, action, description, true);
+        }
 
         /// <summary>
         /// 
@@ -298,8 +305,14 @@ namespace H.Core.Runners
         /// <param name="func"></param>
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
-        protected void AddAsyncAction(string key, Func<string?, Task> func, string? description = null, bool isInternal = false) =>
-            AddAction(key, async text => await (func.Invoke(text) ?? Task.Delay(0)).ConfigureAwait(false), description, isInternal);
+        protected void AddAsyncAction(string key, Func<string?, Task> func, string? description = null, bool isInternal = false)
+        {
+            AddAction(
+                key, 
+                async text => await (func.Invoke(text) ?? Task.FromResult(false)).ConfigureAwait(false),
+                description, 
+                isInternal);
+        }
 
         /// <summary>
         /// 
@@ -307,14 +320,20 @@ namespace H.Core.Runners
         /// <param name="key"></param>
         /// <param name="func"></param>
         /// <param name="description"></param>
-        protected void AddInternalAsyncAction(string key, Func<string?, Task> func, string? description = null) =>
+        protected void AddInternalAsyncAction(string key, Func<string?, Task> func, string? description = null)
+        {
             AddAsyncAction(key, func, description, true);
+        }
 
-        private void AddAction(string key, RunInformation information) =>
-            HandlerDictionary[key] = information;
+        private void AddAction(string key, RunInformation information)
+        {
+            Actions.Add(key, information);
+        }
 
-        private RunInformation GetHandler(string key) =>
-            HandlerDictionary.TryGetValue(key, out var handler) ? handler : new RunInformation();
+        private RunInformation GetAction(string key)
+        {
+            return Actions.TryGetValue(key, out var handler) ? handler : new RunInformation();
+        }
 
         #endregion
     }

@@ -5,12 +5,10 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>0.12.0</Version>
+    <Version>0.13.0</Version>
     <Description>HomeCenter Core library that contains IRecognizer/IRecorder/IRunner/INotifiers etc.</Description>
     <PackageReleaseNotes>
-      Deleted managers.
-      Renamed converters to recognizers.
-      Publish Notifier.Command.
+      Refactored runners.
     </PackageReleaseNotes>
   </PropertyGroup>
 
