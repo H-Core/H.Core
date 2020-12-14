@@ -50,7 +50,7 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintAsyncTest()
         {
-            var call = await CommandTest(new AsyncCommand("print", arguments =>
+            var call = await CommandTest(new AsyncCommand("print", (arguments, _) =>
             {
                 Console.WriteLine(arguments);
 

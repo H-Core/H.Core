@@ -14,7 +14,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        private Func<string, Task> Action { get; }
+        private Func<string, CancellationToken, Task> Action { get; }
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string prefix, Func<string, Task> action)
+        public AsyncCommand(string prefix, Func<string, CancellationToken, Task> action)
         {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             Action = action ?? throw new ArgumentNullException(nameof(action));
@@ -45,7 +45,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public async Task RunAsync(string arguments, CancellationToken cancellationToken = default)
         {
-            await Action(arguments).ConfigureAwait(false);
+            await Action(arguments, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Utilities;
 
@@ -184,7 +185,7 @@ namespace H.Core.Runners
         /// <param name="func"></param>
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
-        protected void AddAsyncAction(string prefix, Func<string, Task> func, string? description = null, bool isInternal = false)
+        protected void AddAsyncAction(string prefix, Func<string, CancellationToken, Task> func, string? description = null, bool isInternal = false)
         {
             Commands.Add(prefix, new AsyncCommand(prefix, func)
             {
