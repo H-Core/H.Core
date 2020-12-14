@@ -92,7 +92,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithArguments(
+        public static AsyncCommand WithArgumentsAndWithoutToken(
             string name,
             Func<string[], Task> action,
             string? description = null,
@@ -116,7 +116,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithSingleArgument(
+        public static AsyncCommand WithSingleArgumentAndWithoutToken(
             string name,
             Func<string, Task> action,
             string? description = null,
@@ -140,7 +140,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithoutArguments(
+        public static AsyncCommand WithoutArgumentsAndToken(
             string name,
             Func<Task> action,
             string? description = null,
