@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace H.Core.Runners
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommandBase
+    public abstract class CommandBase : ICommand
     {
         #region Properties
 
@@ -22,7 +24,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public string Prefix { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// 
@@ -36,18 +38,18 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<string>? Running;
+        public event EventHandler<string[]>? Running;
 
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<string>? Ran;
+        public event EventHandler<string[]>? Ran;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        protected void OnRunning(string value)
+        protected void OnRunning(string[] value)
         {
             Running?.Invoke(this, value);
         }
@@ -56,9 +58,32 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         /// <param name="value"></param>
-        protected void OnRan(string value)
+        protected void OnRan(string[] value)
         {
             Ran?.Invoke(this, value);
+        }
+
+        #endregion
+
+
+        #region Public methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arguments"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public abstract Task RunAsync(string[] arguments, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public ICall PrepareCall(params string[] arguments)
+        {
+            return new Call(this, arguments);
         }
 
         #endregion

@@ -8,11 +8,11 @@ namespace H.Core.UnitTests
     [TestClass]
     public class RunnerTests
     {
-        private static ICall IsSupportedTest(IRunner runner, string command)
+        private static ICall IsSupportedTest(IRunner runner, string name, params string[] arguments)
         {
-            var call = runner.TryPrepareCall(command);
+            var call = runner.TryPrepareCall(name, arguments);
             
-            Assert.IsNotNull(call, $"{nameof(IsSupportedTest)}: {command}");
+            Assert.IsNotNull(call, $"{nameof(IsSupportedTest)}: {name}");
             call = call ?? throw new Exception();
 
             return call;
@@ -24,11 +24,10 @@ namespace H.Core.UnitTests
             {
                 command,
             };
+            var call = IsSupportedTest(runner, "print", "Hello, World!");
 
-            var call = IsSupportedTest(runner, "print Hello, World!");
-
-            Assert.AreEqual("Hello, World!", call.Arguments, nameof(call.Arguments));
-            Assert.AreEqual("print", call.Command.Prefix, nameof(call.Command.Prefix));
+            CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Arguments, nameof(call.Arguments));
+            Assert.AreEqual("print", call.Command.Name, nameof(call.Command.Name));
             Assert.AreEqual(string.Empty, call.Command.Description, nameof(call.Command.Description));
             Assert.AreEqual(false, call.Command.IsInternal, nameof(call.Command.IsInternal));
 
@@ -42,7 +41,7 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintTest()
         {
-            var call = await CommandTest(new Command("print", Console.WriteLine));
+            var call = await CommandTest(Command.WithSingleArgument("print", Console.WriteLine));
             
             Assert.AreEqual(false, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
         }
@@ -50,9 +49,9 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintAsyncTest()
         {
-            var call = await CommandTest(new AsyncCommand("print", (arguments, _) =>
+            var call = await CommandTest(AsyncCommand.WithSingleArgument("print", (argument, _) =>
             {
-                Console.WriteLine(arguments);
+                Console.WriteLine(argument);
 
                 return Task.CompletedTask;
             }));

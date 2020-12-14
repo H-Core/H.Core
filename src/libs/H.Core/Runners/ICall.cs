@@ -19,7 +19,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        string Arguments { get; }
+        string[] Arguments { get; }
 
         #endregion
 

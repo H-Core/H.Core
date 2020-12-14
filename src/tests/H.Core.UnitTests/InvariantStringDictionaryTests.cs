@@ -82,7 +82,7 @@ namespace H.Core.UnitTests
         [TestMethod]
         public void CommandsTest()
         {
-            var command = new Command("print", Console.WriteLine);
+            var command = Command.WithSingleArgument("print", Console.WriteLine);
             var dictionary = new InvariantStringDictionary<Command>
             {
                 { "print", command },

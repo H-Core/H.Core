@@ -19,7 +19,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public string Arguments { get; }
+        public string[] Arguments { get; }
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="command"></param>
         /// <param name="arguments"></param>
-        public Call(ICommand command, string arguments)
+        public Call(ICommand command, string[] arguments)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
             Arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,14 +8,31 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public class AsyncCommand : CommandBase, ICommand
+    public class AsyncCommand : CommandBase
     {
+        #region Static methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static AsyncCommand WithSingleArgument(string name, Func<string, CancellationToken, Task> action)
+        {
+            return new(
+                name, 
+                (arguments, cancellationToken) => 
+                    action.Invoke(arguments.FirstOrDefault() ?? string.Empty, cancellationToken));
+        }
+
+        #endregion
         #region Properties
 
         /// <summary>
         /// 
         /// </summary>
-        private Func<string, CancellationToken, Task> Action { get; }
+        private Func<string[], CancellationToken, Task> Action { get; }
 
         #endregion
 
@@ -23,11 +41,11 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="prefix"></param>
+        /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string prefix, Func<string, CancellationToken, Task> action)
+        public AsyncCommand(string name, Func<string[], CancellationToken, Task> action)
         {
-            Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Action = action ?? throw new ArgumentNullException(nameof(action));
 
             IsCancellable = true;
@@ -43,19 +61,13 @@ namespace H.Core.Runners
         /// <param name="arguments"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task RunAsync(string arguments, CancellationToken cancellationToken = default)
+        public override async Task RunAsync(string[] arguments, CancellationToken cancellationToken = default)
         {
+            OnRunning(arguments);
+            
             await Action(arguments, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
-        public ICall PrepareCall(string arguments)
-        {
-            return new Call(this, arguments);
+            
+            OnRan(arguments);
         }
 
         #endregion

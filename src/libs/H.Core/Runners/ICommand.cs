@@ -24,7 +24,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        string Prefix { get; }
+        string Name { get; }
 
         /// <summary>
         /// 
@@ -38,12 +38,12 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<string>? Running;
+        event EventHandler<string[]>? Running;
 
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<string>? Ran;
+        event EventHandler<string[]>? Ran;
 
         #endregion
 
@@ -53,7 +53,7 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         /// <returns></returns>
-        ICall PrepareCall(string arguments);
+        ICall PrepareCall(params string[] arguments);
 
         /// <summary>
         /// 
@@ -61,7 +61,7 @@ namespace H.Core.Runners
         /// <param name="arguments"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task RunAsync(string arguments, CancellationToken cancellationToken = default);
+        Task RunAsync(string[] arguments, CancellationToken cancellationToken = default);
 
         #endregion
     }

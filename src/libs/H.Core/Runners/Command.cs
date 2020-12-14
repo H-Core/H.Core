@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,27 +8,42 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public class Command : CommandBase, ICommand
+    public class Command : CommandBase
     {
+        #region Static methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static Command WithSingleArgument(string name, Action<string> action)
+        {
+            return new (name, arguments => action.Invoke(arguments.FirstOrDefault() ?? string.Empty));
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// 
         /// </summary>
-        private Action<string> Action { get; }
+        private Action<string[]> Action { get; }
 
         #endregion
-        
+
         #region Constructors
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="prefix"></param>
+        /// <param name="name"></param>
         /// <param name="action"></param>
-        public Command(string prefix, Action<string> action)
+        public Command(string name, Action<string[]> action)
         {
-            Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Action = action ?? throw new ArgumentNullException(nameof(action));
         }
 
@@ -41,7 +57,7 @@ namespace H.Core.Runners
         /// <param name="arguments"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task RunAsync(string arguments, CancellationToken cancellationToken = default)
+        public override Task RunAsync(string[] arguments, CancellationToken cancellationToken = default)
         {
             OnRunning(arguments);
             
@@ -50,16 +66,6 @@ namespace H.Core.Runners
             OnRan(arguments);
 
             return Task.FromResult(false);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
-        public ICall PrepareCall(string arguments)
-        {
-            return new Call(this, arguments);
         }
 
         #endregion

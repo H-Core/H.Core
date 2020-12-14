@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Utilities;
 
@@ -28,19 +27,19 @@ namespace H.Core.Runners
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public ICall? TryPrepareCall(string text)
+        public ICall? TryPrepareCall(string name, params string[] arguments)
         {
-            text = text ?? throw new ArgumentNullException(nameof(text));
+            name = name ?? throw new ArgumentNullException(nameof(name));
 
-            var values = text.SplitOnlyFirstIgnoreQuote(' ');
-            var prefix = values[0];
-
-            if (!Commands.TryGetValue(prefix, out var command))
+            if (!Commands.TryGetValue(name, out var command))
             {
                 return null;
             }
-            
-            var arguments = FindVariablesAndReplace(values[1]);
+
+            for (var i = 0; i < arguments.Length; i++)
+            {
+                arguments[i] = FindVariablesAndReplace(arguments[i]);
+            }
 
             return command.PrepareCall(arguments);
         }
@@ -159,39 +158,7 @@ namespace H.Core.Runners
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
             
-            Commands.Add(command.Prefix, command);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        protected void AddCommand(string prefix, Action<string> action, string? description = null, bool isInternal = false)
-        {
-            Commands.Add(prefix, new Command(prefix, action)
-            {
-                Description = description ?? string.Empty,
-                IsInternal = isInternal,
-            });
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="func"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        protected void AddAsyncAction(string prefix, Func<string, CancellationToken, Task> func, string? description = null, bool isInternal = false)
-        {
-            Commands.Add(prefix, new AsyncCommand(prefix, func)
-            {
-                Description = description ?? string.Empty,
-                IsInternal = isInternal,
-            });
+            Commands.Add(command.Name, command);
         }
 
         /// <summary>

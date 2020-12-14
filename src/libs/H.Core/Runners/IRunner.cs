@@ -10,9 +10,10 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="name"></param>
+        /// <param name="arguments"></param>
         /// <returns></returns>
-        ICall? TryPrepareCall(string command);
+        ICall? TryPrepareCall(string name, params string[] arguments);
 
         #endregion
     }
