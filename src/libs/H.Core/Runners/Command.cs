@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,10 +16,47 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static Command WithSingleArgument(string name, Action<string> action)
+        public static Command WithArguments(
+            string name, 
+            Action<string> action, 
+            string? description = null, 
+            bool isCancellable = false, 
+            bool isInternal = false)
         {
-            return new (name, arguments => action.Invoke(arguments.FirstOrDefault() ?? string.Empty));
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static Command WithSingleArgument(
+            string name, 
+            Action<string> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
+        {
+            return new (name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
         }
 
         #endregion
@@ -41,10 +77,19 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public Command(string name, Action<string[]> action)
+        public Command(string name, Action<string[]> action) : base(name)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
             Action = action ?? throw new ArgumentNullException(nameof(action));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public Command(string name, Action<string> action) : 
+            this(name, (Action<string[]>)(arguments => action.Invoke(string.Join(" ", arguments))))
+        {
         }
 
         #endregion

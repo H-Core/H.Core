@@ -14,8 +14,8 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        bool IsInternal { get; }
-        
+        string Name { get; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -24,12 +24,12 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        string Name { get; }
-
+        bool IsCancellable { get; }
+        
         /// <summary>
         /// 
         /// </summary>
-        bool IsCancellable { get; }
+        bool IsInternal { get; }
 
         #endregion
 

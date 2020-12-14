@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,16 +16,51 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithSingleArgument(string name, Func<string, CancellationToken, Task> action)
+        public static AsyncCommand WithArguments(
+            string name, 
+            Func<string[], CancellationToken, Task> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
         {
-            return new(
-                name, 
-                (arguments, cancellationToken) => 
-                    action.Invoke(arguments.FirstOrDefault() ?? string.Empty, cancellationToken));
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncCommand WithSingleArgument(
+            string name, 
+            Func<string, CancellationToken, Task> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
         }
 
         #endregion
+        
         #region Properties
 
         /// <summary>
@@ -43,12 +77,22 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<string[], CancellationToken, Task> action)
+        public AsyncCommand(string name, Func<string[], CancellationToken, Task> action) : base(name)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
             Action = action ?? throw new ArgumentNullException(nameof(action));
 
             IsCancellable = true;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncCommand(string name, Func<string, CancellationToken, Task> action) :
+            this(name, (Func<string[], CancellationToken, Task>)((arguments, cancellationToken) =>
+                    action.Invoke(string.Join(" ", arguments), cancellationToken)))
+        {
         }
 
         #endregion

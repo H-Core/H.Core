@@ -14,7 +14,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public bool IsInternal { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// 
@@ -24,12 +24,12 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public bool IsCancellable { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsCancellable { get; set; }
+        public bool IsInternal { get; set; }
 
         #endregion
 
@@ -65,6 +65,18 @@ namespace H.Core.Runners
 
         #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        protected CommandBase(string name)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+
+        #endregion
 
         #region Public methods
 
