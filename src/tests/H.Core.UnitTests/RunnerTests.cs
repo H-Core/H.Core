@@ -30,6 +30,7 @@ namespace H.Core.UnitTests
             Assert.AreEqual("print", call.Command.Name, nameof(call.Command.Name));
             Assert.AreEqual(string.Empty, call.Command.Description, nameof(call.Command.Description));
             Assert.AreEqual(false, call.Command.IsInternal, nameof(call.Command.IsInternal));
+            Assert.AreEqual(false, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
 
             call.Running += (_, _) => Console.WriteLine($"{nameof(call.Running)}");
             call.Ran += (_, _) => Console.WriteLine($"{nameof(call.Ran)}");
@@ -41,22 +42,18 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintTest()
         {
-            var call = await CommandTest(Command.WithSingleArgument("print", Console.WriteLine));
-            
-            Assert.AreEqual(false, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
+            await CommandTest(Command.WithSingleArgument("print", Console.WriteLine));
         }
 
         [TestMethod]
         public async Task PrintAsyncTest()
         {
-            var call = await CommandTest(AsyncCommand.WithSingleArgument("print", (argument, _) =>
+            await CommandTest(AsyncCommand.WithSingleArgument("print", argument =>
             {
                 Console.WriteLine(argument);
 
                 return Task.CompletedTask;
             }));
-
-            Assert.AreEqual(true, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
         }
     }
 }

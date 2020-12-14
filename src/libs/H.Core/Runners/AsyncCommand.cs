@@ -83,6 +83,78 @@ namespace H.Core.Runners
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncCommand WithArguments(
+            string name,
+            Func<string[], Task> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncCommand WithSingleArgument(
+            string name,
+            Func<string, Task> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncCommand WithoutArguments(
+            string name,
+            Func<Task> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
         #endregion
 
         #region Properties
@@ -133,6 +205,45 @@ namespace H.Core.Runners
 
             Action = (_, cancellationToken) => action(cancellationToken);
             IsCancellable = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncCommand(string name, Func<string[], Task> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (arguments, _) => action(arguments);
+            IsCancellable = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncCommand(string name, Func<string, Task> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (arguments, _) => action(string.Join(" ", arguments));
+            IsCancellable = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncCommand(string name, Func<Task> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (_, _) => action();
+            IsCancellable = false;
         }
 
         #endregion
