@@ -7,7 +7,7 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommandBase : ICommand
+    public abstract class ActionBase : IAction
     {
         #region Properties
 
@@ -71,7 +71,7 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         /// <param name="name"></param>
-        protected CommandBase(string name)
+        protected ActionBase(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }

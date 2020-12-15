@@ -7,7 +7,7 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public interface ICommand
+    public interface IAction
     {
         #region Properties
 

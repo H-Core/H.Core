@@ -82,13 +82,13 @@ namespace H.Core.UnitTests
         [TestMethod]
         public void CommandsTest()
         {
-            var command = Command.WithSingleArgument("print", Console.WriteLine);
-            var dictionary = new InvariantStringDictionary<Command>
+            var action = SyncAction.WithSingleArgument("print", Console.WriteLine);
+            var dictionary = new InvariantStringDictionary<IAction>
             {
-                { "print", command },
+                { "print", action },
             };
             
-            BaseContainsTest(dictionary, "print", command);
+            BaseContainsTest(dictionary, "print", action);
         }
     }
 }

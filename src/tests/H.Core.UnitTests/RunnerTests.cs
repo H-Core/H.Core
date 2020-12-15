@@ -18,19 +18,19 @@ namespace H.Core.UnitTests
             return call;
         }
 
-        public static async Task<ICall> CommandTest(ICommand command)
+        public static async Task<ICall> ActionTest(IAction action)
         {
             using var runner = new Runner
             {
-                command,
+                action,
             };
             var call = IsSupportedTest(runner, "print", "Hello, World!");
 
             CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Arguments, nameof(call.Arguments));
-            Assert.AreEqual("print", call.Command.Name, nameof(call.Command.Name));
-            Assert.AreEqual(string.Empty, call.Command.Description, nameof(call.Command.Description));
-            Assert.AreEqual(false, call.Command.IsInternal, nameof(call.Command.IsInternal));
-            Assert.AreEqual(false, call.Command.IsCancellable, nameof(call.Command.IsCancellable));
+            Assert.AreEqual("print", call.Action.Name, nameof(call.Action.Name));
+            Assert.AreEqual(string.Empty, call.Action.Description, nameof(call.Action.Description));
+            Assert.AreEqual(false, call.Action.IsInternal, nameof(call.Action.IsInternal));
+            Assert.AreEqual(false, call.Action.IsCancellable, nameof(call.Action.IsCancellable));
 
             call.Running += (_, _) => Console.WriteLine($"{nameof(call.Running)}");
             call.Ran += (_, _) => Console.WriteLine($"{nameof(call.Ran)}");
@@ -42,13 +42,13 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintTest()
         {
-            await CommandTest(Command.WithSingleArgument("print", Console.WriteLine));
+            await ActionTest(SyncAction.WithSingleArgument("print", Console.WriteLine));
         }
 
         [TestMethod]
         public async Task PrintAsyncTest()
         {
-            await CommandTest(AsyncCommand.WithSingleArgumentAndWithoutToken("print", argument =>
+            await ActionTest(AsyncAction.WithSingleArgumentAndWithoutToken("print", argument =>
             {
                 Console.WriteLine(argument);
 

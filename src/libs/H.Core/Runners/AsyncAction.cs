@@ -7,7 +7,7 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public class AsyncCommand : CommandBase
+    public class AsyncAction : ActionBase
     {
         #region Static methods
 
@@ -20,7 +20,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithArguments(
+        public static AsyncAction WithArguments(
             string name, 
             Func<string[], CancellationToken, Task> action,
             string? description = null,
@@ -44,7 +44,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithSingleArgument(
+        public static AsyncAction WithSingleArgument(
             string name, 
             Func<string, CancellationToken, Task> action,
             string? description = null,
@@ -68,7 +68,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithoutArguments(
+        public static AsyncAction WithoutArguments(
             string name,
             Func<CancellationToken, Task> action,
             string? description = null,
@@ -92,7 +92,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithArgumentsAndWithoutToken(
+        public static AsyncAction WithArgumentsAndWithoutToken(
             string name,
             Func<string[], Task> action,
             string? description = null,
@@ -116,7 +116,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithSingleArgumentAndWithoutToken(
+        public static AsyncAction WithSingleArgumentAndWithoutToken(
             string name,
             Func<string, Task> action,
             string? description = null,
@@ -140,7 +140,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncCommand WithoutArgumentsAndToken(
+        public static AsyncAction WithoutArgumentsAndToken(
             string name,
             Func<Task> action,
             string? description = null,
@@ -173,7 +173,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<string[], CancellationToken, Task> action) : base(name)
+        public AsyncAction(string name, Func<string[], CancellationToken, Task> action) : base(name)
         {
             Action = action ?? throw new ArgumentNullException(nameof(action));
 
@@ -185,7 +185,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<string, CancellationToken, Task> action) : base(name)
+        public AsyncAction(string name, Func<string, CancellationToken, Task> action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
@@ -199,7 +199,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<CancellationToken, Task> action) : base(name)
+        public AsyncAction(string name, Func<CancellationToken, Task> action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
@@ -212,7 +212,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<string[], Task> action) : base(name)
+        public AsyncAction(string name, Func<string[], Task> action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
@@ -225,7 +225,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<string, Task> action) : base(name)
+        public AsyncAction(string name, Func<string, Task> action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
@@ -238,7 +238,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncCommand(string name, Func<Task> action) : base(name)
+        public AsyncAction(string name, Func<Task> action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 

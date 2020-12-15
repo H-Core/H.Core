@@ -9,14 +9,14 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public class Runner : Module, IRunner, IEnumerable<ICommand>
+    public class Runner : Module, IRunner, IEnumerable<IAction>
     {
         #region Properties
 
         /// <summary>
         /// 
         /// </summary>
-        protected InvariantStringDictionary<ICommand> Commands { get; } = new();
+        protected InvariantStringDictionary<IAction> Actions { get; } = new();
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace H.Core.Runners
         {
             name = name ?? throw new ArgumentNullException(nameof(name));
 
-            if (!Commands.TryGetValue(name, out var command))
+            if (!Actions.TryGetValue(name, out var action))
             {
                 return null;
             }
@@ -41,7 +41,7 @@ namespace H.Core.Runners
                 arguments[i] = FindVariablesAndReplace(arguments[i]);
             }
 
-            return command.PrepareCall(arguments);
+            return action.PrepareCall(arguments);
         }
 
         #endregion
@@ -153,21 +153,21 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="command"></param>
-        public void Add(ICommand command)
+        /// <param name="action"></param>
+        public void Add(IAction action)
         {
-            command = command ?? throw new ArgumentNullException(nameof(command));
-            
-            Commands.Add(command.Name, command);
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Actions.Add(action.Name, action);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<ICommand> GetEnumerator()
+        public IEnumerator<IAction> GetEnumerator()
         {
-            return Commands.Values.GetEnumerator();
+            return Actions.Values.GetEnumerator();
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Commands.Values.GetEnumerator();
+            return Actions.Values.GetEnumerator();
         }
 
         #endregion

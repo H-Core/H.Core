@@ -7,7 +7,7 @@ namespace H.Core.Runners
     /// <summary>
     /// 
     /// </summary>
-    public class Command : CommandBase
+    public class SyncAction : ActionBase
     {
         #region Static methods
 
@@ -20,7 +20,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static Command WithArguments(
+        public static SyncAction WithArguments(
             string name, 
             Action<string> action, 
             string? description = null, 
@@ -44,7 +44,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static Command WithSingleArgument(
+        public static SyncAction WithSingleArgument(
             string name, 
             Action<string> action,
             string? description = null,
@@ -68,7 +68,7 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static Command WithoutArguments(
+        public static SyncAction WithoutArguments(
             string name,
             Action action,
             string? description = null,
@@ -101,7 +101,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public Command(string name, Action<string[]> action) : base(name)
+        public SyncAction(string name, Action<string[]> action) : base(name)
         {
             Action = action ?? throw new ArgumentNullException(nameof(action));
         }
@@ -111,7 +111,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public Command(string name, Action<string> action) : base(name)
+        public SyncAction(string name, Action<string> action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
@@ -123,7 +123,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public Command(string name, Action action) : base(name)
+        public SyncAction(string name, Action action) : base(name)
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 

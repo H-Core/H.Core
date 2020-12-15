@@ -14,7 +14,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public ICommand Command { get; }
+        public IAction Action { get; }
 
         /// <summary>
         /// 
@@ -52,11 +52,11 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="action"></param>
         /// <param name="arguments"></param>
-        public Call(ICommand command, string[] arguments)
+        public Call(IAction action, string[] arguments)
         {
-            Command = command ?? throw new ArgumentNullException(nameof(command));
+            Action = action ?? throw new ArgumentNullException(nameof(action));
             Arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
         }
 
@@ -73,7 +73,7 @@ namespace H.Core.Runners
         {
             OnRunning();
             
-            await Command.RunAsync(Arguments, cancellationToken).ConfigureAwait(false);
+            await Action.RunAsync(Arguments, cancellationToken).ConfigureAwait(false);
             
             OnRan();
         }

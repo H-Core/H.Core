@@ -14,7 +14,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        ICommand Command { get; }
+        IAction Action { get; }
         
         /// <summary>
         /// 
