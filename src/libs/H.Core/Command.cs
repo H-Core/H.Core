@@ -2,7 +2,7 @@
 using System.Linq;
 using H.Core.Utilities;
 
-namespace H.Core.Runners
+namespace H.Core
 {
     /// <summary>
     /// 

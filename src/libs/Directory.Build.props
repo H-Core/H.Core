@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.14.3</Version>
+    <Version>0.14.4</Version>
     <PackageReleaseNotes>
       Renamed Commands to Actions.
       Added Command.
@@ -11,6 +11,7 @@
       Added IRunner.TryPrepareCall(ICommand command) method.
       Refactored Actions.
       Wrapped not cancellable actions with Task.Run().
+      Moved Command to H.Core namespace.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
