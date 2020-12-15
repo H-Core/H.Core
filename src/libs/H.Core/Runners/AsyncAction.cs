@@ -370,6 +370,5 @@ namespace H.Core.Runners
         }
 
         #endregion
-
     }
 }
