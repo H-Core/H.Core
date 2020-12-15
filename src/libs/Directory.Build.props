@@ -8,6 +8,7 @@
       Renamed Commands to Actions.
       Added Command.
       Added ToString() overloads.
+      Added IRunner.TryPrepareCall(ICommand command) method.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

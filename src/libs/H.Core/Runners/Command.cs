@@ -8,7 +8,7 @@ namespace H.Core.Runners
     /// 
     /// </summary>
     [Serializable]
-    public class Command
+    public class Command : ICommand
     {
         #region Static methods
 

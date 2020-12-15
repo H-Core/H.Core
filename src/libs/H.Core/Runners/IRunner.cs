@@ -15,6 +15,13 @@
         /// <returns></returns>
         ICall? TryPrepareCall(string name, params string[] arguments);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        ICall? TryPrepareCall(ICommand command);
+
         #endregion
     }
 }

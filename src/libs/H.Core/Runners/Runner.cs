@@ -31,17 +31,29 @@ namespace H.Core.Runners
         {
             name = name ?? throw new ArgumentNullException(nameof(name));
 
-            if (!Actions.TryGetValue(name, out var action))
+            return TryPrepareCall(new Command(name, arguments));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <returns></returns>
+        public ICall? TryPrepareCall(ICommand command)
+        {
+            command = command ?? throw new ArgumentNullException(nameof(command));
+
+            if (!Actions.TryGetValue(command.Name, out var action))
             {
                 return null;
             }
 
-            for (var i = 0; i < arguments.Length; i++)
+            for (var i = 0; i < command.Arguments.Length; i++)
             {
-                arguments[i] = FindVariablesAndReplace(arguments[i]);
+                command.Arguments[i] = FindVariablesAndReplace(command.Arguments[i]);
             }
 
-            return action.PrepareCall(arguments);
+            return action.PrepareCall(command.Arguments);
         }
 
         #endregion
