@@ -12,7 +12,7 @@ namespace H.Core.Notifiers
         /// <summary>
         /// 
         /// </summary>
-        string Command { get; set; }
+        ICommand Command { get; set; }
 
         #endregion
 

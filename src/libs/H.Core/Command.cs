@@ -13,6 +13,11 @@ namespace H.Core
         #region Static methods
 
         /// <summary>
+        /// Empty command.
+        /// </summary>
+        public static Command Empty { get; } = new ();
+        
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="text"></param>
@@ -33,22 +38,34 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public string Name { get; }
+        public string Name { get; } = string.Empty;
 
         /// <summary>
         /// 
         /// </summary>
-        public string[] Arguments { get; }
+        public string[] Arguments { get; } = EmptyArray<string>.Value;
 
         /// <summary>
         /// 
         /// </summary>
         public string Argument => string.Join(" ", Arguments);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsEmpty => string.IsNullOrWhiteSpace(Name);
+
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public Command()
+        {
+        }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -70,7 +87,9 @@ namespace H.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Name} {Argument}";
+            return IsEmpty
+                ? string.Empty
+                : $"{Name} {Argument}";
         }
 
         #endregion

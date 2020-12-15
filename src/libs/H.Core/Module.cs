@@ -75,7 +75,7 @@ namespace H.Core
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public object? GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
+        public object? GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func() : null;
 
         #endregion
 
@@ -84,8 +84,17 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<string>? NewCommand;
-        
+        public event EventHandler<ICommand>? CommandReceived;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        protected void OnCommandReceived(ICommand value)
+        {
+            CommandReceived?.Invoke(this, value);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -155,7 +164,30 @@ namespace H.Core
         /// 
         /// </summary>
         /// <param name="text"></param>
-        public void Run(string text) => NewCommand?.Invoke(this, text);
+        /// <exception cref="ArgumentNullException"></exception>
+        public void Run(string text)
+        {
+            text = text ?? throw new ArgumentNullException(nameof(text));
+            
+            Run(Command.Parse(text));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void Run(ICommand command)
+        {
+            command = command ?? throw new ArgumentNullException(nameof(command));
+
+            if (command.IsEmpty)
+            {
+                return;
+            }
+            
+            OnCommandReceived(command);
+        }
 
         /// <summary>
         /// 

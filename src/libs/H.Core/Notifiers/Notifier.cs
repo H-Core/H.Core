@@ -12,12 +12,12 @@ namespace H.Core.Notifiers
         /// <summary>
         /// 
         /// </summary>
-        public string Command { get; set; } = string.Empty;
+        public ICommand Command { get; set; } = new Command();
         
         /// <summary>
         /// 
         /// </summary>
-        public Func<string>? CommandFactory { get; set; }
+        public Func<ICommand>? CommandFactory { get; set; }
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace H.Core.Notifiers
             {
                 try
                 {
-                    if (!string.IsNullOrWhiteSpace(Command))
+                    if (!Command.IsEmpty)
                     {
                         Run(Command);
                     }

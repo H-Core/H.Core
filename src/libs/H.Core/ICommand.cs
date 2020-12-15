@@ -21,6 +21,11 @@
         /// 
         /// </summary>
         string Argument { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        bool IsEmpty { get; }
 
         #endregion
     }

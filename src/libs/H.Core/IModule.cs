@@ -10,6 +10,8 @@ namespace H.Core
     /// </summary>
     public interface IModule : IDisposable
     {
+        #region Properties
+
         /// <summary>
         /// 
         /// </summary>
@@ -34,12 +36,40 @@ namespace H.Core
         /// 
         /// </summary>
         string Description { get; }
-
+        
         /// <summary>
         /// 
         /// </summary>
         ISettingsStorage Settings { get; }
-        
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<ICommand>? CommandReceived;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<Exception>? ExceptionOccurred;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<string>? LogReceived;
+
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// 
         /// </summary>
@@ -69,36 +99,6 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<string>? NewCommand;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        event EventHandler<IModule>? SettingsSaved;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        event EventHandler<Exception>? ExceptionOccurred;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        event EventHandler<string>? LogReceived;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        void SaveSettings();
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <returns></returns>
         string[] GetSupportedVariables();
         
@@ -108,5 +108,7 @@ namespace H.Core
         /// <param name="name"></param>
         /// <returns></returns>
         object? GetModuleVariableValue(string name);
+
+        #endregion
     }
 }
