@@ -82,7 +82,7 @@ namespace H.Core.UnitTests
         [TestMethod]
         public void CommandsTest()
         {
-            var action = SyncAction.WithSingleArgument("print", Console.WriteLine);
+            var action = SyncAction.WithSingleArgument("print", Console.WriteLine, "value");
             var dictionary = new InvariantStringDictionary<IAction>
             {
                 { "print", action },

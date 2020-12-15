@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.14.1</Version>
+    <Version>0.14.2</Version>
     <PackageReleaseNotes>
       Renamed Commands to Actions.
       Added Command.

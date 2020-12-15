@@ -28,7 +28,7 @@ namespace H.Core.UnitTests
 
             CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Arguments, nameof(call.Arguments));
             Assert.AreEqual("print", call.Action.Name, nameof(call.Action.Name));
-            Assert.AreEqual(string.Empty, call.Action.Description, nameof(call.Action.Description));
+            Assert.AreEqual("value", call.Action.Description, nameof(call.Action.Description));
             Assert.AreEqual(false, call.Action.IsInternal, nameof(call.Action.IsInternal));
             Assert.AreEqual(false, call.Action.IsCancellable, nameof(call.Action.IsCancellable));
 
@@ -42,7 +42,7 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintTest()
         {
-            await ActionTest(SyncAction.WithSingleArgument("print", Console.WriteLine));
+            await ActionTest(SyncAction.WithSingleArgument("print", Console.WriteLine, "value"));
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace H.Core.UnitTests
                 Console.WriteLine(argument);
 
                 return Task.CompletedTask;
-            }));
+            }, "value"));
         }
     }
 }

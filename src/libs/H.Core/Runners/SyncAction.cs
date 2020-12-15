@@ -17,22 +17,15 @@ namespace H.Core.Runners
         /// <param name="name"></param>
         /// <param name="action"></param>
         /// <param name="description"></param>
-        /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
         public static SyncAction WithCommand(
             string name,
             Action<ICommand> action,
             string? description = null,
-            bool isCancellable = false,
             bool isInternal = false)
         {
-            return new(name, action)
-            {
-                Description = description ?? string.Empty,
-                IsCancellable = isCancellable,
-                IsInternal = isInternal,
-            };
+            return new(name, action, description, isInternal);
         }
         
         /// <summary>
@@ -41,22 +34,15 @@ namespace H.Core.Runners
         /// <param name="name"></param>
         /// <param name="action"></param>
         /// <param name="description"></param>
-        /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
         public static SyncAction WithArguments(
             string name, 
             Action<string> action, 
             string? description = null, 
-            bool isCancellable = false, 
             bool isInternal = false)
         {
-            return new(name, action)
-            {
-                Description = description ?? string.Empty,
-                IsCancellable = isCancellable,
-                IsInternal = isInternal,
-            };
+            return new(name, action, description, isInternal);
         }
 
         /// <summary>
@@ -65,22 +51,15 @@ namespace H.Core.Runners
         /// <param name="name"></param>
         /// <param name="action"></param>
         /// <param name="description"></param>
-        /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
         public static SyncAction WithSingleArgument(
             string name, 
             Action<string> action,
             string? description = null,
-            bool isCancellable = false,
             bool isInternal = false)
         {
-            return new (name, action)
-            {
-                Description = description ?? string.Empty,
-                IsCancellable = isCancellable,
-                IsInternal = isInternal,
-            };
+            return new (name, action, description, isInternal);
         }
 
         /// <summary>
@@ -89,22 +68,15 @@ namespace H.Core.Runners
         /// <param name="name"></param>
         /// <param name="action"></param>
         /// <param name="description"></param>
-        /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
         public static SyncAction WithoutArguments(
             string name,
             Action action,
             string? description = null,
-            bool isCancellable = false,
             bool isInternal = false)
         {
-            return new(name, action)
-            {
-                Description = description ?? string.Empty,
-                IsCancellable = isCancellable,
-                IsInternal = isInternal,
-            };
+            return new(name, action, description, isInternal);
         }
 
         #endregion
@@ -125,33 +97,18 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public SyncAction(string name, Action<ICommand> action) : base(name)
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public SyncAction(
+            string name, 
+            Action<ICommand> action,
+            string? description = null,
+            bool isInternal = false) : 
+            base(name)
         {
             Action = action ?? throw new ArgumentNullException(nameof(action));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        public SyncAction(string name, Action<string[]> action) : base(name)
-        {
-            action = action ?? throw new ArgumentNullException(nameof(action));
-
-            Action = command => action(command.Arguments);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        public SyncAction(string name, Action<string> action) : base(name)
-        {
-            action = action ?? throw new ArgumentNullException(nameof(action));
-
-            Action = command => action(command.Argument);
+            Description = description ?? string.Empty;
+            IsInternal = isInternal;
         }
 
         /// <summary>
@@ -159,11 +116,62 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public SyncAction(string name, Action action) : base(name)
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public SyncAction(
+            string name, 
+            Action<string[]> action,
+            string? description = null,
+            bool isInternal = false) : 
+            this(
+                name, 
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command => action?.Invoke(command.Arguments), 
+                description, 
+                isInternal)
         {
-            action = action ?? throw new ArgumentNullException(nameof(action));
+        }
 
-            Action = _ => action();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public SyncAction(
+            string name, 
+            Action<string> action,
+            string? description = null,
+            bool isInternal = false) :
+            this(
+                name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command => action?.Invoke(command.Argument),
+                description,
+                isInternal)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public SyncAction(
+            string name, 
+            Action action,
+            string? description = null,
+            bool isInternal = false) :
+            this(
+                name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (Action<ICommand>)(_ => action?.Invoke()),
+                description,
+                isInternal)
+        {
         }
 
         #endregion
