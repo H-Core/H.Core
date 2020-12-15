@@ -6,6 +6,7 @@
     <Version>0.14.0</Version>
     <PackageReleaseNotes>
       Renamed Commands to Actions.
+      Added Command.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
