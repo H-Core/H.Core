@@ -98,6 +98,15 @@ namespace H.Core.Runners
             return new Call(this, arguments);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{Name} {Description}";
+        }
+
         #endregion
     }
 }

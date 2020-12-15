@@ -78,6 +78,15 @@ namespace H.Core.Runners
             OnRan();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{Action.Name} {string.Join(" ", Arguments)}";
+        }
+
         #endregion
     }
 }

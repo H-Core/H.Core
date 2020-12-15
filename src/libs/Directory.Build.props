@@ -7,6 +7,7 @@
     <PackageReleaseNotes>
       Renamed Commands to Actions.
       Added Command.
+      Added ToString() overloads.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
