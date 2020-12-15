@@ -40,6 +40,11 @@ namespace H.Core.Runners
         /// </summary>
         public string[] Arguments { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Argument => string.Join(" ", Arguments);
+
         #endregion
 
         #region Constructors
@@ -65,7 +70,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Name} {string.Join(" ", Arguments)}";
+            return $"{Name} {Argument}";
         }
 
         #endregion
