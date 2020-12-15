@@ -3,10 +3,11 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.13.11</Version>
+    <Version>0.13.12</Version>
     <PackageReleaseNotes>
       Refactored runners.
       Refactored searchers.
+      Added Notifier.CommandFactory property.
       Refactored StringExtensions as null free.
       Fixed InvariantStringDictionary bug.
     </PackageReleaseNotes>

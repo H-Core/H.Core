@@ -13,6 +13,11 @@ namespace H.Core.Notifiers
         /// 
         /// </summary>
         public string Command { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Func<string>? CommandFactory { get; set; }
 
         #endregion
 
@@ -44,21 +49,20 @@ namespace H.Core.Notifiers
 
             EventOccurred += (_, _) =>
             {
-                OnLogReceived($"{Name} AfterEvent");
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(Command))
+                    if (!string.IsNullOrWhiteSpace(Command))
                     {
-                        OnLogReceived("Command is empty");
-                        return;
+                        Run(Command);
                     }
-
-                    Run(Command);
-                    OnLogReceived($"Run command: {Command}");
+                    if (CommandFactory != null)
+                    {
+                        Run(CommandFactory());
+                    }
                 }
                 catch (Exception exception)
                 {
-                    OnLogReceived($"Exception: {exception}");
+                    OnExceptionOccurred(exception);
                 }
             };
         }
