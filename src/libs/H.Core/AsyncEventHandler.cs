@@ -19,7 +19,7 @@ namespace H.Core
     /// <summary>
     /// 
     /// </summary>
-    public static class AsynchronousEventExtensions
+    public static class AsyncEventHandlerExtensions
     {
         /// <summary>
         /// 
