@@ -155,7 +155,7 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         private Func<ICommand, CancellationToken, Task> Action { get; }
-
+        
         #endregion
 
         #region Constructors
@@ -167,6 +167,7 @@ namespace H.Core.Runners
         /// <param name="action"></param>
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public AsyncAction(
             string name, 
             Func<ICommand, CancellationToken, Task> action,
@@ -348,12 +349,22 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public override async Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
+            command = command ?? throw new ArgumentNullException(nameof(command));
+
             OnRunning(command);
-            
-            await Action(command, cancellationToken).ConfigureAwait(false);
+
+            if (IsCancellable)
+            {
+                await Action(command, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                await Task.Run(() => Action(command, cancellationToken), cancellationToken).ConfigureAwait(false);
+            }
             
             OnRan(command);
         }

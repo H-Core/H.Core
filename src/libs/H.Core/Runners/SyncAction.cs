@@ -183,16 +183,18 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public override Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
+        public override async Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
-            OnRunning(command);
+            command = command ?? throw new ArgumentNullException(nameof(command));
             
-            Action(command);
+            OnRunning(command);
+
+            await Task.Run(() => Action(command), cancellationToken)
+                .ConfigureAwait(false);
 
             OnRan(command);
-
-            return Task.FromResult(false);
         }
 
         #endregion
