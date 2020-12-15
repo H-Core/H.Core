@@ -54,7 +54,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
+        event AsyncEventHandler<ICommand>? AsyncCommandReceived;
 
         /// <summary>
         /// 

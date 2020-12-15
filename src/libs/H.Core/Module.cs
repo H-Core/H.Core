@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Settings;
 using H.Core.Storages;
@@ -85,6 +86,11 @@ namespace H.Core
         /// 
         /// </summary>
         public event EventHandler<ICommand>? CommandReceived;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public event AsyncEventHandler<ICommand>? AsyncCommandReceived;
 
         /// <summary>
         /// 
@@ -98,7 +104,12 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<TextDeferredEventArgs>? NewCommandAsync;
+        /// <param name="value"></param>
+        /// <param name="cancellationToken"></param>
+        protected Task OnAsyncCommandReceivedAsync(ICommand value, CancellationToken cancellationToken = default)
+        {
+            return AsyncCommandReceived.OnAsync(this, value, cancellationToken);
+        }
         
         /// <summary>
         /// 
@@ -209,30 +220,33 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task RunAsync(string text)
+        public async Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
-            if (NewCommandAsync != null)
-            {
-                using var args = TextDeferredEventArgs.Create(text);
-                
-                await NewCommandAsync.InvokeAsync(this, args).ConfigureAwait(false);
-            }
+            await OnAsyncCommandReceivedAsync(command, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task SayAsync(string text) => await RunAsync($"say {text}").ConfigureAwait(false);
+        public async Task SayAsync(string text, CancellationToken cancellationToken = default)
+        {
+            await RunAsync(new Command("say", text), cancellationToken).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        public void Enable() => Run($"enable-module {UniqueName}");
-        
+        public void Enable()
+        {
+            Run($"enable-module {UniqueName}");
+        }
+
         /// <summary>
         /// 
         /// </summary>
