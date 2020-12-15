@@ -108,7 +108,7 @@ namespace H.Core
         /// <param name="cancellationToken"></param>
         protected Task OnAsyncCommandReceivedAsync(ICommand value, CancellationToken cancellationToken = default)
         {
-            return AsyncCommandReceived.OnAsync(this, value, cancellationToken);
+            return AsyncCommandReceived.InvokeAsync(this, value, cancellationToken);
         }
         
         /// <summary>

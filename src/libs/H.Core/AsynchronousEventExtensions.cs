@@ -30,7 +30,7 @@ namespace H.Core
         /// <param name="args"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task OnAsync<TEventArgs>(
+        public static Task InvokeAsync<TEventArgs>(
             this AsyncEventHandler<TEventArgs>? handlers, 
             object source, 
             TEventArgs args,
