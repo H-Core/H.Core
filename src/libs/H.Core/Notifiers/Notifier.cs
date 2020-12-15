@@ -45,7 +45,7 @@ namespace H.Core.Notifiers
         /// </summary>
         protected Notifier()
         {
-            AddSetting(nameof(Command), o => Command = o, _ => true, Command);
+            AddSetting(nameof(Command), o => Command = Core.Command.Parse(o), Any, string.Empty);
 
             EventOccurred += (_, _) =>
             {
