@@ -38,18 +38,18 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<string[]>? Running;
+        public event EventHandler<ICommand>? Running;
 
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<string[]>? Ran;
+        public event EventHandler<ICommand>? Ran;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        protected void OnRunning(string[] value)
+        protected void OnRunning(ICommand value)
         {
             Running?.Invoke(this, value);
         }
@@ -58,7 +58,7 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         /// <param name="value"></param>
-        protected void OnRan(string[] value)
+        protected void OnRan(ICommand value)
         {
             Ran?.Invoke(this, value);
         }
@@ -83,10 +83,35 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public abstract Task RunAsync(ICommand command, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="arguments"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task RunAsync(string[] arguments, CancellationToken cancellationToken = default);
+        public async Task RunAsync(string[] arguments, CancellationToken cancellationToken = default)
+        {
+            arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
+            
+            await RunAsync(new Command(string.Empty, arguments), cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public ICall PrepareCall(ICommand command)
+        {
+            command = command ?? throw new ArgumentNullException(nameof(command));
+
+            return PrepareCall(command.Arguments);
+        }
 
         /// <summary>
         /// 

@@ -20,6 +20,30 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
+        public static AsyncAction WithCommand(
+            string name,
+            Func<ICommand, CancellationToken, Task> action,
+            string? description = null,
+            bool isCancellable = true,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
         public static AsyncAction WithArguments(
             string name, 
             Func<string[], CancellationToken, Task> action,
@@ -73,6 +97,30 @@ namespace H.Core.Runners
             Func<CancellationToken, Task> action,
             string? description = null,
             bool isCancellable = true,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithCommandAndWithoutToken(
+            string name,
+            Func<ICommand, Task> action,
+            string? description = null,
+            bool isCancellable = false,
             bool isInternal = false)
         {
             return new(name, action)
@@ -162,7 +210,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        private Func<string[], CancellationToken, Task> Action { get; }
+        private Func<ICommand, CancellationToken, Task> Action { get; }
 
         #endregion
 
@@ -173,10 +221,24 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public AsyncAction(string name, Func<string[], CancellationToken, Task> action) : base(name)
+        public AsyncAction(string name, Func<ICommand, CancellationToken, Task> action) : base(name)
         {
             Action = action ?? throw new ArgumentNullException(nameof(action));
 
+            IsCancellable = true;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncAction(string name, Func<string[], CancellationToken, Task> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (command, cancellationToken) =>
+                action(command.Arguments, cancellationToken);
             IsCancellable = true;
         }
         
@@ -189,8 +251,8 @@ namespace H.Core.Runners
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
-            Action = (arguments, cancellationToken) =>
-                action(string.Join(" ", arguments), cancellationToken);
+            Action = (command, cancellationToken) =>
+                action(command.Argument, cancellationToken);
             IsCancellable = true;
         }
 
@@ -203,8 +265,23 @@ namespace H.Core.Runners
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
-            Action = (_, cancellationToken) => action(cancellationToken);
+            Action = (_, cancellationToken) => 
+                action(cancellationToken);
             IsCancellable = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public AsyncAction(string name, Func<ICommand, Task> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = (command, _) => 
+                action(command);
+            IsCancellable = false;
         }
 
         /// <summary>
@@ -216,7 +293,8 @@ namespace H.Core.Runners
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
-            Action = (arguments, _) => action(arguments);
+            Action = (command, _) => 
+                action(command.Arguments);
             IsCancellable = false;
         }
 
@@ -229,7 +307,8 @@ namespace H.Core.Runners
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
-            Action = (arguments, _) => action(string.Join(" ", arguments));
+            Action = (command, _) => 
+                action(command.Argument);
             IsCancellable = false;
         }
 
@@ -242,7 +321,8 @@ namespace H.Core.Runners
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
-            Action = (_, _) => action();
+            Action = (_, _) =>
+                action();
             IsCancellable = false;
         }
 
@@ -253,16 +333,16 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="arguments"></param>
+        /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override async Task RunAsync(string[] arguments, CancellationToken cancellationToken = default)
+        public override async Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
-            OnRunning(arguments);
+            OnRunning(command);
             
-            await Action(arguments, cancellationToken).ConfigureAwait(false);
+            await Action(command, cancellationToken).ConfigureAwait(false);
             
-            OnRan(arguments);
+            OnRan(command);
         }
 
         #endregion

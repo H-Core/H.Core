@@ -20,6 +20,30 @@ namespace H.Core.Runners
         /// <param name="isCancellable"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
+        public static SyncAction WithCommand(
+            string name,
+            Action<ICommand> action,
+            string? description = null,
+            bool isCancellable = false,
+            bool isInternal = false)
+        {
+            return new(name, action)
+            {
+                Description = description ?? string.Empty,
+                IsCancellable = isCancellable,
+                IsInternal = isInternal,
+            };
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isCancellable"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
         public static SyncAction WithArguments(
             string name, 
             Action<string> action, 
@@ -90,7 +114,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        private Action<string[]> Action { get; }
+        private Action<ICommand> Action { get; }
 
         #endregion
 
@@ -101,9 +125,21 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
-        public SyncAction(string name, Action<string[]> action) : base(name)
+        public SyncAction(string name, Action<ICommand> action) : base(name)
         {
             Action = action ?? throw new ArgumentNullException(nameof(action));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        public SyncAction(string name, Action<string[]> action) : base(name)
+        {
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            Action = command => action(command.Arguments);
         }
         
         /// <summary>
@@ -115,7 +151,7 @@ namespace H.Core.Runners
         {
             action = action ?? throw new ArgumentNullException(nameof(action));
 
-            Action = arguments => action(string.Join(" ", arguments));
+            Action = command => action(command.Argument);
         }
 
         /// <summary>
@@ -137,21 +173,20 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="arguments"></param>
+        /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override Task RunAsync(string[] arguments, CancellationToken cancellationToken = default)
+        public override Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
-            OnRunning(arguments);
+            OnRunning(command);
             
-            Action(arguments);
+            Action(command);
 
-            OnRan(arguments);
+            OnRan(command);
 
             return Task.FromResult(false);
         }
 
         #endregion
-
     }
 }

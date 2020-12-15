@@ -38,12 +38,12 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<string[]>? Running;
+        event EventHandler<ICommand>? Running;
 
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<string[]>? Ran;
+        event EventHandler<ICommand>? Ran;
 
         #endregion
 
@@ -52,8 +52,24 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        ICall PrepareCall(ICommand command);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arguments"></param>
         /// <returns></returns>
         ICall PrepareCall(params string[] arguments);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task RunAsync(ICommand command, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
