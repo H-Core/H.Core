@@ -7,7 +7,7 @@ namespace H.Core.Utilities
     /// <summary>
     /// Contains unhandled exceptions.
     /// </summary>
-    public class ExceptionsBag
+    public class ExceptionsBag : IDisposable
     {
         #region Properties
 
@@ -46,9 +46,9 @@ namespace H.Core.Utilities
         }
 
         /// <summary>
-        /// Throws <see cref="AggregateException"/> if any exceptions occur.
+        /// Throws <see cref="System.AggregateException"/> if any exceptions occur.
         /// </summary>
-        /// <exception cref="AggregateException"></exception>
+        /// <exception cref="System.AggregateException"></exception>
         public void EnsureNoExceptions()
         {
             var exception = AggregateException;
@@ -56,6 +56,15 @@ namespace H.Core.Utilities
             {
                 throw exception;
             }
+        }
+
+        /// <summary>
+        /// It just calls <see cref="EnsureNoExceptions"/>. 
+        /// </summary>
+        /// <exception cref="System.AggregateException"></exception>
+        public void Dispose()
+        {
+            EnsureNoExceptions();
         }
 
         #endregion
