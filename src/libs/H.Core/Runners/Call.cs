@@ -19,7 +19,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public string[] Arguments { get; }
+        public ICommand Command { get; }
 
         #endregion
 
@@ -53,11 +53,11 @@ namespace H.Core.Runners
         /// 
         /// </summary>
         /// <param name="action"></param>
-        /// <param name="arguments"></param>
-        public Call(IAction action, string[] arguments)
+        /// <param name="command"></param>
+        public Call(IAction action, ICommand command)
         {
             Action = action ?? throw new ArgumentNullException(nameof(action));
-            Arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
+            Command = command ?? throw new ArgumentNullException(nameof(command));
         }
 
         #endregion
@@ -69,13 +69,15 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task RunAsync(CancellationToken cancellationToken = default)
+        public async Task<ICommand> RunAsync(CancellationToken cancellationToken = default)
         {
             OnRunning();
             
-            await Action.RunAsync(Arguments, cancellationToken).ConfigureAwait(false);
+            var output = await Action.RunAsync(Command, cancellationToken).ConfigureAwait(false);
             
             OnRan();
+
+            return output;
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Action.Name} {string.Join(" ", Arguments)}";
+            return $"{Action.Name} {Command.Argument}";
         }
 
         #endregion

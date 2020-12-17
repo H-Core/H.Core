@@ -59,25 +59,10 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
-        ICall PrepareCall(params string[] arguments);
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task RunAsync(ICommand command, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task RunAsync(string[] arguments, CancellationToken cancellationToken = default);
+        Task<ICommand> RunAsync(ICommand command, CancellationToken cancellationToken = default);
 
         #endregion
     }

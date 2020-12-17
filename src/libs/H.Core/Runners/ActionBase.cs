@@ -86,7 +86,7 @@ namespace H.Core.Runners
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task RunAsync(ICommand command, CancellationToken cancellationToken = default);
+        public abstract Task<ICommand> RunAsync(ICommand command, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
@@ -110,17 +110,7 @@ namespace H.Core.Runners
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
 
-            return PrepareCall(command.Arguments);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
-        public ICall PrepareCall(params string[] arguments)
-        {
-            return new Call(this, arguments);
+            return new Call(this, command);
         }
 
         /// <summary>

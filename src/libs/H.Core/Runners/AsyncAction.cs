@@ -21,13 +21,30 @@ namespace H.Core.Runners
         /// <returns></returns>
         public static AsyncAction WithCommand(
             string name,
-            Func<ICommand, CancellationToken, Task> action,
+            Func<ICommand, CancellationToken, Task<ICommand>> action,
             string? description = null,
             bool isInternal = false)
         {
             return new(name, action, description, isInternal);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithCommand(
+            string name,
+            Func<ICommand, CancellationToken, Task> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return new(name, action, description, isInternal);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -188,7 +205,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        private Func<ICommand, CancellationToken, Task> Action { get; }
+        private Func<ICommand, CancellationToken, Task<ICommand>> Action { get; }
         
         #endregion
 
@@ -204,7 +221,7 @@ namespace H.Core.Runners
         /// <exception cref="ArgumentNullException"></exception>
         public AsyncAction(
             string name, 
-            Func<ICommand, CancellationToken, Task> action,
+            Func<ICommand, CancellationToken, Task<ICommand>> action,
             string? description = null,
             bool isInternal = false) : 
             base(name)
@@ -214,6 +231,33 @@ namespace H.Core.Runners
             IsInternal = isInternal;
 
             IsCancellable = true;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public AsyncAction(
+            string name,
+            Func<ICommand, CancellationToken, Task> action,
+            string? description = null,
+            bool isInternal = false) :
+            this(
+                name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                {
+                    action?.Invoke(command, cancellationToken);
+                    
+                    return Task.FromResult<ICommand>(Command.Empty);
+                },
+                description,
+                isInternal)
+        {
         }
 
         /// <summary>
@@ -430,22 +474,21 @@ namespace H.Core.Runners
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public override async Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
+        public override async Task<ICommand> RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
 
             OnRunning(command);
 
-            if (IsCancellable)
-            {
-                await Action(command, cancellationToken).ConfigureAwait(false);
-            }
-            else
-            {
-                await Task.Run(() => Action(command, cancellationToken), cancellationToken).ConfigureAwait(false);
-            }
+            var output = IsCancellable
+                ? await Action(command, cancellationToken)
+                    .ConfigureAwait(false)
+                : await Task.Run(() => Action(command, cancellationToken), cancellationToken)
+                    .ConfigureAwait(false);
             
             OnRan(command);
+
+            return output;
         }
 
         #endregion

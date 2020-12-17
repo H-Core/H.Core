@@ -26,7 +26,10 @@ namespace H.Core.UnitTests
             };
             var call = IsSupportedTest(runner, "print", "Hello, World!");
 
-            CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Arguments, nameof(call.Arguments));
+            Assert.AreEqual("print", call.Command.Name, nameof(call.Command.Name));
+            CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Command.Arguments, nameof(call.Command.Arguments));
+            CollectionAssert.AreEqual(new byte[0], call.Command.Data, nameof(call.Command.Data));
+            Assert.AreEqual("Hello, World!", call.Command.Argument, nameof(call.Command.Argument));
             Assert.AreEqual("print", call.Action.Name, nameof(call.Action.Name));
             Assert.AreEqual("value", call.Action.Description, nameof(call.Action.Description));
             Assert.AreEqual(false, call.Action.IsInternal, nameof(call.Action.IsInternal));

@@ -53,7 +53,7 @@ namespace H.Core.Runners
                 command.Arguments[i] = FindVariablesAndReplace(command.Arguments[i]);
             }
 
-            return action.PrepareCall(command.Arguments);
+            return action.PrepareCall(command);
         }
 
         #endregion
