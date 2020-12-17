@@ -15,7 +15,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        public RecordingFormat Format { get; } = RecordingFormat.None;
+        public RecordingFormat Format { get; }
         
         /// <summary>
         /// 
@@ -69,6 +69,24 @@ namespace H.Core.Recorders
         protected void OnDisposed()
         {
             Disposed?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="format"></param>
+        protected Recording(RecordingFormat format)
+        {
+            if (format is RecordingFormat.None)
+            {
+                throw new ArgumentException("Format is None.");
+            }
+            
+            Format = format;
         }
 
         #endregion
