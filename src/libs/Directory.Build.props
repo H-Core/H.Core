@@ -3,10 +3,11 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.15.2</Version>
+    <Version>0.15.3</Version>
     <PackageReleaseNotes>
       Added IRecording. Refactored Recorder.
       Added ICommand.Data property.
+      Fixed RecorderExtensions.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
