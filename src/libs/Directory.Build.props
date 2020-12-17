@@ -3,19 +3,9 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.14.10</Version>
+    <Version>0.15.0</Version>
     <PackageReleaseNotes>
-      Renamed Commands to Actions.
-      Added Command.
-      Added ToString() overloads.
-      Added IRunner.TryPrepareCall(ICommand command) method.
-      Refactored Actions.
-      Wrapped not cancellable actions with Task.Run().
-      Moved Command to H.Core namespace.
-      Refactored Module Events.
-      Refactored Notifier.
-      Added iModule.AsyncCommandReceived event.
-      Added ExceptionsBag.Dispose method.
+      Added IRecording. Refactored Recorder.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

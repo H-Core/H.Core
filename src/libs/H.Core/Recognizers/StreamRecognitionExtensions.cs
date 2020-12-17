@@ -16,39 +16,39 @@ namespace H.Core.Recognizers
         /// 
         /// </summary>
         /// <param name="recognition"></param>
-        /// <param name="recorder"></param>
+        /// <param name="recording"></param>
         /// <param name="writeWavHeader"></param>
         /// <param name="exceptionsBag"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public static async Task BindRecorderAsync(
+        public static async Task BindRecordingAsync(
             this IStreamingRecognition recognition, 
-            IRecorder recorder, 
+            IRecording recording, 
             bool writeWavHeader = false,
             ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
         {
             recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
-            recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
+            recording = recording ?? throw new ArgumentNullException(nameof(recording));
 
             if (writeWavHeader)
             {
-                if (!recorder.WavHeader.Any())
+                if (!recording.WavHeader.Any())
                 {
                     throw new InvalidOperationException("recorder.WavHeader is empty.");
                 }
 
-                await recognition.WriteAsync(recorder.WavHeader, cancellationToken).ConfigureAwait(false);
+                await recognition.WriteAsync(recording.WavHeader, cancellationToken).ConfigureAwait(false);
             }
 
-            if (recorder.RawData.Any())
+            if (recording.Data.Any())
             {
-                await recognition.WriteAsync(recorder.RawData, cancellationToken).ConfigureAwait(false);
+                await recognition.WriteAsync(recording.Data, cancellationToken).ConfigureAwait(false);
             }
 
-            async void OnRawDataReceived(object? _, byte[] bytes)
+            async void OnDataReceived(object? _, byte[] bytes)
             {
                 try
                 {
@@ -64,8 +64,8 @@ namespace H.Core.Recognizers
             {
                 try
                 {
-                    recorder.RawDataReceived -= OnRawDataReceived;
-                    recorder.Stopped -= OnStopped;
+                    recording.DataReceived -= OnDataReceived;
+                    recording.Stopped -= OnStopped;
                 }
                 catch (Exception exception)
                 {
@@ -73,8 +73,8 @@ namespace H.Core.Recognizers
                 }
             }
 
-            recorder.RawDataReceived += OnRawDataReceived;
-            recorder.Stopped += OnStopped;
+            recording.DataReceived += OnDataReceived;
+            recording.Stopped += OnStopped;
         }
 
         /// <summary>
@@ -97,22 +97,26 @@ namespace H.Core.Recognizers
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
 
-            await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
+            var recording = await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
 
             var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
             recognition.Stopping += async (_, _) =>
             {
                 try
                 {
-                    await recorder.StopAsync(cancellationToken).ConfigureAwait(false);
+                    await recording.StopAsync(cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception exception)
                 {
                     exceptionsBag?.OnOccurred(exception);
                 }
+                finally
+                {
+                    recording.Dispose();
+                }
             };
 
-            await recognition.BindRecorderAsync(recorder, writeWavHeader, exceptionsBag, cancellationToken).ConfigureAwait(false);
+            await recognition.BindRecordingAsync(recording, writeWavHeader, exceptionsBag, cancellationToken).ConfigureAwait(false);
 
             return recognition;
         }
