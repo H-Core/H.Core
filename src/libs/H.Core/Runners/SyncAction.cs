@@ -27,7 +27,24 @@ namespace H.Core.Runners
         {
             return new(name, action, description, isInternal);
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static SyncAction WithData(
+            string name,
+            Action<byte[]> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return new(name, action, description, isInternal);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -38,7 +55,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public static SyncAction WithArguments(
             string name, 
-            Action<string> action, 
+            Action<string[]> action, 
             string? description = null, 
             bool isInternal = false)
         {
@@ -109,6 +126,27 @@ namespace H.Core.Runners
             Action = action ?? throw new ArgumentNullException(nameof(action));
             Description = description ?? string.Empty;
             IsInternal = isInternal;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public SyncAction(
+            string name,
+            Action<byte[]> action,
+            string? description = null,
+            bool isInternal = false) :
+            this(
+                name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command => action?.Invoke(command.Data),
+                description,
+                isInternal)
+        {
         }
 
         /// <summary>

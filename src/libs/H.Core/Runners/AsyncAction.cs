@@ -36,6 +36,23 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
+        public static AsyncAction WithData(
+            string name,
+            Func<byte[], CancellationToken, Task> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return new(name, action, description, isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
         public static AsyncAction WithArguments(
             string name, 
             Func<string[], CancellationToken, Task> action,
@@ -90,6 +107,23 @@ namespace H.Core.Runners
         public static AsyncAction WithCommandAndWithoutToken(
             string name,
             Func<ICommand, Task> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return new(name, action, description, isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithDataAndWithoutToken(
+            string name,
+            Func<byte[], Task> action,
             string? description = null,
             bool isInternal = false)
         {
@@ -190,6 +224,28 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         public AsyncAction(
+            string name,
+            Func<byte[], CancellationToken, Task> action,
+            string? description = null,
+            bool isInternal = false) :
+            this(
+                name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Data, cancellationToken) ?? Task.FromResult(false),
+                description,
+                isInternal)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public AsyncAction(
             string name, 
             Func<string[], CancellationToken, Task> action,
             string? description = null,
@@ -265,6 +321,29 @@ namespace H.Core.Runners
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, _) =>
                     action?.Invoke(command) ?? Task.FromResult(false),
+                description,
+                isInternal)
+        {
+            IsCancellable = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        public AsyncAction(
+            string name,
+            Func<byte[], Task> action,
+            string? description = null,
+            bool isInternal = false) :
+            this(
+                name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, _) =>
+                    action?.Invoke(command.Data) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {

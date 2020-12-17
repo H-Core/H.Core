@@ -53,6 +53,11 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
+        public byte[] Data { get; } = EmptyArray<byte>.Value;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsEmpty => string.IsNullOrWhiteSpace(Name);
 
         #endregion
@@ -75,6 +80,17 @@ namespace H.Core
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Arguments = arguments;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="data"></param>
+        public Command(string name, byte[] data)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Data = data;
         }
 
         #endregion

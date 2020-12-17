@@ -21,7 +21,12 @@
         /// 
         /// </summary>
         string Argument { get; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        byte[] Data { get; }
+
         /// <summary>
         /// 
         /// </summary>
