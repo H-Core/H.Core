@@ -30,16 +30,30 @@ namespace H.Core.Recorders
         #endregion
 
         #region Events
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventHandler? Stopped;
 
         /// <summary>
         /// When new partial raw data received.
         /// </summary>
         public event EventHandler<byte[]>? DataReceived;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler? Stopped;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler? Disposed;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        protected void OnDataReceived(byte[] value)
+        {
+            DataReceived?.Invoke(this, value);
+        }
 
         /// <summary>
         /// 
@@ -52,10 +66,9 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="value"></param>
-        protected void OnDataReceived(byte[] value)
+        protected void OnDisposed()
         {
-            DataReceived?.Invoke(this, value);
+            Disposed?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
@@ -79,6 +92,7 @@ namespace H.Core.Recorders
         /// </summary>
         public virtual void Dispose()
         {
+            OnDisposed();
         }
 
         #endregion

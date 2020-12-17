@@ -34,6 +34,11 @@ namespace H.Core.Recorders
         /// After <see cref="StopAsync"/> call.
         /// </summary>
         event EventHandler? Stopped;
+        
+        /// <summary>
+        /// After <see cref="IDisposable.Dispose"/> call.
+        /// </summary>
+        event EventHandler? Disposed;
 
         /// <summary>
         /// Raw data received.

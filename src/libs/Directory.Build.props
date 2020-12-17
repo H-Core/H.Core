@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.15.0</Version>
+    <Version>0.15.1</Version>
     <PackageReleaseNotes>
       Added IRecording. Refactored Recorder.
     </PackageReleaseNotes>
