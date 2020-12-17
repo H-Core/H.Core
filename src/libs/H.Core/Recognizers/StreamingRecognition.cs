@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using H.Core.Utilities;
 
 namespace H.Core.Recognizers
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class StreamingRecognition : DisposableObject, IStreamingRecognition
+    public abstract class StreamingRecognition : IStreamingRecognition
     {
         #region Events
 
@@ -85,6 +84,13 @@ namespace H.Core.Recognizers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public abstract Task StopAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual void Dispose()
+        {
+        }
 
         #endregion
     }

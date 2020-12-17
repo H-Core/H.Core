@@ -12,19 +12,19 @@ namespace H.Core.Recorders
         #region Properties
 
         /// <summary>
-        /// Raw data.
+        /// Format.
+        /// </summary>
+        RecordingFormat Format { get; }
+        
+        /// <summary>
+        /// Data.
         /// </summary>
         byte[] Data { get; }
 
         /// <summary>
-        /// Raw data with wav header.
+        /// Header bytes.
         /// </summary>
-        byte[] WavData { get; }
-
-        /// <summary>
-        /// Wav header bytes.
-        /// </summary>
-        byte[] WavHeader { get; }
+        byte[] Header { get; }
 
         #endregion
 

@@ -8,10 +8,15 @@ namespace H.Core.Recorders
     /// <summary>
     /// /
     /// </summary>
-    public class Recording : IRecording
+    public abstract class Recording : IRecording
     {
         #region Properties
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public RecordingFormat Format { get; } = RecordingFormat.None;
+        
         /// <summary>
         /// 
         /// </summary>
@@ -20,12 +25,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        public byte[] WavData { get; protected set; } = EmptyArray<byte>.Value;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public byte[] WavHeader { get; protected set; } = EmptyArray<byte>.Value;
+        public byte[] Header { get; protected set; } = EmptyArray<byte>.Value;
 
         #endregion
 

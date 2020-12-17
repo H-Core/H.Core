@@ -40,13 +40,14 @@ namespace H.Core.Recorders
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task InitializeAsync(CancellationToken cancellationToken = default);
-        
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="format"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IRecording> StartAsync(CancellationToken cancellationToken = default);
+        Task<IRecording> StartAsync(RecordingFormat format, CancellationToken cancellationToken = default);
 
         #endregion
     }

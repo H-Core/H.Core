@@ -14,18 +14,27 @@ namespace H.Core.Recorders
         /// </summary>
         /// <param name="recorder"></param>
         /// <param name="timeout"></param>
+        /// <param name="format"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<IRecording> StartWithTimeoutAsync(this IRecorder recorder, TimeSpan timeout, CancellationToken cancellationToken = default)
+        public static async Task<IRecording> StartWithTimeoutAsync(
+            this IRecorder recorder, 
+            TimeSpan timeout,
+            RecordingFormat format,
+            CancellationToken cancellationToken = default)
         {
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
-
+            if (format is RecordingFormat.None)
+            {
+                throw new ArgumentException("format is None.");
+            }
+            
             if (!recorder.IsInitialized)
             {
                 await recorder.InitializeAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            using var recording = await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
+            using var recording = await recorder.StartAsync(format, cancellationToken).ConfigureAwait(false);
 
             await Task.Delay(timeout, cancellationToken).ConfigureAwait(false);
 

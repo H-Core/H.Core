@@ -17,30 +17,32 @@ namespace H.Core.Recognizers
         /// </summary>
         /// <param name="recognition"></param>
         /// <param name="recording"></param>
-        /// <param name="writeWavHeader"></param>
         /// <param name="exceptionsBag"></param>
         /// <param name="cancellationToken"></param>
-        /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         /// <returns></returns>
         public static async Task BindRecordingAsync(
             this IStreamingRecognition recognition, 
-            IRecording recording, 
-            bool writeWavHeader = false,
+            IRecording recording,
             ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
         {
             recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
             recording = recording ?? throw new ArgumentNullException(nameof(recording));
 
-            if (writeWavHeader)
+            if (recording.Format is RecordingFormat.None)
             {
-                if (!recording.WavHeader.Any())
+                throw new ArgumentException("recording.Format is None.");
+            }
+            if (recording.Format is not RecordingFormat.Raw)
+            {
+                if (!recording.Header.Any())
                 {
-                    throw new InvalidOperationException("recorder.WavHeader is empty.");
+                    throw new ArgumentException("recording.Header is empty.");
                 }
 
-                await recognition.WriteAsync(recording.WavHeader, cancellationToken).ConfigureAwait(false);
+                await recognition.WriteAsync(recording.Header, cancellationToken).ConfigureAwait(false);
             }
 
             if (recording.Data.Any())
@@ -82,7 +84,6 @@ namespace H.Core.Recognizers
         /// </summary>
         /// <param name="recognizer"></param>
         /// <param name="recorder"></param>
-        /// <param name="writeWavHeader"></param>
         /// <param name="exceptionsBag"></param>
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
@@ -90,16 +91,21 @@ namespace H.Core.Recognizers
         public static async Task<IStreamingRecognition> StartStreamingRecognitionAsync(
             this IRecognizer recognizer, 
             IRecorder recorder,
-            bool writeWavHeader = false,
             ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
         {
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
 
-            var recording = await recorder.StartAsync(cancellationToken).ConfigureAwait(false);
-
-            var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken).ConfigureAwait(false);
+            if (recognizer.StreamingFormat is RecordingFormat.None)
+            {
+                throw new ArgumentException("Recognizer does not support streaming recognition.");
+            }
+            
+            var recording = await recorder.StartAsync(recognizer.StreamingFormat, cancellationToken)
+                .ConfigureAwait(false);
+            var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
+                .ConfigureAwait(false);
             recognition.Stopping += async (_, _) =>
             {
                 try
@@ -116,9 +122,36 @@ namespace H.Core.Recognizers
                 }
             };
 
-            await recognition.BindRecordingAsync(recording, writeWavHeader, exceptionsBag, cancellationToken).ConfigureAwait(false);
+            await recognition.BindRecordingAsync(recording, exceptionsBag, cancellationToken).ConfigureAwait(false);
 
             return recognition;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recognizer"></param>
+        /// <param name="bytes"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<string> ConvertOverStreamingRecognition(
+            this IRecognizer recognizer,
+            byte[] bytes, 
+            CancellationToken cancellationToken = default)
+        {
+            recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
+            bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
+
+            using var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
+                .ConfigureAwait(false);
+            
+            var response = string.Empty;
+            recognition.FinalResultsReceived += (_, value) => response = value;
+
+            await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+            await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
+
+            return response;
         }
     }
 }

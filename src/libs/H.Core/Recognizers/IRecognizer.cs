@@ -8,10 +8,21 @@ namespace H.Core.Recognizers
     /// </summary>
     public interface IRecognizer : IModule
     {
+        #region Properties
+
         /// <summary>
         /// 
         /// </summary>
-        bool IsStreamingRecognitionSupported { get; }
+        RecordingFormat Format { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        RecordingFormat StreamingFormat { get; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// 
@@ -27,5 +38,7 @@ namespace H.Core.Recognizers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default);
+
+        #endregion
     }
 }

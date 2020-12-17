@@ -66,9 +66,10 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="format"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task<IRecording> StartAsync(CancellationToken cancellationToken = default);
+        public abstract Task<IRecording> StartAsync(RecordingFormat format, CancellationToken cancellationToken = default);
 
         #endregion
     }
