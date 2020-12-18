@@ -9,15 +9,6 @@ namespace H.Core.Recorders
     /// </summary>
     public abstract class Recorder : Module, IRecorder
     {
-        #region Properties
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsInitialized { get; protected set; }
-
-        #endregion
-
         #region Events
         
         /// <summary>
@@ -50,18 +41,6 @@ namespace H.Core.Recorders
         #endregion
 
         #region Public methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual Task InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            IsInitialized = true;
-
-            return Task.FromResult(false);
-        }
 
         /// <summary>
         /// 

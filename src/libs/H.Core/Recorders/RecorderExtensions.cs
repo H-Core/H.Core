@@ -29,11 +29,6 @@ namespace H.Core.Recorders
                 throw new ArgumentException("format is None.");
             }
             
-            if (!recorder.IsInitialized)
-            {
-                await recorder.InitializeAsync(cancellationToken).ConfigureAwait(false);
-            }
-
             using var recording = await recorder.StartAsync(format, cancellationToken).ConfigureAwait(false);
 
             await Task.Delay(timeout, cancellationToken).ConfigureAwait(false);

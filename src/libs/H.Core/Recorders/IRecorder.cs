@@ -9,15 +9,6 @@ namespace H.Core.Recorders
     /// </summary>
     public interface IRecorder : IModule
     {
-        #region Properties
-
-        /// <summary>
-        /// 
-        /// </summary>
-        bool IsInitialized { get; }
-
-        #endregion
-
         #region Events
 
         /// <summary>
@@ -33,13 +24,6 @@ namespace H.Core.Recorders
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task InitializeAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
