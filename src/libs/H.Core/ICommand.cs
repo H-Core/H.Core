@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        IProcess Process { get; }
+        IProcess? Process { get; set; }
 
         /// <summary>
         /// 
