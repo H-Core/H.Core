@@ -23,7 +23,7 @@ namespace H.Core.Recognizers
         /// <exception cref="ArgumentException"></exception>
         /// <returns></returns>
         public static async Task BindRecordingAsync(
-            this IStreamingRecognition recognition, 
+            this IStreamingRecognition recognition,
             IRecording recording,
             ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
@@ -89,7 +89,7 @@ namespace H.Core.Recognizers
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public static async Task<IStreamingRecognition> StartStreamingRecognitionAsync(
-            this IRecognizer recognizer, 
+            this IRecognizer recognizer,
             IRecorder recorder,
             ExceptionsBag? exceptionsBag = null,
             CancellationToken cancellationToken = default)
@@ -101,7 +101,7 @@ namespace H.Core.Recognizers
             {
                 throw new ArgumentException("Recognizer does not support streaming recognition.");
             }
-            
+
             var recording = await recorder.StartAsync(recognizer.StreamingFormat, cancellationToken)
                 .ConfigureAwait(false);
             var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
@@ -131,12 +131,53 @@ namespace H.Core.Recognizers
         /// 
         /// </summary>
         /// <param name="recognizer"></param>
+        /// <param name="recorder"></param>
+        /// <param name="process"></param>
+        /// <param name="cancellationToken"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <returns></returns>
+        public static Task<IProcess> StartStreamingRecognitionAsync(
+            this IRecognizer recognizer,
+            IRecorder recorder,
+            Process? process = null,
+            CancellationToken cancellationToken = default)
+        {
+            recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
+            recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
+            if (recognizer.StreamingFormat is RecordingFormat.None)
+            {
+                throw new ArgumentException("Recognizer does not support streaming recognition.");
+            }
+
+            process ??= new Process();
+            process.Initialize(async () =>
+            {
+                using var recording = await recorder.StartAsync(recognizer.StreamingFormat, cancellationToken)
+                    .ConfigureAwait(false);
+                using var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
+                    .ConfigureAwait(false);
+
+                await recognition.BindRecordingAsync(recording, process.Exceptions, cancellationToken).ConfigureAwait(false);
+
+                await process.WaitAsync(cancellationToken).ConfigureAwait(false);
+
+                await recording.StopAsync(cancellationToken).ConfigureAwait(false);
+                await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
+
+            return Task.FromResult<IProcess>(process);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recognizer"></param>
         /// <param name="bytes"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<string> ConvertOverStreamingRecognition(
             this IRecognizer recognizer,
-            byte[] bytes, 
+            byte[] bytes,
             CancellationToken cancellationToken = default)
         {
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
@@ -144,7 +185,7 @@ namespace H.Core.Recognizers
 
             using var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
                 .ConfigureAwait(false);
-            
+
             var response = string.Empty;
             recognition.FinalResultsReceived += (_, value) => response = value;
 

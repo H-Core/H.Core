@@ -3,10 +3,9 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.16.5</Version>
+    <Version>0.17.0</Version>
     <PackageReleaseNotes>
-      Refactored Recognizers and Recorders.
-      Added ICall.RunAsync returning value.
+      Added IProcess.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

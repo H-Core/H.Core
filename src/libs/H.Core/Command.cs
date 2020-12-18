@@ -58,6 +58,11 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
+        public IProcess? Process { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsEmpty => string.IsNullOrWhiteSpace(Name);
 
         #endregion
