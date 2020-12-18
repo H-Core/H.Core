@@ -58,7 +58,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public IProcess? Process { get; set; }
+        public IProcess<ICommand>? Process { get; set; }
 
         /// <summary>
         /// 

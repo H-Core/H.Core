@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        IProcess? Process { get; set; }
+        IProcess<ICommand>? Process { get; set; }
 
         /// <summary>
         /// 
