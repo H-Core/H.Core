@@ -20,7 +20,7 @@
         /// <summary>
         /// 
         /// </summary>
-        IProcess<ICommand>? Process { get; set; }
+        IProcess<IValue>? Process { get; set; }
 
         /// <summary>
         /// 
