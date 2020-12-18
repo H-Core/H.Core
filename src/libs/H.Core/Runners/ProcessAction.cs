@@ -68,19 +68,6 @@ namespace H.Core.Runners
             return output;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="process"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public ICall PrepareCall(IProcess<IValue> process, ICommand command)
-        {
-            command = command ?? throw new ArgumentNullException(nameof(command));
-
-            return new Call(this, command);
-        }
-
         #endregion
     }
 }

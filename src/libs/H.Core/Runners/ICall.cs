@@ -46,6 +46,14 @@ namespace H.Core.Runners
         /// <returns></returns>
         Task<IValue> RunAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="process"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IValue> RunAsync(IProcess<IValue> process, CancellationToken cancellationToken = default);
+
         #endregion
     }
 }

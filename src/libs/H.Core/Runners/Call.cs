@@ -83,6 +83,28 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="process"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IValue> RunAsync(IProcess<IValue> process, CancellationToken cancellationToken = default)
+        {
+            if (Action is not IProcessAction processAction)
+            {
+                throw new InvalidOperationException("Action is not ProcessAction.");
+            }
+            
+            OnRunning();
+
+            var output = await processAction.RunAsync(process, Command, cancellationToken).ConfigureAwait(false);
+
+            OnRan();
+
+            return output;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public override string ToString()
         {

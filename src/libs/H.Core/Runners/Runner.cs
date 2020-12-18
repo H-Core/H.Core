@@ -57,27 +57,6 @@ namespace H.Core.Runners
                 ? action.PrepareCall(command)
                 : null;
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <returns></returns>
-        public ICall? TryPrepareCall(IProcess<IValue> process, ICommand command)
-        {
-            command = command ?? throw new ArgumentNullException(nameof(command));
-
-            if (!TryPrepareAction(command, out var action))
-            {
-                return null;
-            }
-            if (action is not IProcessAction processAction)
-            {
-                throw new ArgumentException("Action is not IProcessAction");
-            }
-
-            return processAction.PrepareCall(process, command);
-        }
 
         #endregion
 
