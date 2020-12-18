@@ -30,6 +30,11 @@
         /// <summary>
         /// 
         /// </summary>
+        IProcess Process { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         bool IsEmpty { get; }
 
         #endregion
