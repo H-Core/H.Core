@@ -28,7 +28,7 @@ namespace H.Core
 
             return new Command(
                 values.ElementAt(0),
-                (values.ElementAtOrDefault(1) ?? string.Empty).Split(' '));
+                Core.Value.Parse(values.ElementAtOrDefault(1) ?? string.Empty));
         }
 
         #endregion
@@ -43,17 +43,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public string[] Arguments { get; } = EmptyArray<string>.Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Argument => string.Join(" ", Arguments);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public byte[] Data { get; } = EmptyArray<byte>.Value;
+        public IValue Value { get; }
 
         /// <summary>
         /// 
@@ -74,7 +64,7 @@ namespace H.Core
         /// </summary>
         public Command(params string[] arguments)
         {
-            Arguments = arguments;
+            Value = new Value(arguments);
         }
         
         /// <summary>
@@ -85,7 +75,7 @@ namespace H.Core
         public Command(string name, params string[] arguments)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Arguments = arguments;
+            Value = new Value(arguments);
         }
 
         /// <summary>
@@ -94,7 +84,7 @@ namespace H.Core
         /// <param name="data"></param>
         public Command(byte[] data)
         {
-            Data = data;
+            Value = new Value(data);
         }
 
         /// <summary>
@@ -105,7 +95,18 @@ namespace H.Core
         public Command(string name, byte[] data)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Data = data;
+            Value = new Value(data);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public Command(string name, IValue value)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Value = value;
         }
 
         #endregion
@@ -120,7 +121,7 @@ namespace H.Core
         {
             return IsEmpty
                 ? string.Empty
-                : $"{Name} {Argument}";
+                : $"{Name} {Value}";
         }
 
         #endregion

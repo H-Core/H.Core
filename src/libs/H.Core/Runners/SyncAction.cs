@@ -21,7 +21,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public static SyncAction WithCommand(
             string name,
-            Func<ICommand, ICommand> action,
+            Func<ICommand, IValue> action,
             string? description = null,
             bool isInternal = false)
         {
@@ -120,7 +120,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        private Func<ICommand, ICommand> Action { get; }
+        private Func<ICommand, IValue> Action { get; }
 
         #endregion
 
@@ -135,7 +135,7 @@ namespace H.Core.Runners
         /// <param name="isInternal"></param>
         public SyncAction(
             string name, 
-            Func<ICommand, ICommand> action,
+            Func<ICommand, IValue> action,
             string? description = null,
             bool isInternal = false) : 
             base(name)
@@ -164,7 +164,7 @@ namespace H.Core.Runners
                 {
                     action?.Invoke(command);
                     
-                    return Command.Empty;
+                    return Value.Empty;
                 },
                 description,
                 isInternal)
@@ -186,7 +186,7 @@ namespace H.Core.Runners
             this(
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command => action?.Invoke(command.Data),
+                command => action?.Invoke(command.Value.Data),
                 description,
                 isInternal)
         {
@@ -207,7 +207,7 @@ namespace H.Core.Runners
             this(
                 name, 
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command => action?.Invoke(command.Arguments), 
+                command => action?.Invoke(command.Value.Arguments), 
                 description, 
                 isInternal)
         {
@@ -228,7 +228,7 @@ namespace H.Core.Runners
             this(
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command => action?.Invoke(command.Argument),
+                command => action?.Invoke(command.Value.Argument),
                 description,
                 isInternal)
         {
@@ -266,7 +266,7 @@ namespace H.Core.Runners
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public override async Task<ICommand> RunAsync(ICommand command, CancellationToken cancellationToken = default)
+        public override async Task<IValue> RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
             

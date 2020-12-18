@@ -86,7 +86,7 @@ namespace H.Core.Runners
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task<ICommand> RunAsync(ICommand command, CancellationToken cancellationToken = default);
+        public abstract Task<IValue> RunAsync(ICommand command, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 

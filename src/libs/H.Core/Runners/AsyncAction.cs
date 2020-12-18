@@ -205,7 +205,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        private Func<ICommand, CancellationToken, Task<ICommand>> Action { get; }
+        private Func<ICommand, CancellationToken, Task<IValue>> Action { get; }
         
         #endregion
 
@@ -221,7 +221,7 @@ namespace H.Core.Runners
         /// <exception cref="ArgumentNullException"></exception>
         public AsyncAction(
             string name, 
-            Func<ICommand, CancellationToken, Task<ICommand>> action,
+            Func<ICommand, CancellationToken, Task<IValue>> action,
             string? description = null,
             bool isInternal = false) : 
             base(name)
@@ -253,7 +253,7 @@ namespace H.Core.Runners
                 {
                     action?.Invoke(command, cancellationToken);
                     
-                    return Task.FromResult<ICommand>(Command.Empty);
+                    return Task.FromResult<IValue>(Value.Empty);
                 },
                 description,
                 isInternal)
@@ -276,7 +276,7 @@ namespace H.Core.Runners
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Data, cancellationToken) ?? Task.FromResult(false),
+                    action?.Invoke(command.Value.Data, cancellationToken) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {
@@ -298,7 +298,7 @@ namespace H.Core.Runners
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Arguments, cancellationToken) ?? Task.FromResult(false),
+                    action?.Invoke(command.Value.Arguments, cancellationToken) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {
@@ -320,7 +320,7 @@ namespace H.Core.Runners
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Argument, cancellationToken) ?? Task.FromResult(false),
+                    action?.Invoke(command.Value.Argument, cancellationToken) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {
@@ -387,7 +387,7 @@ namespace H.Core.Runners
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, _) =>
-                    action?.Invoke(command.Data) ?? Task.FromResult(false),
+                    action?.Invoke(command.Value.Data) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {
@@ -410,7 +410,7 @@ namespace H.Core.Runners
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, _) =>
-                    action?.Invoke(command.Arguments) ?? Task.FromResult(false),
+                    action?.Invoke(command.Value.Arguments) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {
@@ -433,7 +433,7 @@ namespace H.Core.Runners
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, _) =>
-                    action?.Invoke(command.Argument) ?? Task.FromResult(false),
+                    action?.Invoke(command.Value.Argument) ?? Task.FromResult(false),
                 description,
                 isInternal)
         {
@@ -474,7 +474,7 @@ namespace H.Core.Runners
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public override async Task<ICommand> RunAsync(ICommand command, CancellationToken cancellationToken = default)
+        public override async Task<IValue> RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
 

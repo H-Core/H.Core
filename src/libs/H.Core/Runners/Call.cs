@@ -69,7 +69,7 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICommand> RunAsync(CancellationToken cancellationToken = default)
+        public async Task<IValue> RunAsync(CancellationToken cancellationToken = default)
         {
             OnRunning();
             
@@ -86,7 +86,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Action.Name} {Command.Argument}";
+            return $"{Action.Name} {Command.Value.Argument}";
         }
 
         #endregion

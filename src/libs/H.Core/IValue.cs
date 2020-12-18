@@ -3,24 +3,24 @@
     /// <summary>
     /// 
     /// </summary>
-    public interface ICommand
+    public interface IValue
     {
         #region Properties
 
         /// <summary>
         /// 
         /// </summary>
-        string Name { get; }
+        string[] Arguments { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        IValue Value { get; }
+        string Argument { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        IProcess<ICommand>? Process { get; set; }
+        byte[] Data { get; }
 
         /// <summary>
         /// 

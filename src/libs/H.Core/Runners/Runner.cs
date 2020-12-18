@@ -48,9 +48,9 @@ namespace H.Core.Runners
                 return null;
             }
 
-            for (var i = 0; i < command.Arguments.Length; i++)
+            for (var i = 0; i < command.Value.Arguments.Length; i++)
             {
-                command.Arguments[i] = FindVariablesAndReplace(command.Arguments[i]);
+                command.Value.Arguments[i] = FindVariablesAndReplace(command.Value.Arguments[i]);
             }
 
             return action.PrepareCall(command);
