@@ -14,12 +14,27 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
-        public RecordingFormat Format { get; } = RecordingFormat.None;
+        public RecordingFormat Format { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public RecordingFormat StreamingFormat { get; } = RecordingFormat.None;
+        public RecordingFormat StreamingFormat { get; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="streamingFormat"></param>
+        protected Recognizer(RecordingFormat format, RecordingFormat streamingFormat = RecordingFormat.None)
+        {
+            Format = format;
+            StreamingFormat = streamingFormat;
+        }
 
         #endregion
 
