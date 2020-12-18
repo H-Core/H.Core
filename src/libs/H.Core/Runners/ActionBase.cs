@@ -91,19 +91,6 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="arguments"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task RunAsync(string[] arguments, CancellationToken cancellationToken = default)
-        {
-            arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
-            
-            await RunAsync(new Command(string.Empty, arguments), cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
         public ICall PrepareCall(ICommand command)

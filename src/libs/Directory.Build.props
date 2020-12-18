@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.16.3</Version>
+    <Version>0.16.4</Version>
     <PackageReleaseNotes>
       Refactored Recognizers and Recorders.
       Added ICall.RunAsync returning value.

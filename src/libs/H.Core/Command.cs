@@ -67,8 +67,9 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public Command()
+        public Command(params string[] arguments)
         {
+            Arguments = arguments;
         }
         
         /// <summary>
@@ -80,6 +81,15 @@ namespace H.Core
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Arguments = arguments;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        public Command(byte[] data)
+        {
+            Data = data;
         }
 
         /// <summary>
