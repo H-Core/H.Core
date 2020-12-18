@@ -10,7 +10,7 @@ namespace H.Core.UnitTests
     {
         private static ICall IsSupportedTest(IRunner runner, string name, params string[] arguments)
         {
-            var call = runner.TryPrepareCall(name, arguments);
+            var call = runner.TryPrepareCall(new Command(name, arguments));
             
             Assert.IsNotNull(call, $"{nameof(IsSupportedTest)}: {name}");
             call = call ?? throw new Exception();

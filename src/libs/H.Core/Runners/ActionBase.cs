@@ -86,7 +86,10 @@ namespace H.Core.Runners
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task<IValue> RunAsync(ICommand command, CancellationToken cancellationToken = default);
+        public virtual Task<IValue> RunAsync(ICommand command, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult<IValue>(Value.Empty);
+        }
 
         /// <summary>
         /// 

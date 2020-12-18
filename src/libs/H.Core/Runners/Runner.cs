@@ -27,11 +27,21 @@ namespace H.Core.Runners
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public ICall? TryPrepareCall(string name, params string[] arguments)
+        private bool TryPrepareAction(ICommand command, out IAction action)
         {
-            name = name ?? throw new ArgumentNullException(nameof(name));
+            command = command ?? throw new ArgumentNullException(nameof(command));
 
-            return TryPrepareCall(new Command(name, arguments));
+            if (!Actions.TryGetValue(command.Name, out action))
+            {
+                return false;
+            }
+
+            for (var i = 0; i < command.Value.Arguments.Length; i++)
+            {
+                command.Value.Arguments[i] = FindVariablesAndReplace(command.Value.Arguments[i]);
+            }
+
+            return true;
         }
         
         /// <summary>
@@ -43,17 +53,30 @@ namespace H.Core.Runners
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
 
-            if (!Actions.TryGetValue(command.Name, out var action))
+            return TryPrepareAction(command, out var action)
+                ? action.PrepareCall(command)
+                : null;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <returns></returns>
+        public ICall? TryPrepareCall(IProcess<IValue> process, ICommand command)
+        {
+            command = command ?? throw new ArgumentNullException(nameof(command));
+
+            if (!TryPrepareAction(command, out var action))
             {
                 return null;
             }
-
-            for (var i = 0; i < command.Value.Arguments.Length; i++)
+            if (action is not IProcessAction processAction)
             {
-                command.Value.Arguments[i] = FindVariablesAndReplace(command.Value.Arguments[i]);
+                throw new ArgumentException("Action is not IProcessAction");
             }
 
-            return action.PrepareCall(command);
+            return processAction.PrepareCall(process, command);
         }
 
         #endregion

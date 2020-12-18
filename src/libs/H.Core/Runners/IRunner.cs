@@ -10,17 +10,17 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="arguments"></param>
+        /// <param name="command"></param>
         /// <returns></returns>
-        ICall? TryPrepareCall(string name, params string[] arguments);
+        ICall? TryPrepareCall(ICommand command);
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="process"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        ICall? TryPrepareCall(ICommand command);
+        ICall? TryPrepareCall(IProcess<IValue> process, ICommand command);
 
         #endregion
     }

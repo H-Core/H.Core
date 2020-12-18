@@ -20,11 +20,6 @@
         /// <summary>
         /// 
         /// </summary>
-        IProcess<IValue>? Process { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         bool IsEmpty { get; }
 
         #endregion
