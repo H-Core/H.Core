@@ -84,5 +84,26 @@ namespace H.Core.Runners
             return await runner.WaitAccept(message, timeout, cancellationToken, additionalAccepts)
                 .ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="runner"></param>
+        /// <param name="text"></param>
+        /// <param name="cancellationToken"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <returns></returns>
+        public static async Task<string[]> SearchAsync(
+            this Runner runner,
+            string text,
+            CancellationToken cancellationToken = default)
+        {
+            runner = runner ?? throw new ArgumentNullException(nameof(runner));
+
+            var value = await runner.RunAsync(new Command("search", text), cancellationToken)
+                .ConfigureAwait(false);
+
+            return value.First().Arguments;
+        }
     }
 }
