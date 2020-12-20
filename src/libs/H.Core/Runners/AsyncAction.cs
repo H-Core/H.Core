@@ -44,11 +44,11 @@ namespace H.Core.Runners
         {
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, cancellationToken) =>
+                async (command, cancellationToken) =>
                 {
-                    action?.Invoke(command, cancellationToken);
+                    await (action?.Invoke(command, cancellationToken) ?? Task.FromResult(false)).ConfigureAwait(false);
 
-                    return Task.FromResult<IValue>(Value.Empty);
+                    return Value.Empty;
                 },
                 description,
                 isInternal);
@@ -263,11 +263,11 @@ namespace H.Core.Runners
         {
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command =>
+                async command =>
                 {
-                    action?.Invoke(command);
+                    await (action?.Invoke(command) ?? Task.FromResult(false)).ConfigureAwait(false);
 
-                    return Task.FromResult<IValue>(Value.Empty);
+                    return Value.Empty;
                 },
                 description,
                 isInternal);

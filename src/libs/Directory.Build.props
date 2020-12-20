@@ -3,12 +3,13 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.18.3</Version>
+    <Version>0.18.4</Version>
     <PackageReleaseNotes>
       Refactored Module.
       Refactored Runner.
       Refactored StreamingRecognition.
       Refactored IRecording.
+      Fixed AsyncAction await bug.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
