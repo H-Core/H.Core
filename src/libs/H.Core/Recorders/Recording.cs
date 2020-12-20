@@ -39,7 +39,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler? Stopped;
+        public event EventHandler<byte[]>? Stopped;
         
         /// <summary>
         /// 
@@ -58,9 +58,9 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        protected void OnStopped()
+        protected void OnStopped(byte[] value)
         {
-            Stopped?.Invoke(this, EventArgs.Empty);
+            Stopped?.Invoke(this, value);
         }
 
         /// <summary>
@@ -98,12 +98,7 @@ namespace H.Core.Recorders
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            OnStopped();
-            
-            return Task.FromResult(false);
-        }
+        public abstract Task<byte[]> StopAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 

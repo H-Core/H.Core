@@ -62,7 +62,7 @@ namespace H.Core.Recognizers
                 }
             }
 
-            void OnStopped(object? o, EventArgs eventArgs)
+            void OnStopped(object? o, byte[] bytes)
             {
                 try
                 {

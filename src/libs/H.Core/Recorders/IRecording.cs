@@ -33,7 +33,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// After <see cref="StopAsync"/> call.
         /// </summary>
-        event EventHandler? Stopped;
+        event EventHandler<byte[]>? Stopped;
         
         /// <summary>
         /// After <see cref="IDisposable.Dispose"/> call.
@@ -54,7 +54,7 @@ namespace H.Core.Recorders
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task StopAsync(CancellationToken cancellationToken = default);
+        Task<byte[]> StopAsync(CancellationToken cancellationToken = default);
         
         #endregion
     }
