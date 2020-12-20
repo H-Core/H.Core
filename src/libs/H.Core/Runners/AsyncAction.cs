@@ -21,7 +21,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public static AsyncAction WithCommand(
             string name,
-            Func<ICommand, CancellationToken, Task<ICommand>> action,
+            Func<ICommand, CancellationToken, Task<IValue>> action,
             string? description = null,
             bool isInternal = false)
         {
