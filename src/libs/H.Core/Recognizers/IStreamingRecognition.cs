@@ -9,6 +9,15 @@ namespace H.Core.Recognizers
     /// </summary>
     public interface IStreamingRecognition : IDisposable
     {
+        #region Properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        string Result { get; }
+
+        #endregion
+
         #region Events
 
         /// <summary>
@@ -19,17 +28,12 @@ namespace H.Core.Recognizers
         /// <summary>
         /// After <see cref="StopAsync"/> call.
         /// </summary>
-        event EventHandler? Stopped;
+        event EventHandler<string>? Stopped;
 
         /// <summary>
         /// 
         /// </summary>
-        event EventHandler<string>? PartialResultsReceived;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        event EventHandler<string>? FinalResultsReceived;
+        event EventHandler<string>? PreviewReceived;
 
         #endregion
 
@@ -48,7 +52,7 @@ namespace H.Core.Recognizers
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task StopAsync(CancellationToken cancellationToken = default);
+        Task<string> StopAsync(CancellationToken cancellationToken = default);
         
         #endregion
     }

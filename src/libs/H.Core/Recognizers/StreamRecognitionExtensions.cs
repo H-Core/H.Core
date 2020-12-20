@@ -186,13 +186,9 @@ namespace H.Core.Recognizers
             using var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            var response = string.Empty;
-            recognition.FinalResultsReceived += (_, value) => response = value;
-
             await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
-            await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
-
-            return response;
+            
+            return await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -9,6 +9,15 @@ namespace H.Core.Recognizers
     /// </summary>
     public abstract class StreamingRecognition : IStreamingRecognition
     {
+        #region Properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Result { get; protected set; } = string.Empty;
+
+        #endregion
+        
         #region Events
 
         /// <summary>
@@ -19,18 +28,13 @@ namespace H.Core.Recognizers
         /// <summary>
         /// After <see cref="StopAsync"/> call.
         /// </summary>
-        public event EventHandler? Stopped;
+        public event EventHandler<string>? Stopped;
         
         /// <summary>
         /// 
         /// </summary>
 
-        public event EventHandler<string>? PartialResultsReceived;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventHandler<string>? FinalResultsReceived;
+        public event EventHandler<string>? PreviewReceived;
 
         /// <summary>
         /// 
@@ -43,27 +47,18 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
-        protected void OnStopped()
+        protected void OnStopped(string value)
         {
-            Stopped?.Invoke(this, EventArgs.Empty);
+            Stopped?.Invoke(this, value);
         }
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        protected void OnPartialResultsReceived(string value)
+        protected void OnPreviewReceived(string value)
         {
-            PartialResultsReceived?.Invoke(this, value);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        protected void OnFinalResultsReceived(string value)
-        {
-            FinalResultsReceived?.Invoke(this, value);
+            PreviewReceived?.Invoke(this, value);
         }
 
         #endregion
@@ -83,7 +78,7 @@ namespace H.Core.Recognizers
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task StopAsync(CancellationToken cancellationToken = default);
+        public abstract Task<string> StopAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
