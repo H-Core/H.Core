@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using H.Core.Storages;
-using H.Core.Utilities;
 
 namespace H.Core
 {
@@ -54,17 +53,12 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        event AsyncEventHandler<ICommand>? AsyncCommandReceived;
+        event AsyncEventHandler<ICommand, IValue>? AsyncCommandReceived;
 
         /// <summary>
         /// 
         /// </summary>
         event EventHandler<Exception>? ExceptionOccurred;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        event EventHandler<string>? LogReceived;
 
         #endregion
 

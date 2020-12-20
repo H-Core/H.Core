@@ -90,7 +90,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public event AsyncEventHandler<ICommand>? AsyncCommandReceived;
+        public event AsyncEventHandler<ICommand, IValue>? AsyncCommandReceived;
 
         /// <summary>
         /// 
@@ -106,7 +106,7 @@ namespace H.Core
         /// </summary>
         /// <param name="value"></param>
         /// <param name="cancellationToken"></param>
-        protected Task OnAsyncCommandReceivedAsync(ICommand value, CancellationToken cancellationToken = default)
+        protected Task<IValue[]> OnAsyncCommandReceivedAsync(ICommand value, CancellationToken cancellationToken = default)
         {
             return AsyncCommandReceived.InvokeAsync(this, value, cancellationToken);
         }
@@ -114,17 +114,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public event EventHandler<IModule>? SettingsSaved;
-        
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<Exception>? ExceptionOccurred;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventHandler<string>? LogReceived;
 
         /// <summary>
         /// 
@@ -134,18 +124,8 @@ namespace H.Core
         {
             ExceptionOccurred?.Invoke(this, value);
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        protected void OnLogReceived(string value)
-        {
-            LogReceived?.Invoke(this, value);
-        }
 
         #endregion
-
 
         #region Constructors
 
@@ -162,25 +142,26 @@ namespace H.Core
                 var key = args.PropertyName;
                 if (!Settings.ContainsKey(key))
                 {
-                    OnLogReceived($"Settings is not exists: {key}");
+                    OnExceptionOccurred(new InvalidOperationException($"Settings is not exists: {key}"));
                 }
             };
         }
 
         #endregion
 
-        #region Main Methods
+        #region Methods
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="name"></param>
+        /// <param name="arguments"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public void Run(string text)
+        public void Run(string name, params string[] arguments)
         {
-            text = text ?? throw new ArgumentNullException(nameof(text));
+            name = name ?? throw new ArgumentNullException(nameof(name));
             
-            Run(Command.Parse(text));
+            Run(new Command(name, arguments));
         }
 
         /// <summary>
@@ -203,59 +184,13 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
-        public void Say(string text) => Run($"say {text}");
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="text"></param>
-        public void Print(string text) => Run($"print {text}");
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ShowSettings() => Run($"show-module-settings {UniqueName}");
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task RunAsync(ICommand command, CancellationToken cancellationToken = default)
+        public async Task<IValue[]> RunAsync(ICommand command, CancellationToken cancellationToken = default)
         {
-            await OnAsyncCommandReceivedAsync(command, cancellationToken).ConfigureAwait(false);
+            return await OnAsyncCommandReceivedAsync(command, cancellationToken).ConfigureAwait(false);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task SayAsync(string text, CancellationToken cancellationToken = default)
-        {
-            await RunAsync(new Command("say", text), cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Enable()
-        {
-            Run($"enable-module {UniqueName}");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Disable() => Run($"disable-module {UniqueName}");
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SaveSettings() => SettingsSaved?.Invoke(this, this);
 
         #endregion
 
@@ -354,17 +289,9 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="_"></param>
         /// <returns></returns>
-        protected static bool Always<T>(T _) => true;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="_"></param>
-        /// <returns></returns>
-        protected static bool Any(object _) => true;
+        protected static bool Any<T>(T _) => true;
 
         /// <summary>
         /// 
@@ -429,63 +356,6 @@ namespace H.Core
         public virtual void Dispose()
         {
         }
-
-        #endregion
-
-        #region Static methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Func<string, object>? GetVariableValueGlobalFunc { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static object? GetVariable(string key) => GetVariableValueGlobalFunc?.Invoke(key);
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static T? GetVariable<T>(string key, T defaultValue = default)
-        {
-            return GetVariable(key) is T value ? value : defaultValue;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Func<string, Task<List<string>>>? SearchFunc { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        protected static async Task<List<string>> SearchInInternet(string key)
-        {
-            if (SearchFunc == null)
-            {
-                return new List<string>();
-            }
-
-            return await SearchFunc.Invoke(key).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public static async Task<List<string>> SearchInInternet(string query, int count) =>
-            (await SearchInInternet(query).ConfigureAwait(false)).Take(count).ToList();
 
         #endregion
     }

@@ -3,11 +3,9 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.17.11</Version>
+    <Version>0.18.0</Version>
     <PackageReleaseNotes>
-      Added IProcess.
-      Added IValue.
-      Added ProcessAction.
+      Refactored module.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
