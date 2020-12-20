@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using H.Core.Utilities;
 
 namespace H.Core.Runners
@@ -84,84 +83,6 @@ namespace H.Core.Runners
             }
 
             return command;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static bool IsWaitCommand { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public static string? WaitCommand { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        protected async Task<string?> WaitNextCommand(int timeout)
-        {
-            var recordTimeout = (int)(0.6 * timeout);
-            Run($"start-record {recordTimeout}");
-
-            IsWaitCommand = true;
-
-            var time = 0;
-            while (IsWaitCommand && time < timeout)
-            {
-                await Task.Delay(10).ConfigureAwait(false);
-                time += 10;
-            }
-
-            if (IsWaitCommand)
-            {
-                WaitCommand = null;
-            }
-            IsWaitCommand = false;
-
-            return WaitCommand;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="timeout"></param>
-        /// <param name="additionalAccepts"></param>
-        /// <returns></returns>
-        protected async Task<bool> WaitAccept(int timeout, params string[] additionalAccepts)
-        {
-            var command = await WaitNextCommand(timeout).ConfigureAwait(false);
-
-            var defaultAccepts = new List<string> {"yes", "да", "согласен"};
-            defaultAccepts.AddRange(additionalAccepts);
-
-            return command.IsAnyOrdinalIgnoreCase(defaultAccepts.ToArray());
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="timeout"></param>
-        /// <param name="additionalAccepts"></param>
-        /// <returns></returns>
-        protected async Task<bool> WaitAccept(string message, int timeout, params string[] additionalAccepts)
-        {
-            await SayAsync(message).ConfigureAwait(false);
-
-            return await WaitAccept(timeout, additionalAccepts).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        public static void StopWaitCommand(string command)
-        {
-            WaitCommand = command;
-            IsWaitCommand = false;
         }
 
         /// <summary>
