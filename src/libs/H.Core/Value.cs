@@ -35,7 +35,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public string[] Arguments { get; } = EmptyArray<string>.Value;
+        public string[] Arguments { get; set; } = EmptyArray<string>.Value;
 
         /// <summary>
         /// 
@@ -45,7 +45,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public byte[] Data { get; } = EmptyArray<byte>.Value;
+        public byte[] Data { get; set; } = EmptyArray<byte>.Value;
 
         /// <summary>
         /// 
