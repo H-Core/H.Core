@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.17.9</Version>
+    <Version>0.17.10</Version>
     <PackageReleaseNotes>
       Added IProcess.
       Added IValue.

@@ -42,7 +42,16 @@ namespace H.Core.Runners
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                {
+                    action?.Invoke(command, cancellationToken);
+
+                    return Task.FromResult<IValue>(Value.Empty);
+                },
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -59,7 +68,34 @@ namespace H.Core.Runners
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Value.Data, cancellationToken) ?? Task.FromResult(false),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithData(
+            string name,
+            Func<byte[], CancellationToken, Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Value.Data, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -76,7 +112,34 @@ namespace H.Core.Runners
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Value.Arguments, cancellationToken) ?? Task.FromResult(false),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithArguments(
+            string name,
+            Func<string[], CancellationToken, Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Value.Arguments, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -93,7 +156,34 @@ namespace H.Core.Runners
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Value.Argument, cancellationToken) ?? Task.FromResult(false),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithSingleArgument(
+            string name,
+            Func<string, CancellationToken, Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (command, cancellationToken) =>
+                    action?.Invoke(command.Value.Argument, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -110,6 +200,50 @@ namespace H.Core.Runners
             string? description = null,
             bool isInternal = false)
         {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (_, cancellationToken) =>
+                    action?.Invoke(cancellationToken) ?? Task.FromResult(false),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithoutArguments(
+            string name,
+            Func<CancellationToken, Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                (_, cancellationToken) =>
+                    action?.Invoke(cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithCommand(
+            string name,
+            Func<ICommand, Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
             return new(name, action, description, isInternal);
         }
 
@@ -121,13 +255,22 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncAction WithCommandAndWithoutToken(
+        public static AsyncAction WithCommand(
             string name,
             Func<ICommand, Task> action,
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                {
+                    action?.Invoke(command);
+
+                    return Task.FromResult<IValue>(Value.Empty);
+                },
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -138,13 +281,18 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncAction WithDataAndWithoutToken(
+        public static AsyncAction WithData(
             string name,
             Func<byte[], Task> action,
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                    action?.Invoke(command.Value.Data) ?? Task.FromResult(false),
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -155,13 +303,40 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncAction WithArgumentsAndWithoutToken(
+        public static AsyncAction WithData(
+            string name,
+            Func<byte[], Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                    action?.Invoke(command.Value.Data) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithArguments(
             string name,
             Func<string[], Task> action,
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                    action?.Invoke(command.Value.Arguments) ?? Task.FromResult(false),
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -172,13 +347,40 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncAction WithSingleArgumentAndWithoutToken(
+        public static AsyncAction WithArguments(
+            string name,
+            Func<string[], Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                    action?.Invoke(command.Value.Arguments) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithSingleArgument(
             string name,
             Func<string, Task> action,
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                    action?.Invoke(command.Value.Argument) ?? Task.FromResult(false),
+                description,
+                isInternal);
         }
 
         /// <summary>
@@ -189,13 +391,62 @@ namespace H.Core.Runners
         /// <param name="description"></param>
         /// <param name="isInternal"></param>
         /// <returns></returns>
-        public static AsyncAction WithoutArgumentsAndToken(
+        public static AsyncAction WithSingleArgument(
+            string name,
+            Func<string, Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                command =>
+                    action?.Invoke(command.Value.Argument) ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithoutArguments(
             string name,
             Func<Task> action,
             string? description = null,
             bool isInternal = false)
         {
-            return new(name, action, description, isInternal);
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                _ =>
+                    action?.Invoke() ?? Task.FromResult(false),
+                description,
+                isInternal);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <param name="description"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
+        public static AsyncAction WithoutArguments(
+            string name,
+            Func<Task<IValue>> action,
+            string? description = null,
+            bool isInternal = false)
+        {
+            return WithCommand(name,
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                _ =>
+                    action?.Invoke() ?? Task.FromResult<IValue>(Value.Empty),
+                description,
+                isInternal);
         }
 
         #endregion
@@ -232,55 +483,6 @@ namespace H.Core.Runners
 
             IsCancellable = true;
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public AsyncAction(
-            string name,
-            Func<ICommand, CancellationToken, Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, cancellationToken) =>
-                {
-                    action?.Invoke(command, cancellationToken);
-                    
-                    return Task.FromResult<IValue>(Value.Empty);
-                },
-                description,
-                isInternal)
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name,
-            Func<byte[], CancellationToken, Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Data, cancellationToken) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-        }
 
         /// <summary>
         /// 
@@ -291,172 +493,14 @@ namespace H.Core.Runners
         /// <param name="isInternal"></param>
         public AsyncAction(
             string name, 
-            Func<string[], CancellationToken, Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Arguments, cancellationToken) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name, 
-            Func<string, CancellationToken, Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Argument, cancellationToken) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name, 
-            Func<CancellationToken, Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (Func<ICommand, CancellationToken, Task>)((_, cancellationToken) =>
-                    action?.Invoke(cancellationToken) ?? Task.FromResult(false)),
-                description,
-                isInternal)
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name, 
-            Func<ICommand, Task> action,
+            Func<ICommand, Task<IValue>> action,
             string? description = null,
             bool isInternal = false) :
             this(
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, _) =>
-                    action?.Invoke(command) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-            IsCancellable = false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name,
-            Func<byte[], Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, _) =>
-                    action?.Invoke(command.Value.Data) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-            IsCancellable = false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name, 
-            Func<string[], Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, _) =>
-                    action?.Invoke(command.Value.Arguments) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-            IsCancellable = false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name, 
-            Func<string, Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (command, _) =>
-                    action?.Invoke(command.Value.Argument) ?? Task.FromResult(false),
-                description,
-                isInternal)
-        {
-            IsCancellable = false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        /// <param name="description"></param>
-        /// <param name="isInternal"></param>
-        public AsyncAction(
-            string name, 
-            Func<Task> action,
-            string? description = null,
-            bool isInternal = false) :
-            this(
-                name,
-                // ReSharper disable once ConstantConditionalAccessQualifier
-                (Func<ICommand, CancellationToken, Task>)((_, _) =>
-                    action?.Invoke() ?? Task.FromResult(false)),
+                    action?.Invoke(command) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal)
         {
