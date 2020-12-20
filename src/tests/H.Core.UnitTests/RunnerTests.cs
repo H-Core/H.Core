@@ -51,7 +51,7 @@ namespace H.Core.UnitTests
         [TestMethod]
         public async Task PrintAsyncTest()
         {
-            await ActionTest(AsyncAction.WithSingleArgumentAndWithoutToken("print", argument =>
+            await ActionTest(AsyncAction.WithSingleArgument("print", argument =>
             {
                 Console.WriteLine(argument);
 
