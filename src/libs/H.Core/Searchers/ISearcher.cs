@@ -15,6 +15,6 @@ namespace H.Core.Searchers
         /// <param name="query"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IEnumerable<SearchResult>> SearchAsync(string query, CancellationToken cancellationToken = default);
+        Task<ICollection<SearchResult>> SearchAsync(string query, CancellationToken cancellationToken = default);
     }
 }
