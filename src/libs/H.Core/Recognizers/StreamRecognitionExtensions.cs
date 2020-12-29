@@ -31,11 +31,11 @@ namespace H.Core.Recognizers
             recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
             recording = recording ?? throw new ArgumentNullException(nameof(recording));
 
-            if (recording.Format is RecordingFormat.None)
+            if (recording.Format is AudioFormat.None)
             {
                 throw new ArgumentException("recording.Format is None.");
             }
-            if (recording.Format is not RecordingFormat.Raw)
+            if (recording.Format is not AudioFormat.Raw)
             {
                 if (!recording.Header.Any())
                 {
@@ -97,7 +97,7 @@ namespace H.Core.Recognizers
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
 
-            if (recognizer.StreamingFormat is RecordingFormat.None)
+            if (recognizer.StreamingFormat is AudioFormat.None)
             {
                 throw new ArgumentException("Recognizer does not support streaming recognition.");
             }
@@ -144,7 +144,7 @@ namespace H.Core.Recognizers
         {
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
-            if (recognizer.StreamingFormat is RecordingFormat.None)
+            if (recognizer.StreamingFormat is AudioFormat.None)
             {
                 throw new ArgumentException("Recognizer does not support streaming recognition.");
             }

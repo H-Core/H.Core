@@ -14,12 +14,12 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
-        public RecordingFormat Format { get; }
+        public AudioFormat Format { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public RecordingFormat StreamingFormat { get; }
+        public AudioFormat StreamingFormat { get; }
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace H.Core.Recognizers
         /// </summary>
         /// <param name="format"></param>
         /// <param name="streamingFormat"></param>
-        protected Recognizer(RecordingFormat format, RecordingFormat streamingFormat = RecordingFormat.None)
+        protected Recognizer(AudioFormat format, AudioFormat streamingFormat = AudioFormat.None)
         {
             Format = format;
             StreamingFormat = streamingFormat;

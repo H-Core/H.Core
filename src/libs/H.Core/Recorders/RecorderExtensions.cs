@@ -20,11 +20,11 @@ namespace H.Core.Recorders
         public static async Task<IRecording> StartWithTimeoutAsync(
             this IRecorder recorder, 
             TimeSpan timeout,
-            RecordingFormat format,
+            AudioFormat format,
             CancellationToken cancellationToken = default)
         {
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
-            if (format is RecordingFormat.None)
+            if (format is AudioFormat.None)
             {
                 throw new ArgumentException("format is None.");
             }

@@ -15,7 +15,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        public RecordingFormat Format { get; }
+        public AudioFormat Format { get; }
         
         /// <summary>
         /// 
@@ -79,9 +79,9 @@ namespace H.Core.Recorders
         /// 
         /// </summary>
         /// <param name="format"></param>
-        protected Recording(RecordingFormat format)
+        protected Recording(AudioFormat format)
         {
-            if (format is RecordingFormat.None)
+            if (format is AudioFormat.None)
             {
                 throw new ArgumentException("Format is None.");
             }

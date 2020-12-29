@@ -13,12 +13,12 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
-        RecordingFormat Format { get; }
+        AudioFormat Format { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        RecordingFormat StreamingFormat { get; }
+        AudioFormat StreamingFormat { get; }
 
         #endregion
 

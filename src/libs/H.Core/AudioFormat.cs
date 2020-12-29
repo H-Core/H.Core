@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public enum RecordingFormat
+    public enum AudioFormat
     {
         /// <summary>
         /// None.

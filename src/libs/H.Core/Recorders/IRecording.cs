@@ -14,7 +14,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// Format.
         /// </summary>
-        RecordingFormat Format { get; }
+        AudioFormat Format { get; }
         
         /// <summary>
         /// Data.
