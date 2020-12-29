@@ -28,7 +28,7 @@ namespace H.Core
 
             return new Command(
                 values.ElementAt(0),
-                Core.Value.Parse(values.ElementAtOrDefault(1) ?? string.Empty));
+                Value.Parse(values.ElementAtOrDefault(1) ?? string.Empty));
         }
 
         #endregion
@@ -43,7 +43,12 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public IValue Value { get; }
+        public IValue Input { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IValue Output { get; set; } = Value.Empty;
 
         /// <summary>
         /// 
@@ -59,7 +64,7 @@ namespace H.Core
         /// </summary>
         public Command(params string[] arguments)
         {
-            Value = new Value(arguments);
+            Input = new Value(arguments);
         }
         
         /// <summary>
@@ -70,7 +75,7 @@ namespace H.Core
         public Command(string name, params string[] arguments)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Value = new Value(arguments);
+            Input = new Value(arguments);
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace H.Core
         /// <param name="data"></param>
         public Command(byte[] data)
         {
-            Value = new Value(data);
+            Input = new Value(data);
         }
 
         /// <summary>
@@ -90,7 +95,7 @@ namespace H.Core
         public Command(string name, byte[] data)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Value = new Value(data);
+            Input = new Value(data);
         }
 
         /// <summary>
@@ -101,7 +106,7 @@ namespace H.Core
         public Command(string name, IValue value)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Value = value;
+            Input = value;
         }
 
         #endregion
@@ -116,7 +121,7 @@ namespace H.Core
         {
             return IsEmpty
                 ? string.Empty
-                : $"{Name} {Value}";
+                : $"{Name} {Input}";
         }
 
         #endregion

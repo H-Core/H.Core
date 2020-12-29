@@ -69,15 +69,15 @@ namespace H.Core.Runners
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IValue> RunAsync(CancellationToken cancellationToken = default)
+        public async Task<ICommand> RunAsync(CancellationToken cancellationToken = default)
         {
             OnRunning();
             
-            var output = await Action.RunAsync(Command, cancellationToken).ConfigureAwait(false);
+            Command.Output = await Action.RunAsync(Command, cancellationToken).ConfigureAwait(false);
             
             OnRan();
 
-            return output;
+            return Command;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace H.Core.Runners
         /// <param name="process"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IValue> RunAsync(IProcess<IValue> process, CancellationToken cancellationToken = default)
+        public async Task<ICommand> RunAsync(IProcess<IValue> process, CancellationToken cancellationToken = default)
         {
             if (Action is not IProcessAction processAction)
             {
@@ -95,11 +95,11 @@ namespace H.Core.Runners
             
             OnRunning();
 
-            var output = await processAction.RunAsync(process, Command, cancellationToken).ConfigureAwait(false);
+            Command.Output = await processAction.RunAsync(process, Command, cancellationToken).ConfigureAwait(false);
 
             OnRan();
 
-            return output;
+            return Command;
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Action.Name} {Command.Value.Argument}";
+            return $"{Action.Name} {Command.Input.Argument}";
         }
 
         #endregion

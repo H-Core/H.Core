@@ -71,7 +71,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Data, cancellationToken) ?? Task.FromResult(false),
+                    action?.Invoke(command.Input.Data, cancellationToken) ?? Task.FromResult(false),
                 description,
                 isInternal);
         }
@@ -93,7 +93,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Data, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                    action?.Invoke(command.Input.Data, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal);
         }
@@ -115,7 +115,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Arguments, cancellationToken) ?? Task.FromResult(false),
+                    action?.Invoke(command.Input.Arguments, cancellationToken) ?? Task.FromResult(false),
                 description,
                 isInternal);
         }
@@ -137,7 +137,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Arguments, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                    action?.Invoke(command.Input.Arguments, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal);
         }
@@ -159,7 +159,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Argument, cancellationToken) ?? Task.FromResult(false),
+                    action?.Invoke(command.Input.Argument, cancellationToken) ?? Task.FromResult(false),
                 description,
                 isInternal);
         }
@@ -181,7 +181,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 (command, cancellationToken) =>
-                    action?.Invoke(command.Value.Argument, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
+                    action?.Invoke(command.Input.Argument, cancellationToken) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal);
         }
@@ -290,7 +290,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 command =>
-                    action?.Invoke(command.Value.Data) ?? Task.FromResult(false),
+                    action?.Invoke(command.Input.Data) ?? Task.FromResult(false),
                 description,
                 isInternal);
         }
@@ -312,7 +312,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 command =>
-                    action?.Invoke(command.Value.Data) ?? Task.FromResult<IValue>(Value.Empty),
+                    action?.Invoke(command.Input.Data) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal);
         }
@@ -334,7 +334,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 command =>
-                    action?.Invoke(command.Value.Arguments) ?? Task.FromResult(false),
+                    action?.Invoke(command.Input.Arguments) ?? Task.FromResult(false),
                 description,
                 isInternal);
         }
@@ -356,7 +356,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 command =>
-                    action?.Invoke(command.Value.Arguments) ?? Task.FromResult<IValue>(Value.Empty),
+                    action?.Invoke(command.Input.Arguments) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal);
         }
@@ -378,7 +378,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 command =>
-                    action?.Invoke(command.Value.Argument) ?? Task.FromResult(false),
+                    action?.Invoke(command.Input.Argument) ?? Task.FromResult(false),
                 description,
                 isInternal);
         }
@@ -400,7 +400,7 @@ namespace H.Core.Runners
             return WithCommand(name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
                 command =>
-                    action?.Invoke(command.Value.Argument) ?? Task.FromResult<IValue>(Value.Empty),
+                    action?.Invoke(command.Input.Argument) ?? Task.FromResult<IValue>(Value.Empty),
                 description,
                 isInternal);
         }

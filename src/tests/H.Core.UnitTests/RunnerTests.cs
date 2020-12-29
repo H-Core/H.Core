@@ -27,9 +27,9 @@ namespace H.Core.UnitTests
             var call = IsSupportedTest(runner, "print", "Hello, World!");
 
             Assert.AreEqual("print", call.Command.Name, nameof(call.Command.Name));
-            CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Command.Value.Arguments, nameof(call.Command.Value.Arguments));
-            CollectionAssert.AreEqual(new byte[0], call.Command.Value.Data, nameof(call.Command.Value.Data));
-            Assert.AreEqual("Hello, World!", call.Command.Value.Argument, nameof(call.Command.Value.Argument));
+            CollectionAssert.AreEqual(new [] { "Hello, World!" }, call.Command.Input.Arguments, nameof(call.Command.Input.Arguments));
+            CollectionAssert.AreEqual(new byte[0], call.Command.Input.Data, nameof(call.Command.Input.Data));
+            Assert.AreEqual("Hello, World!", call.Command.Input.Argument, nameof(call.Command.Input.Argument));
             Assert.AreEqual("print", call.Action.Name, nameof(call.Action.Name));
             Assert.AreEqual("value", call.Action.Description, nameof(call.Action.Description));
             Assert.AreEqual(false, call.Action.IsInternal, nameof(call.Action.IsInternal));

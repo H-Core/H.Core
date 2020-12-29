@@ -186,7 +186,7 @@ namespace H.Core.Runners
             this(
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command => action?.Invoke(command.Value.Data),
+                command => action?.Invoke(command.Input.Data),
                 description,
                 isInternal)
         {
@@ -207,7 +207,7 @@ namespace H.Core.Runners
             this(
                 name, 
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command => action?.Invoke(command.Value.Arguments), 
+                command => action?.Invoke(command.Input.Arguments), 
                 description, 
                 isInternal)
         {
@@ -228,7 +228,7 @@ namespace H.Core.Runners
             this(
                 name,
                 // ReSharper disable once ConstantConditionalAccessQualifier
-                command => action?.Invoke(command.Value.Argument),
+                command => action?.Invoke(command.Input.Argument),
                 description,
                 isInternal)
         {

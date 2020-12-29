@@ -29,9 +29,9 @@ namespace H.Core.Synthesizers
         {
             Add(new AsyncAction("synthesize", async (command, cancellationToken) =>
             {
-                var text = command.Value.Arguments.First();
+                var text = command.Input.Arguments.First();
                 var format = Enum.TryParse<AudioFormat>(
-                    command.Value.Arguments.ElementAtOrDefault(1), true, out var result)
+                    command.Input.Arguments.ElementAtOrDefault(1), true, out var result)
                     ? result
                     : AudioFormat.Raw;
 

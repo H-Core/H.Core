@@ -35,9 +35,9 @@ namespace H.Core.Runners
                 return false;
             }
 
-            for (var i = 0; i < command.Value.Arguments.Length; i++)
+            for (var i = 0; i < command.Input.Arguments.Length; i++)
             {
-                command.Value.Arguments[i] = FindVariablesAndReplace(command.Value.Arguments[i]);
+                command.Input.Arguments[i] = FindVariablesAndReplace(command.Input.Arguments[i]);
             }
 
             return true;
