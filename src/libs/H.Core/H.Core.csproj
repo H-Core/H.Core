@@ -6,6 +6,7 @@
 
   <PropertyGroup Label="NuGet">
     <Description>HomeCenter Core library that contains IRecognizer/IRecorder/IRunner/INotifiers etc.</Description>
+    <PackageTags>homecenter, h.framework</PackageTags>
   </PropertyGroup>
 
 </Project>
