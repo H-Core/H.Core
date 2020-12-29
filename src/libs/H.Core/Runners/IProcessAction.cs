@@ -17,7 +17,7 @@ namespace H.Core.Runners
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IValue> RunAsync(IProcess<IValue> process, ICommand command, CancellationToken cancellationToken = default);
+        Task<IValue> RunAsync(IProcess<ICommand> process, ICommand command, CancellationToken cancellationToken = default);
 
         #endregion
     }

@@ -86,7 +86,7 @@ namespace H.Core.Runners
         /// <param name="process"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ICommand> RunAsync(IProcess<IValue> process, CancellationToken cancellationToken = default)
+        public async Task<ICommand> RunAsync(IProcess<ICommand> process, CancellationToken cancellationToken = default)
         {
             if (Action is not IProcessAction processAction)
             {

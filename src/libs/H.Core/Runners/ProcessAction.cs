@@ -11,7 +11,7 @@ namespace H.Core.Runners
     {
         #region Properties
 
-        private Func<IProcess<IValue>, ICommand, CancellationToken, Task<IValue>> Action { get; }
+        private Func<IProcess<ICommand>, ICommand, CancellationToken, Task<IValue>> Action { get; }
         
         #endregion
 
@@ -27,7 +27,7 @@ namespace H.Core.Runners
         /// <exception cref="ArgumentNullException"></exception>
         public ProcessAction(
             string name, 
-            Func<IProcess<IValue>, ICommand, CancellationToken, Task<IValue>> action,
+            Func<IProcess<ICommand>, ICommand, CancellationToken, Task<IValue>> action,
             string? description = null,
             bool isInternal = false) : 
             base(name)
@@ -51,13 +51,13 @@ namespace H.Core.Runners
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public async Task<IValue> RunAsync(IProcess<IValue> process, ICommand command, CancellationToken cancellationToken = default)
+        public async Task<IValue> RunAsync(IProcess<ICommand> process, ICommand command, CancellationToken cancellationToken = default)
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
 
             OnRunning(command);
 
-            var output = IsCancellable
+            var value = IsCancellable
                 ? await Action(process, command, cancellationToken)
                     .ConfigureAwait(false)
                 : await Task.Run(() => Action(process, command, cancellationToken), cancellationToken)
@@ -65,7 +65,7 @@ namespace H.Core.Runners
             
             OnRan(command);
 
-            return output;
+            return value;
         }
 
         #endregion
