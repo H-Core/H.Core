@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Runners;
@@ -17,7 +18,13 @@ namespace H.Core.Searchers
         /// </summary>
         protected Searcher()
         {
-            Add(AsyncAction.WithSingleArgument("search", SearchAsync, "text"));
+            Add(AsyncAction.WithSingleArgument("search", async (query, cancellationToken) =>
+            {
+                var results = await SearchAsync(query, cancellationToken)
+                    .ConfigureAwait(false);
+
+                return new Value(results.Select(result => result.Url).ToArray());
+            }, "query"));
         }
 
         #endregion

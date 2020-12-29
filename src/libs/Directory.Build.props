@@ -3,7 +3,7 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.19.5</Version>
+    <Version>0.19.6</Version>
     <PackageReleaseNotes>
       Refactored Synthesizer.
       Added ICommand.Output.
