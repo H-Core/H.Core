@@ -3,13 +3,14 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup Label="Nuget">
-    <Version>0.19.4</Version>
+    <Version>0.19.5</Version>
     <PackageReleaseNotes>
       Refactored Synthesizer.
       Added ICommand.Output.
       Refactored ISearcher.
       Added IPlayer.
       EmptyArray to public.
+      Added Player and Searcher classes.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
