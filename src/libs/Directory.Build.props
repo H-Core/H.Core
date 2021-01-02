@@ -8,10 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.5</Version>
+    <Version>0.20.6</Version>
     <PackageReleaseNotes>
       Added AudioSettings. Refactored.
       Added SynthesizerExtensions.PlayAsync.
+      Added StopWhenSilence to StartStreamingRecognitionAsync.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

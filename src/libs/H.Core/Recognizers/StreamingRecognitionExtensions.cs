@@ -98,16 +98,41 @@ namespace H.Core.Recognizers
                 throw new ArgumentException("Recognizer does not support streaming recognition.");
             }
 
+            var isStopped = false;
             var settings = recognizer.SupportedStreamingSettings.First();
             var recording = await recorder.StartAsync(settings, cancellationToken)
                 .ConfigureAwait(false);
+            recording.StopWhenSilence();
+
             var recognition = await recognizer.StartStreamingRecognitionAsync(settings, cancellationToken)
                 .ConfigureAwait(false);
             recognition.Stopping += async (_, _) =>
             {
+                if (isStopped)
+                {
+                    return;
+                }
+
                 try
                 {
                     await recording.StopAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    exceptionsBag?.OnOccurred(exception);
+                }
+                finally
+                {
+                    recording.Dispose();
+                }
+            };
+            recording.Stopped += async (_, _) =>
+            {
+                isStopped = true;
+
+                try
+                {
+                    await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception exception)
                 {
@@ -152,6 +177,7 @@ namespace H.Core.Recognizers
                 var settings = recognizer.SupportedStreamingSettings.First();
                 using var recording = await recorder.StartAsync(settings, cancellationToken)
                     .ConfigureAwait(false);
+                
                 using var recognition = await recognizer.StartStreamingRecognitionAsync(settings, cancellationToken)
                     .ConfigureAwait(false);
 
