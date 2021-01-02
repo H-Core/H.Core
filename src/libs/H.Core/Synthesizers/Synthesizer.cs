@@ -35,12 +35,14 @@ namespace H.Core.Synthesizers
             Add(new AsyncAction("synthesize", async (command, cancellationToken) =>
             {
                 var text = command.Input.Arguments.ElementAt(0);
-                var format = AudioSettings.Parse(command.Input.Arguments.ElementAtOrDefault(1) ?? "()");
+                var settings = command.Input.Arguments.Length > 1
+                    ? AudioSettings.Parse(command.Input.Arguments.ElementAt(1))
+                    : SupportedSettings.First();
 
-                var bytes = await ConvertAsync(text, format, cancellationToken).ConfigureAwait(false);
+                var bytes = await ConvertAsync(text, settings, cancellationToken).ConfigureAwait(false);
 
-                return new Value(bytes);
-            }, "text"));
+                return new Value(bytes, $"{settings}");
+            }, "Arguments: text, audioSettings?"));
         }
 
         #endregion

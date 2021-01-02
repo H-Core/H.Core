@@ -91,5 +91,18 @@ namespace H.Core
         }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"({Format:G}, {Rate}, {Bits}, {Channels})";
+        }
+
+        #endregion
     }
 }

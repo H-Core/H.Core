@@ -59,18 +59,21 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="arguments"></param>
         public Value(params string[] arguments)
         {
             Arguments = arguments;
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="data"></param>
-        public Value(byte[] data)
+        /// <param name="arguments"></param>
+        public Value(byte[] data, params string[] arguments)
         {
             Data = data;
+            Arguments = arguments;
         }
 
         #endregion

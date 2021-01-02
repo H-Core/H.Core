@@ -29,13 +29,13 @@ namespace H.Core.Players
         {
             Add(new AsyncAction("play", async (command, cancellationToken) =>
             {
-                var format = AudioSettings.Parse(command.Input.Argument);
+                var settings = AudioSettings.Parse(command.Input.Argument);
                 var bytes = command.Input.Data;
 
-                await PlayAsync(bytes, format, cancellationToken).ConfigureAwait(false);
+                await PlayAsync(bytes, settings, cancellationToken).ConfigureAwait(false);
 
                 return Value.Empty;
-            }, "Data: bytes, Arguments: audioFormat"));
+            }, "Data: bytes, Arguments: audioSettings"));
         }
 
         #endregion
