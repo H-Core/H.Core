@@ -10,7 +10,7 @@ namespace H.Core.Recognizers
     /// <summary>
     /// 
     /// </summary>
-    public static class StreamRecognitionExtensions
+    public static class StreamingRecognitionExtensions
     {
         /// <summary>
         /// 
