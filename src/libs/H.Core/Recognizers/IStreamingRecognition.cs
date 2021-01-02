@@ -14,6 +14,11 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
+        AudioSettings Settings { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         string Result { get; }
 
         #endregion

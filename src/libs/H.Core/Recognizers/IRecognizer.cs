@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Core.Recognizers
@@ -13,12 +14,12 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
-        AudioFormat Format { get; }
+        ICollection<AudioSettings> SupportedSettings { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        AudioFormat StreamingFormat { get; }
+        ICollection<AudioSettings> SupportedStreamingSettings { get; }
 
         #endregion
 
@@ -28,16 +29,23 @@ namespace H.Core.Recognizers
         /// 
         /// </summary>
         /// <param name="bytes"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default);
-        
+        Task<string> ConvertAsync(
+            byte[] bytes, 
+            AudioSettings? settings = null, 
+            CancellationToken cancellationToken = default);
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default);
+        Task<IStreamingRecognition> StartStreamingRecognitionAsync(
+            AudioSettings? settings = null, 
+            CancellationToken cancellationToken = default);
 
         #endregion
     }

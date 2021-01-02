@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +18,11 @@ namespace H.Core.Synthesizers
         /// </summary>
         public bool UseCache { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<AudioSettings> SupportedSettings { get; } = new List<AudioSettings>();
+
         #endregion
 
         #region Constructors
@@ -29,11 +34,8 @@ namespace H.Core.Synthesizers
         {
             Add(new AsyncAction("synthesize", async (command, cancellationToken) =>
             {
-                var text = command.Input.Arguments.First();
-                var format = Enum.TryParse<AudioFormat>(
-                    command.Input.Arguments.ElementAtOrDefault(1), true, out var result)
-                    ? result
-                    : AudioFormat.Raw;
+                var text = command.Input.Arguments.ElementAt(0);
+                var format = AudioSettings.Parse(command.Input.Arguments.ElementAtOrDefault(1) ?? "()");
 
                 var bytes = await ConvertAsync(text, format, cancellationToken).ConfigureAwait(false);
 
@@ -49,12 +51,12 @@ namespace H.Core.Synthesizers
         /// 
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="format"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public abstract Task<byte[]> ConvertAsync(
             string text, 
-            AudioFormat format = AudioFormat.Raw, 
+            AudioSettings? settings = null, 
             CancellationToken cancellationToken = default);
 
         #endregion

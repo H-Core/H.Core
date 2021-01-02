@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Core.Synthesizers
@@ -15,6 +16,11 @@ namespace H.Core.Synthesizers
         /// </summary>
         bool UseCache { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        ICollection<AudioSettings> SupportedSettings { get; }
+
         #endregion
 
         #region Methods
@@ -23,10 +29,10 @@ namespace H.Core.Synthesizers
         /// 
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="format"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<byte[]> ConvertAsync(string text, AudioFormat format, CancellationToken cancellationToken = default);
+        Task<byte[]> ConvertAsync(string text, AudioSettings? settings = null, CancellationToken cancellationToken = default);
 
         #endregion
     }

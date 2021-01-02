@@ -8,15 +8,9 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.19.8</Version>
+    <Version>0.20.0</Version>
     <PackageReleaseNotes>
-      Refactored Synthesizer.
-      Added ICommand.Output.
-      Refactored ISearcher.
-      Added IPlayer.
-      EmptyArray to public.
-      Added Player and Searcher classes.
-      Added RecordingExtensions.StopWhen.
+      Added AudioSettings. Refactored.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

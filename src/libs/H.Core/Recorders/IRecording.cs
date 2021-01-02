@@ -12,9 +12,9 @@ namespace H.Core.Recorders
         #region Properties
 
         /// <summary>
-        /// Format.
+        /// AudioSettings.
         /// </summary>
-        AudioFormat Format { get; }
+        AudioSettings Settings { get; }
         
         /// <summary>
         /// Data.

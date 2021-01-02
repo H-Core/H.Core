@@ -40,32 +40,35 @@ namespace H.Core.Recorders
         }
 
         /// <summary>
-        /// Stop when <paramref name="requiredCount"></paramref> of data received will be lower than <paramref name="threshold"></paramref>. <br/>
+        /// Stop when values for <paramref name="silenceInMilliseconds"></paramref> of
+        /// <paramref name="bufferInMilliseconds"/> will be lower than <paramref name="threshold"></paramref>. <br/>
         /// NAudioRecorder produces 100 DataReceived events per seconds. <br/>
         /// It can be set up by NAudioRecorder.Delay property. <br/>
         /// </summary>
         /// <param name="recording"></param>
+        /// <param name="bufferInMilliseconds"></param>
+        /// <param name="silenceInMilliseconds"></param>
         /// <param name="threshold"></param>
         /// <param name="exceptions"></param>
-        /// <param name="bufferSize"></param>
-        /// <param name="requiredCount"></param>
-        /// <param name="bits">Bits of the sample in the DataReceived.</param>
-        public static IRecording StopWhen(
+        public static IRecording StopWhenSilence(
             this IRecording recording, 
-            int bufferSize = 300, 
-            int requiredCount = 250,
+            int bufferInMilliseconds = 3000, 
+            int silenceInMilliseconds = 2500,
             double threshold = 0.02,
-            int bits = 16,
             ExceptionsBag? exceptions = null)
         {
             recording = recording ?? throw new ArgumentNullException(nameof(recording));
+
+            var delay = (int)recording.Settings.Delay.TotalMilliseconds;
+            var bufferSize = bufferInMilliseconds / delay;
+            var requiredCount = silenceInMilliseconds / delay;
 
             var last = new ConcurrentQueue<double>();
             recording.DataReceived += async (_, bytes) =>
             {
                 try
                 {
-                    var max = bytes.GetMaxLevel(bits);
+                    var max = bytes.GetMaxLevel(recording.Settings.Bits);
 
                     last.Enqueue(max);
                     if (last.Count <= bufferSize)

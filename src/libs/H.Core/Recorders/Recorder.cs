@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,8 +10,17 @@ namespace H.Core.Recorders
     /// </summary>
     public abstract class Recorder : Module, IRecorder
     {
+        #region Properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<AudioSettings> SupportedSettings { get; } = new List<AudioSettings>();
+
+        #endregion
+
         #region Events
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -45,10 +55,10 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="format"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task<IRecording> StartAsync(AudioFormat format, CancellationToken cancellationToken = default);
+        public abstract Task<IRecording> StartAsync(AudioSettings? settings = null, CancellationToken cancellationToken = default);
 
         #endregion
     }

@@ -15,7 +15,7 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        public AudioFormat Format { get; }
+        public AudioSettings Settings { get; }
         
         /// <summary>
         /// 
@@ -78,15 +78,10 @@ namespace H.Core.Recorders
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="format"></param>
-        protected Recording(AudioFormat format)
+        /// <param name="settings"></param>
+        protected Recording(AudioSettings? settings = null)
         {
-            if (format is AudioFormat.None)
-            {
-                throw new ArgumentException("Format is None.");
-            }
-            
-            Format = format;
+            Settings = settings ?? new AudioSettings();
         }
 
         #endregion

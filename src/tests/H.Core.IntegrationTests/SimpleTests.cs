@@ -42,7 +42,7 @@ namespace H.Core.IntegrationTests
             using var recorder = new NAudioRecorder();
             using var recording = await recorder.StartAsync(AudioFormat.Raw, cancellationToken);
             recording.Stopped += (_, _) => source.TrySetResult(true);
-            recording.StopWhen(exceptions: exceptions);
+            recording.StopWhenSilence(exceptions: exceptions);
 
             await source.Task;
         }

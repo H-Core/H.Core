@@ -31,11 +31,7 @@ namespace H.Core.Recognizers
             recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
             recording = recording ?? throw new ArgumentNullException(nameof(recording));
 
-            if (recording.Format is AudioFormat.None)
-            {
-                throw new ArgumentException("recording.Format is None.");
-            }
-            if (recording.Format is not AudioFormat.Raw)
+            if (recording.Settings.Format is not AudioFormat.Raw)
             {
                 if (!recording.Header.Any())
                 {
@@ -97,14 +93,15 @@ namespace H.Core.Recognizers
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
 
-            if (recognizer.StreamingFormat is AudioFormat.None)
+            if (!recognizer.SupportedStreamingSettings.Any())
             {
                 throw new ArgumentException("Recognizer does not support streaming recognition.");
             }
 
-            var recording = await recorder.StartAsync(recognizer.StreamingFormat, cancellationToken)
+            var settings = recognizer.SupportedStreamingSettings.First();
+            var recording = await recorder.StartAsync(settings, cancellationToken)
                 .ConfigureAwait(false);
-            var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
+            var recognition = await recognizer.StartStreamingRecognitionAsync(settings, cancellationToken)
                 .ConfigureAwait(false);
             recognition.Stopping += async (_, _) =>
             {
@@ -144,7 +141,7 @@ namespace H.Core.Recognizers
         {
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
-            if (recognizer.StreamingFormat is AudioFormat.None)
+            if (!recognizer.SupportedStreamingSettings.Any())
             {
                 throw new ArgumentException("Recognizer does not support streaming recognition.");
             }
@@ -152,9 +149,10 @@ namespace H.Core.Recognizers
             process ??= new Process();
             process.Initialize(async () =>
             {
-                using var recording = await recorder.StartAsync(recognizer.StreamingFormat, cancellationToken)
+                var settings = recognizer.SupportedStreamingSettings.First();
+                using var recording = await recorder.StartAsync(settings, cancellationToken)
                     .ConfigureAwait(false);
-                using var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
+                using var recognition = await recognizer.StartStreamingRecognitionAsync(settings, cancellationToken)
                     .ConfigureAwait(false);
 
                 await recognition.BindRecordingAsync(recording, process.Exceptions, cancellationToken).ConfigureAwait(false);
@@ -173,17 +171,19 @@ namespace H.Core.Recognizers
         /// </summary>
         /// <param name="recognizer"></param>
         /// <param name="bytes"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<string> ConvertOverStreamingRecognition(
             this IRecognizer recognizer,
             byte[] bytes,
+            AudioSettings? settings = null,
             CancellationToken cancellationToken = default)
         {
             recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
             bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
-
-            using var recognition = await recognizer.StartStreamingRecognitionAsync(cancellationToken)
+            
+            using var recognition = await recognizer.StartStreamingRecognitionAsync(settings, cancellationToken)
                 .ConfigureAwait(false);
 
             await recognition.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);

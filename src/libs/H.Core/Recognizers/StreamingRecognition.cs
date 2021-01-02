@@ -14,6 +14,11 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
+        public AudioSettings Settings { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Result { get; protected set; } = string.Empty;
 
         #endregion
@@ -59,6 +64,19 @@ namespace H.Core.Recognizers
         protected void OnPreviewReceived(string value)
         {
             PreviewReceived?.Invoke(this, value);
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="settings"></param>
+        protected StreamingRecognition(AudioSettings? settings = null)
+        {
+            Settings = settings ?? new AudioSettings();
         }
 
         #endregion

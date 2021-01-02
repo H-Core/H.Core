@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,27 +15,12 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
-        public AudioFormat Format { get; }
+        public ICollection<AudioSettings> SupportedSettings { get; } = new List<AudioSettings>();
 
         /// <summary>
         /// 
         /// </summary>
-        public AudioFormat StreamingFormat { get; }
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="streamingFormat"></param>
-        protected Recognizer(AudioFormat format, AudioFormat streamingFormat = AudioFormat.None)
-        {
-            Format = format;
-            StreamingFormat = streamingFormat;
-        }
+        public ICollection<AudioSettings> SupportedStreamingSettings { get; } = new List<AudioSettings>();
 
         #endregion
 
@@ -44,9 +30,13 @@ namespace H.Core.Recognizers
         /// 
         /// </summary>
         /// <param name="bytes"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
+        public virtual Task<string> ConvertAsync(
+            byte[] bytes, 
+            AudioSettings? settings = null, 
+            CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -54,9 +44,12 @@ namespace H.Core.Recognizers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
+        public virtual Task<IStreamingRecognition> StartStreamingRecognitionAsync(
+            AudioSettings? settings = null, 
+            CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

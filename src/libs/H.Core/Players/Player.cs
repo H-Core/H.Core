@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using H.Core.Runners;
@@ -10,6 +10,16 @@ namespace H.Core.Players
     /// </summary>
     public abstract class Player : Runner, IPlayer
     {
+        #region Properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<AudioSettings> SupportedSettings { get; } = new List<AudioSettings>();
+
+        #endregion
+
+
         #region Constructors
 
         /// <summary>
@@ -19,10 +29,7 @@ namespace H.Core.Players
         {
             Add(new AsyncAction("play", async (command, cancellationToken) =>
             {
-                var format = Enum.TryParse<AudioFormat>(
-                    command.Input.Argument, true, out var result) 
-                    ? result
-                    : AudioFormat.Raw;
+                var format = AudioSettings.Parse(command.Input.Argument);
                 var bytes = command.Input.Data;
 
                 await PlayAsync(bytes, format, cancellationToken).ConfigureAwait(false);
@@ -39,12 +46,12 @@ namespace H.Core.Players
         /// 
         /// </summary>
         /// <param name="bytes"></param>
-        /// <param name="format"></param>
+        /// <param name="settings"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public abstract Task PlayAsync(
             byte[] bytes,
-            AudioFormat format = AudioFormat.Raw,
+            AudioSettings? settings = null,
             CancellationToken cancellationToken = default);
 
         #endregion

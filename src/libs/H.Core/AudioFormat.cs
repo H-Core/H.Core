@@ -6,11 +6,6 @@
     public enum AudioFormat
     {
         /// <summary>
-        /// None.
-        /// </summary>
-        None,
-        
-        /// <summary>
         /// RAW - without header.
         /// </summary>
         Raw,
