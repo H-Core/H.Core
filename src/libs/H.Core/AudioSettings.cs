@@ -69,7 +69,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan Delay { get; set; }
+        public TimeSpan Delay { get; set; } = TimeSpan.FromMilliseconds(10);
 
         #endregion
 
