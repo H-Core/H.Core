@@ -79,9 +79,9 @@ namespace H.Core.Recorders
         /// 
         /// </summary>
         /// <param name="settings"></param>
-        protected Recording(AudioSettings? settings = null)
+        protected Recording(AudioSettings settings)
         {
-            Settings = settings ?? new AudioSettings();
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         #endregion

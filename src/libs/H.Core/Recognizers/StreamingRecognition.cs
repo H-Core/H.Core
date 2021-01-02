@@ -74,9 +74,9 @@ namespace H.Core.Recognizers
         /// 
         /// </summary>
         /// <param name="settings"></param>
-        protected StreamingRecognition(AudioSettings? settings = null)
+        protected StreamingRecognition(AudioSettings settings)
         {
-            Settings = settings ?? new AudioSettings();
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         #endregion
