@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
 using H.Core.Utilities;
 
 namespace H.Core.Recorders
@@ -10,35 +8,6 @@ namespace H.Core.Recorders
     /// </summary>
     public static class RecordingExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="bits"></param>
-        /// <returns></returns>
-        private static double GetMaxLevel(this byte[] bytes, int bits)
-        {
-            bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
-
-            var max = 0.0;
-            for (var index = 0; index < bytes.Length; index += bits / 8)
-            {
-                var level = Math.Abs(bits switch
-                {
-                    8 => 1.0 * bytes[index] / byte.MaxValue,
-                    16 => 1.0 * (short)((bytes[index + 1] << 8) | bytes[index]) / short.MaxValue,
-                    32 => 1.0 * ((bytes[index + 3] << 24) | (bytes[index + 2] << 16) | (bytes[index + 1] << 8) | bytes[index]) / int.MaxValue,
-                    _ => throw new NotImplementedException($"Bits: {bits} are not supported.")
-                });
-                if (level > max)
-                {
-                    max = level;
-                }
-            }
-
-            return max;
-        }
-
         /// <summary>
         /// Stop when values for <paramref name="silenceInMilliseconds"></paramref> of
         /// <paramref name="bufferInMilliseconds"/> will be lower than <paramref name="threshold"></paramref>. <br/>
@@ -63,24 +32,23 @@ namespace H.Core.Recorders
             var bufferSize = bufferInMilliseconds / delay;
             var requiredCount = silenceInMilliseconds / delay;
 
-            var last = new ConcurrentQueue<double>();
-            recording.DataReceived += async (_, bytes) =>
+            var detector = new SilenceDetector(recording.Settings, bufferSize, requiredCount, threshold);
+            detector.Detected += async (_, _) =>
             {
                 try
                 {
-                    var max = bytes.GetMaxLevel(recording.Settings.Bits);
-
-                    last.Enqueue(max);
-                    if (last.Count <= bufferSize)
-                    {
-                        return;
-                    }
-
-                    last.TryDequeue(out var _);
-                    if (last.ToArray().Count(value => value < threshold) >= requiredCount)
-                    {
-                        await recording.StopAsync().ConfigureAwait(false);
-                    }
+                    await recording.StopAsync().ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    exceptions?.OnOccurred(exception);
+                }
+            };
+            recording.DataReceived += (_, bytes) =>
+            {
+                try
+                {
+                    detector.Write(bytes);
                 }
                 catch (Exception exception)
                 {

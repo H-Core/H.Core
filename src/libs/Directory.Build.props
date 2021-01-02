@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.0</Version>
+    <Version>0.20.1</Version>
     <PackageReleaseNotes>
       Added AudioSettings. Refactored.
     </PackageReleaseNotes>

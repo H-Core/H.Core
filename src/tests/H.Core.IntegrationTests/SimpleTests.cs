@@ -1,10 +1,6 @@
-using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using H.Core.Recorders;
-using H.Core.Utilities;
-using H.Recorders;
+using H.IO.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace H.Core.IntegrationTests
@@ -12,39 +8,28 @@ namespace H.Core.IntegrationTests
     [TestClass]
     public class SimpleTests
     {
-        private static void CheckDevices()
-        {
-            var devices = NAudioRecorder.GetAvailableDevices().ToList();
-            if (!devices.Any())
-            {
-                Assert.Inconclusive("No available devices for NAudioRecorder.");
-            }
-
-            Console.WriteLine("Available devices:");
-            foreach (var device in devices)
-            {
-                Console.WriteLine($" - Name: {device.ProductName}, Channels: {device.Channels}");
-            }
-        }
-
         [TestMethod]
-        public async Task NoiseDetectionTest()
+        public void SilenceDetectorTest()
         {
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-            var cancellationToken = cancellationTokenSource.Token;
+            var bytes = ResourcesUtilities
+                .ReadFileAsBytes("test_test_rus_8000.wav")
+                .Skip(44)
+                .ToArray();
 
-            CheckDevices();
+            var isDetected = false;
+            var detector = new SilenceDetector(requiredCount: 200);
+            detector.Detected += (_, _) => isDetected = true;
 
-            var source = new TaskCompletionSource<bool>();
-            using var exceptions = new ExceptionsBag();
-            using var registration = cancellationToken.Register(() => source.TrySetCanceled(cancellationToken));
+            var partLength = bytes.Length / 500; // One part is 10 milliseconds.
 
-            using var recorder = new NAudioRecorder();
-            using var recording = await recorder.StartAsync(AudioFormat.Raw, cancellationToken);
-            recording.Stopped += (_, _) => source.TrySetResult(true);
-            recording.StopWhenSilence(exceptions: exceptions);
+            for (var i = 0; i < bytes.Length / partLength; i++)
+            {
+                var part = bytes.Skip(i * partLength).Take(partLength).ToArray();
 
-            await source.Task;
+                detector.Write(part);
+            }
+
+            Assert.IsTrue(isDetected);
         }
     }
 }
