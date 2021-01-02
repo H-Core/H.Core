@@ -2,8 +2,13 @@
 
   <Import Project="..\Directory.Build.props" />
 
+  <PropertyGroup Label="Signing">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)\src\key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
   <PropertyGroup Label="Nuget">
-    <Version>0.19.7</Version>
+    <Version>0.19.8</Version>
     <PackageReleaseNotes>
       Refactored Synthesizer.
       Added ICommand.Output.

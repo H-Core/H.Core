@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Core.UnitTests", "src\tests\H.Core.UnitTests\H.Core.UnitTests.csproj", "{F2548AE2-D736-4C21-942F-55C4F592EFF2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Core.IntegrationTests", "src\tests\H.Core.IntegrationTests\H.Core.IntegrationTests.csproj", "{7A3B8407-96A9-4D23-8558-71712197C157}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{F2548AE2-D736-4C21-942F-55C4F592EFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2548AE2-D736-4C21-942F-55C4F592EFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2548AE2-D736-4C21-942F-55C4F592EFF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A3B8407-96A9-4D23-8558-71712197C157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A3B8407-96A9-4D23-8558-71712197C157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A3B8407-96A9-4D23-8558-71712197C157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A3B8407-96A9-4D23-8558-71712197C157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8C39C5CD-A8D1-4528-9FCE-0190BD515466} = {6E5BF389-3D3F-4D74-9DD0-3B199CB529C5}
 		{F2548AE2-D736-4C21-942F-55C4F592EFF2} = {9CAA231D-7BE1-46C9-ACD6-EB2E569CEBEA}
+		{7A3B8407-96A9-4D23-8558-71712197C157} = {9CAA231D-7BE1-46C9-ACD6-EB2E569CEBEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1493AEE4-9211-46E9-BFE6-8F629EAC5693}

@@ -26,7 +26,7 @@ namespace H.Core.Recorders
                 var level = Math.Abs(bits switch
                 {
                     8 => 1.0 * bytes[index] / byte.MaxValue,
-                    16 => 1.0 * ((bytes[index + 1] << 8) | bytes[index]) / short.MaxValue,
+                    16 => 1.0 * (short)((bytes[index + 1] << 8) | bytes[index]) / short.MaxValue,
                     32 => 1.0 * ((bytes[index + 3] << 24) | (bytes[index + 2] << 16) | (bytes[index + 1] << 8) | bytes[index]) / int.MaxValue,
                     _ => throw new NotImplementedException($"Bits: {bits} are not supported.")
                 });
