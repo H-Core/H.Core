@@ -32,7 +32,7 @@ namespace H.Core
                 .Select(value => value.Trim())
                 .ToArray();
 
-            var format = Enum.TryParse<AudioFormat>(values.ElementAtOrDefault(1) ?? "raw", true, out var formatResult)
+            var format = Enum.TryParse<AudioFormat>(values.ElementAtOrDefault(0) ?? "raw", true, out var formatResult)
                 ? formatResult
                 : AudioFormat.Raw;
             var rate = Convert.ToInt32(values.ElementAtOrDefault(1) ?? "8000", CultureInfo.InvariantCulture);
