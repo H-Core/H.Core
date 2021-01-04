@@ -6,7 +6,7 @@ namespace H.Core.Attributes
     /// 
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class AllowMultipleInstanceAttribute : Attribute
+    public sealed class AllowMultipleInstanceAttribute : Attribute
     {
         /// <summary>
         /// 

@@ -2,18 +2,27 @@
 
   <Import Project="..\Directory.Build.props" />
 
+  <PropertyGroup Label="Common">
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
   <PropertyGroup Label="Signing">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)\src\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <ItemGroup Label="CLSCompliant">
+    <Compile Include="$(SolutionDir)src\CLSCompliantTrue.cs" />
+  </ItemGroup>
+
   <PropertyGroup Label="Nuget">
-    <Version>0.20.7</Version>
+    <Version>0.20.8</Version>
     <PackageReleaseNotes>
       Added AudioSettings. Refactored.
       Added SynthesizerExtensions.PlayAsync.
       Added StopWhenSilence to StartStreamingRecognitionAsync.
       Fixed Synthesizer.
+      Refactored Analyzers.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -59,14 +68,10 @@
   </ItemGroup>
 
   <PropertyGroup Label="Analyzers">
-    <NoWarn>$(NoWarn);CA1819;CA1031;CA1816;CA1063;CA1716;CA2237;CA1710</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <NoWarn>$(NoWarn);CA1819;CA1031;CA1816;CA1063;CA1716;CA2237;CA1710;CA1711;CA1003</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup Label="Analyzers">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 
 </Project>

@@ -70,13 +70,13 @@ namespace H.Core
         /// <param name="key"></param>
         /// <param name="action"></param>
         protected void AddVariable(string key, Func<object> action) => Variables[key] = action;
-        
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public object? GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func() : null;
+        public object? GetModuleVariableValue(string name) => Variables.TryGetValue(name, out var func) ? func() : null;
 
         #endregion
 

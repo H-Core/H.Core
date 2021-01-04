@@ -34,11 +34,11 @@ namespace H.Core.Searchers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="query"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public abstract Task<ICollection<SearchResult>> SearchAsync(
-            string text, 
+            string query, 
             CancellationToken cancellationToken = default);
 
         #endregion
