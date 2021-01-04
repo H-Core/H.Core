@@ -27,7 +27,7 @@ namespace H.Core.Utilities
             }
 
             var array = text.Split(separator);
-            var prefix = array.FirstOrDefault();
+            var prefix = array.First();
             var postfix = string.Join(separator.ToString(), array.Skip(1));
 
             return new[] { prefix, postfix };

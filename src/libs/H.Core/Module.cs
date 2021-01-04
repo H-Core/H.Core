@@ -134,13 +134,14 @@ namespace H.Core
         /// </summary>
         protected Module()
         {
-            Name = GetType().FullName;
-            UniqueName = GetType().Name;
+            var type = GetType() ?? throw new InvalidOperationException("Type is null.");
+            Name = type.FullName ?? throw new InvalidOperationException("FullName is null.");
+            UniqueName = type.Name;
 
             Settings.PropertyChanged += (_, args) =>
             {
                 var key = args.PropertyName;
-                if (!Settings.ContainsKey(key))
+                if (key == null || !Settings.ContainsKey(key))
                 {
                     OnExceptionOccurred(new InvalidOperationException($"Settings is not exists: {key}"));
                 }
