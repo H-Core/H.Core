@@ -216,5 +216,27 @@ namespace H.Core.Recognizers
             
             return await recognition.StopAsync(cancellationToken).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Waits <seealso cref="IStreamingRecognition.Stopped"/> events. <br/>
+        /// Can be used with <seealso cref="RecordingExtensions.StopWhenSilence"/> extension.
+        /// </summary>
+        /// <param name="recognition"></param>
+        /// <param name="cancellationToken"></param>
+        public static async Task WaitStopAsync(
+            this IStreamingRecognition recognition,
+            CancellationToken cancellationToken = default)
+        {
+            recognition = recognition ?? throw new ArgumentNullException(nameof(recognition));
+
+            var source = new TaskCompletionSource<bool>();
+            using var registration = cancellationToken.Register(() => source.TrySetCanceled());
+            recognition.Stopped += (_, _) =>
+            {
+                source.TrySetResult(true);
+            };
+
+            await source.Task.ConfigureAwait(false);
+        }
     }
 }

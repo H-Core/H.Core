@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.9</Version>
+    <Version>0.20.10</Version>
     <PackageReleaseNotes>
       Added AudioSettings. Refactored.
       Added SynthesizerExtensions.PlayAsync.
@@ -24,6 +24,7 @@
       Fixed Synthesizer.
       Refactored Analyzers.
       Added IRecording.WaitStopAsync extension.
+      Added IStreamingRecognition.WaitStopAsync extension.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -43,7 +44,7 @@
 
   <PropertyGroup Label="Source Link">
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EmbedAllSources>true</EmbedAllSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
