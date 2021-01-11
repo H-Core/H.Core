@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using H.Core.Utilities;
 
 namespace H.Core.Recorders
@@ -57,6 +59,28 @@ namespace H.Core.Recorders
             };
 
             return recording;
+        }
+
+        /// <summary>
+        /// Waits <seealso cref="IRecording.Stopped"/> events. <br/>
+        /// Can be used with <seealso cref="StopWhenSilence"/> extension.
+        /// </summary>
+        /// <param name="recording"></param>
+        /// <param name="cancellationToken"></param>
+        public static async Task WaitStopAsync(
+            this IRecording recording,
+            CancellationToken cancellationToken = default)
+        {
+            recording = recording ?? throw new ArgumentNullException(nameof(recording));
+
+            var source = new TaskCompletionSource<bool>();
+            using var registration = cancellationToken.Register(() => source.TrySetCanceled());
+            recording.Stopped += (_, _) =>
+            {
+                source.TrySetResult(true);
+            };
+
+            await source.Task.ConfigureAwait(false);
         }
     }
 }

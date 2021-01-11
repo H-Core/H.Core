@@ -16,13 +16,14 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.8</Version>
+    <Version>0.20.9</Version>
     <PackageReleaseNotes>
       Added AudioSettings. Refactored.
       Added SynthesizerExtensions.PlayAsync.
       Added StopWhenSilence to StartStreamingRecognitionAsync.
       Fixed Synthesizer.
       Refactored Analyzers.
+      Added IRecording.WaitStopAsync extension.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
