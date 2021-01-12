@@ -15,7 +15,7 @@
         /// <summary>
         /// 
         /// </summary>
-        IValue Input { get; }
+        IValue Input { get; set; }
 
         /// <summary>
         /// 

@@ -43,7 +43,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public IValue Input { get; }
+        public IValue Input { get; set; }
 
         /// <summary>
         /// 

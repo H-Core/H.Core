@@ -27,6 +27,7 @@ Added IRecording.WaitStopAsync extension.
 Added IStreamingRecognition.WaitStopAsync extension.
 Added Runner.GetNextCommandAsync extension.
 Added IValue.Merge extension.
+Added ICommand.WithMergedInput and ICommand.WithMergedOutput extension.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
