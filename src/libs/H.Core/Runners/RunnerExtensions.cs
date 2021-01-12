@@ -15,43 +15,38 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="runner"></param>
-        /// <param name="timeout"></param>
+        /// <param name="module"></param>
         /// <param name="cancellationToken"></param>
-        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
-        public static async Task<string> WaitNextCommandAsync(
-            this Runner runner, 
-            TimeSpan timeout, 
-            CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static async Task<string> GetNextCommandAsync(this Module module, CancellationToken cancellationToken = default)
         {
-            runner = runner ?? throw new ArgumentNullException(nameof(runner));
+            module = module ?? throw new ArgumentNullException(nameof(module));
 
-            var value = await runner.RunAsync(
-                new Command("start-record", $"{timeout.TotalMilliseconds}"), cancellationToken)
+            var values = await module.RunAsync(new Command("get-next-command"), cancellationToken)
                 .ConfigureAwait(false);
-            
-            return value.First().Argument;
+
+            return values
+                .FirstOrDefault(value => !string.IsNullOrWhiteSpace(value.Argument))?
+                .Argument ?? string.Empty;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="runner"></param>
-        /// <param name="timeout"></param>
         /// <param name="cancellationToken"></param>
         /// <param name="additionalAccepts"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static async Task<bool> WaitAccept(
             this Runner runner, 
-            TimeSpan timeout,
             CancellationToken cancellationToken = default, 
             params string[] additionalAccepts)
         {
             runner = runner ?? throw new ArgumentNullException(nameof(runner));
             
-            var command = await runner.WaitNextCommandAsync(timeout, cancellationToken)
+            var command = await runner.GetNextCommandAsync(cancellationToken)
                 .ConfigureAwait(false);
 
             var defaultAccepts = new List<string> { "yes", "да", "согласен" };
@@ -100,10 +95,12 @@ namespace H.Core.Runners
         {
             runner = runner ?? throw new ArgumentNullException(nameof(runner));
 
-            var value = await runner.RunAsync(new Command("search", text), cancellationToken)
+            var values = await runner.RunAsync(new Command("search", text), cancellationToken)
                 .ConfigureAwait(false);
 
-            return value.First().Arguments;
+            return values
+                .SelectMany(value => value.Arguments)
+                .ToArray();
         }
     }
 }

@@ -16,15 +16,16 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.10</Version>
+    <Version>0.20.11</Version>
     <PackageReleaseNotes>
-      Added AudioSettings. Refactored.
-      Added SynthesizerExtensions.PlayAsync.
-      Added StopWhenSilence to StartStreamingRecognitionAsync.
-      Fixed Synthesizer.
-      Refactored Analyzers.
-      Added IRecording.WaitStopAsync extension.
-      Added IStreamingRecognition.WaitStopAsync extension.
+Added AudioSettings. Refactored.
+Added SynthesizerExtensions.PlayAsync.
+Added StopWhenSilence to StartStreamingRecognitionAsync.
+Fixed Synthesizer.
+Refactored Analyzers.
+Added IRecording.WaitStopAsync extension.
+Added IStreamingRecognition.WaitStopAsync extension.
+Added Runner.GetNextCommandAsync extension.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
