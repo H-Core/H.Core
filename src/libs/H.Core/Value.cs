@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using H.Core.Utilities;
 
 namespace H.Core
@@ -87,7 +88,7 @@ namespace H.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Argument}";
+            return $"{string.Join(" ", Arguments.Select(argument => $"\"{argument}\""))}";
         }
 
         #endregion

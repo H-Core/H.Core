@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.13</Version>
+    <Version>0.20.14</Version>
     <PackageReleaseNotes>
 Added AudioSettings. Refactored.
 Added SynthesizerExtensions.PlayAsync.
@@ -29,6 +29,7 @@ Added Runner.GetNextCommandAsync extension.
 Added IValue.Merge extension.
 Added ICommand.WithMergedInput and ICommand.WithMergedOutput extension.
 Refactored Command.Parse and Value.Parse.
+Fixed Value.ToString().
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
