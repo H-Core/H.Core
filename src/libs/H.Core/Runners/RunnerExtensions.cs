@@ -13,6 +13,27 @@ namespace H.Core.Runners
     public static class RunnerExtensions
     {
         /// <summary>
+        /// Calls runner's command.
+        /// </summary>
+        /// <param name="runner"></param>
+        /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<ICommand> CallAsync(
+            this IRunner runner,
+            ICommand command,
+            CancellationToken cancellationToken = default)
+        {
+            runner = runner ?? throw new ArgumentNullException(nameof(runner));
+            command = command ?? throw new ArgumentNullException(nameof(command));
+
+            var call = runner.TryPrepareCall(command) ??
+                       throw new InvalidOperationException($"Command is not supported: {command.Name}.");
+
+            return await call.RunAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="module"></param>
