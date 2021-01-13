@@ -15,12 +15,12 @@
         /// <summary>
         /// 
         /// </summary>
-        IValue Input { get; set; }
+        IValue Input { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        IValue Output { get; set; }
+        IValue Output { get; }
 
         /// <summary>
         /// 

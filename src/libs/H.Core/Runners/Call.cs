@@ -73,11 +73,11 @@ namespace H.Core.Runners
         {
             OnRunning();
             
-            Command.Output = await Action.RunAsync(Command, cancellationToken).ConfigureAwait(false);
+            var output = await Action.RunAsync(Command, cancellationToken).ConfigureAwait(false);
             
             OnRan();
 
-            return Command;
+            return Command.WithOutput(output);
         }
 
         /// <summary>
@@ -95,11 +95,11 @@ namespace H.Core.Runners
             
             OnRunning();
 
-            Command.Output = await processAction.RunAsync(process, Command, cancellationToken).ConfigureAwait(false);
+            var output = await processAction.RunAsync(process, Command, cancellationToken).ConfigureAwait(false);
 
             OnRan();
 
-            return Command;
+            return Command.WithOutput(output);
         }
 
         /// <summary>

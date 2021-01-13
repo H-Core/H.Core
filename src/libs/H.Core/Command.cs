@@ -50,12 +50,12 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public IValue Input { get; set; }
+        public IValue Input { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IValue Output { get; set; } = Value.Empty;
+        public IValue Output { get; } = Value.Empty;
 
         /// <summary>
         /// 
@@ -111,11 +111,13 @@ namespace H.Core
         /// 
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="value"></param>
-        public Command(string name, IValue value)
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        public Command(string name, IValue input, IValue? output = null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Input = value;
+            Input = input ?? throw new ArgumentNullException(nameof(name));
+            Output = output ?? Value.Empty;
         }
 
         #endregion

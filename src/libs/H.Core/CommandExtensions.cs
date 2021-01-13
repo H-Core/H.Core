@@ -20,8 +20,7 @@ namespace H.Core
             command = command ?? throw new ArgumentNullException(nameof(command));
             value = value ?? throw new ArgumentNullException(nameof(value));
 
-            command.Input = command.Input.Merge(value);
-            return command;
+            return new Command(command.Name, command.Input.Merge(value));
         }
 
         /// <summary>
@@ -32,13 +31,12 @@ namespace H.Core
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static ICommand WithMergedOutput(this ICommand command, IValue value)
+        public static ICommand WithOutput(this ICommand command, IValue value)
         {
             command = command ?? throw new ArgumentNullException(nameof(command));
             value = value ?? throw new ArgumentNullException(nameof(value));
 
-            command.Output = command.Output.Merge(value);
-            return command;
+            return new Command(command.Name, command.Input, value);
         }
     }
 }
