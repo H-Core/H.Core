@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.14</Version>
+    <Version>0.20.15</Version>
     <PackageReleaseNotes>
 Added AudioSettings. Refactored.
 Added SynthesizerExtensions.PlayAsync.
@@ -30,6 +30,7 @@ Added IValue.Merge extension.
 Added ICommand.WithMergedInput and ICommand.WithMergedOutput extension.
 Refactored Command.Parse and Value.Parse.
 Fixed Value.ToString().
+Fixed Command.Parse and Value.Parse empty string bugs.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -78,7 +79,7 @@ Fixed Value.ToString().
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <NoWarn>$(NoWarn);CA1819;CA1031;CA1816;CA1063;CA1716;CA2237;CA1710;CA1711;CA1003</NoWarn>
+    <NoWarn>$(NoWarn);CA1819;CA1031;CA1816;CA1063;CA1716;CA2237;CA1710;CA1711;CA1003;CA1508</NoWarn>
   </PropertyGroup>
 
 </Project>

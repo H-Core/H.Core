@@ -26,7 +26,11 @@ namespace H.Core
         public static Value Parse(string text)
         {
             text = text ?? throw new ArgumentNullException(nameof(text));
-            
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return Empty;
+            }
+
             return new Value(text.CmdSplit());
         }
 
