@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.21.4</Version>
+    <Version>0.21.5</Version>
     <PackageReleaseNotes>
 Changed AsyncEventHandler.
 Added Runner.CallAsync extension.

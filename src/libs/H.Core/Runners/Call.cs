@@ -19,7 +19,7 @@ namespace H.Core.Runners
         /// <summary>
         /// 
         /// </summary>
-        public ICommand Command { get; }
+        public ICommand Command { get; private set; }
 
         #endregion
 
@@ -74,10 +74,11 @@ namespace H.Core.Runners
             OnRunning();
             
             var output = await Action.RunAsync(Command, cancellationToken).ConfigureAwait(false);
-            
+            Command = Command.WithOutput(output);
+
             OnRan();
 
-            return Command.WithOutput(output);
+            return Command;
         }
 
         /// <summary>
@@ -96,10 +97,11 @@ namespace H.Core.Runners
             OnRunning();
 
             var output = await processAction.RunAsync(process, Command, cancellationToken).ConfigureAwait(false);
+            Command = Command.WithOutput(output);
 
             OnRan();
 
-            return Command.WithOutput(output);
+            return Command;
         }
 
         /// <summary>
