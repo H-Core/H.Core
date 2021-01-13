@@ -11,11 +11,14 @@ namespace H.Core
     /// </summary>
     /// <typeparam name="TEventArgs"></typeparam>
     /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <param name="args"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [Serializable]
-    public delegate Task AsyncEventHandler<in TEventArgs>(object sender, TEventArgs e, CancellationToken cancellationToken);
+    public delegate Task AsyncEventHandler<in TEventArgs>(
+        object sender, 
+        TEventArgs args, 
+        CancellationToken cancellationToken);
 
     /// <summary>
     /// 
@@ -23,11 +26,14 @@ namespace H.Core
     /// <typeparam name="TEventArgs"></typeparam>
     /// <typeparam name="TTaskType"></typeparam>
     /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <param name="args"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [Serializable]
-    public delegate Task<TTaskType> AsyncEventHandler<in TEventArgs, TTaskType>(object sender, TEventArgs e, CancellationToken cancellationToken);
+    public delegate Task<TTaskType[]> AsyncEventHandler<in TEventArgs, TTaskType>(
+        object sender, 
+        TEventArgs args, 
+        CancellationToken cancellationToken);
 
     /// <summary>
     /// 
@@ -72,7 +78,7 @@ namespace H.Core
         /// <param name="args"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<TTaskType[]> InvokeAsync<TEventArgs, TTaskType>(
+        public static async Task<TTaskType[]> InvokeAsync<TEventArgs, TTaskType>(
             this AsyncEventHandler<TEventArgs, TTaskType>? handlers,
             object source,
             TEventArgs args,
@@ -80,15 +86,19 @@ namespace H.Core
         {
             if (handlers != null)
             {
-                return Task.WhenAll(
+                var results = await Task.WhenAll(
                     handlers
                         .GetInvocationList()
                         .OfType<AsyncEventHandler<TEventArgs, TTaskType>>()
                         .Select(func => func(source, args, cancellationToken))
-                );
+                ).ConfigureAwait(false);
+
+                return results
+                    .SelectMany(result => result)
+                    .ToArray();
             }
 
-            return Task.FromResult(EmptyArray<TTaskType>.Value);
+            return await Task.FromResult(EmptyArray<TTaskType>.Value).ConfigureAwait(false);
         }
     }
 }
