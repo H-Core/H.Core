@@ -16,19 +16,22 @@ namespace H.Core
         /// Empty command.
         /// </summary>
         public static Command Empty { get; } = new ();
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="text"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public static Command Parse(string text)
         {
-            var values = text.SplitOnlyFirstIgnoreQuote(' ');
+            text = text ?? throw new ArgumentNullException(nameof(text));
+
+            var values = text.CmdSplit();
 
             return new Command(
                 values.ElementAt(0),
-                Value.Parse(values.ElementAtOrDefault(1) ?? string.Empty));
+                values.Skip(1).ToArray());
         }
 
         #endregion
@@ -92,10 +95,12 @@ namespace H.Core
         /// </summary>
         /// <param name="name"></param>
         /// <param name="data"></param>
-        public Command(string name, byte[] data)
+        /// <param name="arguments"></param>
+        public Command(string name, byte[] data, params string[] arguments)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Input = new Value(data);
+
+            Input = new Value(data, arguments);
         }
 
         /// <summary>

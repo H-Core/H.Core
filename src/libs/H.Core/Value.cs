@@ -15,17 +15,18 @@ namespace H.Core
         /// Empty value.
         /// </summary>
         public static Value Empty { get; } = new ();
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="text"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns></returns>
         public static Value Parse(string text)
         {
             text = text ?? throw new ArgumentNullException(nameof(text));
             
-            return new Value(text.Split(' '));
+            return new Value(text.CmdSplit());
         }
 
         #endregion
@@ -35,7 +36,7 @@ namespace H.Core
         /// <summary>
         /// 
         /// </summary>
-        public string[] Arguments { get; set; } = EmptyArray<string>.Value;
+        public string[] Arguments { get; set; }
 
         /// <summary>
         /// 
