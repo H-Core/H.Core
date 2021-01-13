@@ -132,7 +132,13 @@ namespace H.Core
         {
             return IsEmpty
                 ? string.Empty
-                : $"{Name} {Input}";
+                : Input.IsEmpty
+                    ? Output.IsEmpty
+                        ? Name
+                        : $"{Name}: {Output}"
+                    : Output.IsEmpty
+                        ? $"{Name} {Input}"
+                        : $"{Name} {Input}: {Output}";
         }
 
         #endregion
