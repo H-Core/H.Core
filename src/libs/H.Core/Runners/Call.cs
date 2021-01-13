@@ -108,7 +108,7 @@ namespace H.Core.Runners
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Action.Name} {Command.Input.Argument}";
+            return $"{Command}";
         }
 
         #endregion
