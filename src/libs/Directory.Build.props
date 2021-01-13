@@ -16,21 +16,8 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.20.16</Version>
+    <Version>0.21.0</Version>
     <PackageReleaseNotes>
-Added AudioSettings. Refactored.
-Added SynthesizerExtensions.PlayAsync.
-Added StopWhenSilence to StartStreamingRecognitionAsync.
-Fixed Synthesizer.
-Refactored Analyzers.
-Added IRecording.WaitStopAsync extension.
-Added IStreamingRecognition.WaitStopAsync extension.
-Added Runner.GetNextCommandAsync extension.
-Added IValue.Merge extension.
-Added ICommand.WithMergedInput and ICommand.WithMergedOutput extension.
-Refactored Command.Parse and Value.Parse.
-Fixed Value.ToString().
-Fixed Command.Parse and Value.Parse empty string bugs.
 Changed AsyncEventHandler.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
