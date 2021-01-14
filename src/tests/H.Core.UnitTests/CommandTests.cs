@@ -4,13 +4,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace H.Core.UnitTests
 {
     [TestClass]
-    public class AudioSettingsTests
+    public class CommandTests
     {
         [TestMethod]
         public void ParseTest()
         {
-            AudioSettings.Parse("mp3")
-                .Should().BeEquivalentTo(new AudioSettings(AudioFormat.Mp3));
+            var first = new Command("вставь", "123");
+            var second = Command.Parse("вставь 123");
+
+            first.Should().BeEquivalentTo(second);
         }
     }
 }
