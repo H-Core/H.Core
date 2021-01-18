@@ -92,7 +92,13 @@ namespace H.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{string.Join(" ", Arguments.Select(argument => $"\"{argument}\""))}";
+            return Arguments.Any()
+                ? string.Join(
+                    " ", 
+                    Arguments.Select(argument => $"\"{argument}\""))
+                : Data.Any()
+                    ? $"{Data.Length} bytes"
+                    : string.Empty;
         }
 
         #endregion
