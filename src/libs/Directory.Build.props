@@ -16,11 +16,9 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.21.5</Version>
+    <Version>0.22.0</Version>
     <PackageReleaseNotes>
-Changed AsyncEventHandler.
-Added Runner.CallAsync extension.
-Fixed Call.ToString().
+Added Key/Keys classes.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
