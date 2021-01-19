@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.22.3</Version>
+    <Version>0.22.4</Version>
     <PackageReleaseNotes>
 Added Key/Keys classes.
 Added Runner.CallAsync(Process) extension.
