@@ -71,7 +71,7 @@ feat: Added Deterministic.
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <NoWarn>$(NoWarn);CA1819;CA1031;CA1816;CA1063;CA1716;CA2237;CA1710;CA1711;CA1003;CA1508</NoWarn>
+    <NoWarn>$(NoWarn);CA1819;CA1031;CA1816;CA1063;CA1716;CA2237;CA1710;CA1711;CA1003;CA1508;CA1720</NoWarn>
   </PropertyGroup>
 
 </Project>
