@@ -17,12 +17,13 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Version>0.22.4</Version>
+    <Version>0.22.5</Version>
     <PackageReleaseNotes>
 Added Key/Keys classes.
 Added Runner.CallAsync(Process) extension.
 Changed Value.ToString().
 feat: Added Deterministic.
+feat: Added Key.Parse digitals support.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

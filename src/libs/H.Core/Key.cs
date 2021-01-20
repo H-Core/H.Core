@@ -334,6 +334,21 @@ namespace H.Core
                 return Key.None;
             }
 
+            text = text switch
+            {
+                "0" => "D0",
+                "1" => "D1",
+                "2" => "D2",
+                "3" => "D3",
+                "4" => "D4",
+                "5" => "D5",
+                "6" => "D6",
+                "7" => "D7",
+                "8" => "D8",
+                "9" => "D9",
+                _ => text,
+            };
+
             return Enum.TryParse<Key>(text, true, out var result)
                 ? result
                 : Key.None;
