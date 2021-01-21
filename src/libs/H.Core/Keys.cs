@@ -27,18 +27,6 @@ namespace H.Core
                 .ToArray());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static Keys FromSpecialData(int data)
-        {
-            var number = data - 16;
-
-            return new Keys(number == 0 ? Key.XButton2 : Key.XButton1);
-        }
-
         #endregion
 
         #region Properties
@@ -159,7 +147,7 @@ namespace H.Core
                 return Values
                     .OrderBy(key => key)
                     .Aggregate(
-                        27, 
+                        27,
                         static (current, value) => (current * 397) ^ value.GetHashCode());
             }
         }

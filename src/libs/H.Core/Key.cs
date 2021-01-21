@@ -316,6 +316,15 @@ namespace H.Core
         NoName,
         Pa1,
         OemClear,
+
+        // Mouse Events:
+        MouseNone = 0x0100,
+        MouseLeft,
+        MouseRight,
+        MouseMiddle,
+        MouseWheel,
+        MouseXButton1,
+        MouseXButton2,
     }
 
     public static class KeyExtensions
@@ -333,7 +342,7 @@ namespace H.Core
             {
                 return Key.None;
             }
-
+            
             text = text switch
             {
                 "0" => "D0",
